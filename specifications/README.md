@@ -319,3 +319,26 @@ private fields, wrong head, unsigned signature/DCO, and attempted merge or
 publication. It is offline evidence validation only: it does not inspect Git,
 verify cryptography, contact a provider or review system, merge, publish, or
 mutate durable state.
+
+## AR-0013 CI and external-observation adapter
+
+`ci-observation-adapter-v1.json` defines a revision-1-bound envelope for a
+prepared hosted-check or remote-observation request, local qualification,
+correlated observation, and evidence projection. The adapter requires exact
+request-ID and target-digest correlation. It intentionally distinguishes
+`local_qualified_remote_unverified` from any verified remote or hosted-CI
+success. The model and checker are `scripts/ci_observation_adapter.py` and
+`scripts/check_ci_observation_adapter.py`:
+
+```text
+python3 scripts/check_ci_observation_adapter.py \\
+  --spec specifications/ci-observation-adapter-v1.json \\
+  --record specifications/fixtures/ci-observation-ar0013-v1.json \\
+  --evidence specifications/fixtures/ci-observation-evidence-ar0013-v1.json \\
+  --expected-revision 1
+```
+
+The positive fixture is synthetic evidence only. Hostile tests cover stale
+revision, replay, unknown/private values, wrong correlation, and an attempt to
+promote an unverified remote success. No request is sent and no CI, provider,
+network, remote, or durable-state operation occurs.

@@ -76,6 +76,27 @@ unsigned-DCO evidence. It performs no Git inspection, network/provider call,
 review lookup, merge, publication, or durable-state mutation; a passing result
 is structural evidence only.
 
+AR-0013 adds the provider-neutral CI and external-observation adapter. The
+revision-1 record contains a prepared request, a positive local qualification,
+one correlated remote observation, and a non-authoritative disposition. The
+request ID and target digest must match across the request, observation, and
+correlation records. A remote `success` must remain `verification: unverified`;
+local qualification does not imply hosted-CI success, and unverified remote
+success does not imply verified execution or quality acceptance.
+
+```text
+python3 scripts/check_ci_observation_adapter.py \
+  --spec specifications/ci-observation-adapter-v1.json \
+  --record specifications/fixtures/ci-observation-ar0013-v1.json \
+  --evidence specifications/fixtures/ci-observation-evidence-ar0013-v1.json \
+  --expected-revision 1
+```
+
+The checker rejects stale, replayed, unknown, private, wrongly correlated, or
+promoted-to-verified evidence. It prepares no request and performs no CI,
+provider, network, remote, Git, Coordinator, AWQ, AWG, UI, or durable-state
+operation.
+
 AR-0003 adds the adapter boundary behind this event protocol. Adapters must
 report only bounded capabilities and identity, bind every lifecycle result to
 the exact task revision and worktree, and accept interaction by digest

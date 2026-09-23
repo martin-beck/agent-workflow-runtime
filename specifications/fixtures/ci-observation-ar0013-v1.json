@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-ci-observation-adapter", "version": "1.0.0"},
+  "task": {"id": "AR-0013", "revision": 1},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "worktree": {"key": "agent-workflow-runtime-0013", "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+  "request": {"id": "RQ-AR0013-01", "kind": "hosted_check", "target_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "input_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "status": "prepared"},
+  "local_qualification": {"status": "qualified", "result": "passed", "evidence_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"},
+  "remote_observation": {"status": "success", "verification": "unverified", "request_id": "RQ-AR0013-01", "target_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "evidence_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"},
+  "correlation": {"request_id": "RQ-AR0013-01", "target_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "observation_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999", "status": "matched"},
+  "disposition": "local_qualified_remote_unverified",
+  "evidence": [
+    {"id": "EV-AR0013-REQUEST", "kind": "request", "digest": "sha256:a32ccca58b5117f84b28ec7d71096aa582b6b1a74b63c46d2c54cfd336b00da3"},
+    {"id": "EV-AR0013-LOCAL", "kind": "local_qualification", "digest": "sha256:e2c2740edef2dd46cbf48968c34ce213b5c376d5a6839aad88fdb247ca371993"},
+    {"id": "EV-AR0013-REMOTE", "kind": "remote_observation", "digest": "sha256:8bc7a616acbcb63c9900adc698544f0723c47a4d78bf5376c0449e9a7c31a7dd"},
+    {"id": "EV-AR0013-CORRELATION", "kind": "correlation", "digest": "sha256:b22dd9dffdd5e80a9903674993d4337cfa91fc7fc08abee81a5872dff29467b5"}
+  ]
+}

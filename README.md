@@ -34,6 +34,14 @@ AR plan in the public Git-backed state repository:
 
 `https://github.com/martin-beck/agent-workflow-runtime-state`
 
+AR-0013 adds `specifications/ci-observation-adapter-v1.json`, a provider-neutral
+revision-1-bound envelope for preparing hosted-check or remote-observation
+requests and correlating supplied results. It keeps local qualification
+explicitly separate from a remote `success`: the only accepted remote state is
+`verification: unverified`, with disposition
+`local_qualified_remote_unverified`. Its checker performs no request, CI call,
+network operation, remote verification, or durable-state mutation.
+
 The runtime must fail closed when an agent action cannot be bound to a claimed
 task revision, an allowed capability, a valid worktree, a quality result, or a
 durable oracle outcome.

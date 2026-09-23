@@ -103,6 +103,18 @@ and deterministic transitions. They do not prove provider availability,
 authorization, transport, model behavior, tool or file execution, or runtime
 success.
 
+## AR-0013 provider-neutral CI and external-observation adapter
+
+The AR-0013 adapter prepares a bounded hosted-check or remote-observation
+request, records local qualification independently, and correlates a supplied
+remote result by request ID and target digest. A remote `success` is accepted
+only as `verification: unverified`; the resulting disposition is
+`local_qualified_remote_unverified`, never provider success, verified execution,
+or AWQ acceptance. `scripts/ci_observation_adapter.py` and
+`scripts/check_ci_observation_adapter.py` validate canonical supplied evidence
+only. They do not send requests, contact CI or a provider, verify a remote host,
+or mutate Coordinator state.
+
 ## AR-0016 provider-neutral OpenCode-style mapping
 
 The AR-0016 adapter is an offline translation boundary, not an OpenCode
