@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-supervisor-lifecycle",
+  "version": "1.0.0",
+  "title": "Versioned supervisor admission, lease, recovery, and lifecycle contract",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "task revision", "claim", "lease authority", "durable lifecycle"],
+    "quality": ["requirements", "quality gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing cancellation and handoff input"],
+    "runtime": ["admission enforcement", "worker supervision", "lease observation", "recovery fencing"]
+  },
+  "binding": {
+    "required": ["task", "project", "worktree", "session", "worker", "lease"],
+    "task_id": "^AR-[0-9]{4}$",
+    "revision": "positive integer supplied by Coordinator",
+    "project_key": "^[a-z][a-z0-9-]{2,63}$",
+    "worktree_key": "^[a-z0-9][a-z0-9._-]{0,63}$",
+    "session_id": "^SES-[A-Z0-9-]{1,63}$",
+    "worker_id": "^WRK-[A-Z0-9-]{1,63}$",
+    "lease_id": "^LSE-[A-Z0-9-]{1,63}$"
+  },
+  "lease": {
+    "clock": "monotonic integer seconds supplied by the Coordinator observation",
+    "minimum_ttl": 1,
+    "heartbeat": "only the current worker may renew before expiry; renewal strictly increases expiry",
+    "fence": "every action carries the current lease id, worker, task revision, and session",
+    "expiry": "an expired lease cannot be renewed; recovery must replace the worker and lease"
+  },
+  "lifecycle": {
+    "states": ["admitted", "active", "cancelling", "handed_off", "recovered", "closed", "failed"],
+    "transitions": [
+      ["admitted", "start", "active"],
+      ["active", "heartbeat", "active"],
+      ["active", "cancel", "cancelling"],
+      ["cancelling", "cancel_ack", "closed"],
+      ["active", "handoff", "handed_off"],
+      ["handed_off", "resume", "active"],
+      ["active", "stale_recover", "recovered"],
+      ["recovered", "resume", "active"],
+      ["active", "complete", "closed"],
+      ["active", "fail", "failed"]
+    ],
+    "terminal": ["closed", "failed"],
+    "rule": "Only the current bound worker can act; handoff and stale recovery fence the old worker before a new worker resumes."
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["unknown fields", "stale task revision", "wrong project or worktree", "expired or replayed lease", "wrong worker", "invalid transition", "early heartbeat", "recovery before expiry", "privacy violation"],
+    "side_effects": "The checker and reference implementation do not access a provider, network, process, Git, Coordinator, AWQ, AWG, or UI."
+  },
+  "privacy": {
+    "forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "personal_data", "raw_output"],
+    "projection": "Evidence contains only stable identifiers, bounded integer times, revisions, lease identifiers, dispositions, and digests."
+  },
+  "compatibility": {
+    "canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline",
+    "major_change": "new specification_id or incompatible schema_version",
+    "minor_change": "a compatible checker and new versioned fixture are required for additions"
+  },
+  "limitations": [
+    "This contract validates supplied observations and does not prove that Coordinator issued them or that a process was actually stopped.",
+    "Integer times are a deterministic offline model, not a host clock or a distributed-clock proof.",
+    "A passing trace does not establish provider availability, filesystem isolation, hosted CI, remote execution, or durable-state reconciliation."
+  ],
+  "follow_up": ["AR-0006 defines checkpoint and resume evidence.", "AR-0007 defines interruption and crash recovery integration.", "AR-0018 implements the production supervisor against Coordinator contracts."]
+}

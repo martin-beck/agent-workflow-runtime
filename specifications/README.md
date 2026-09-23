@@ -105,3 +105,22 @@ The fixture records only the task revision, specification/evidence digests,
 checker version, and safe identifiers. The checker does not inspect or create
 a worktree, execute a tool, consult Coordinator/AWQ/AWG/UI, or establish
 filesystem isolation; those claims require later integration work (AR-0019).
+
+## AR-0005 supervisor admission and lifecycle
+
+`supervisor-lifecycle-v1.json` defines task/worktree admission, fenced leases
+and heartbeats, cancellation, worker handoff, stale-worker recovery, and
+terminal lifecycle transitions. `scripts/check_supervisor.py` and the
+standard-library `SupervisorState` model are deterministic and fail closed.
+
+```text
+python3 scripts/check_supervisor.py \
+  --spec specifications/supervisor-lifecycle-v1.json \
+  --trace specifications/fixtures/supervisor-trace-ar0005-v1.json \
+  --expected-revision 5
+```
+
+The model observes integer times only. It does not launch or stop workers,
+renew a real Coordinator lease, persist state, or prove provider, filesystem,
+hosted-CI, remote, or runtime success. Handoff and recovery replace the worker
+and lease before resume; old worker actions are rejected.

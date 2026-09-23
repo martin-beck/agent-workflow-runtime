@@ -47,6 +47,21 @@ quality result, or task completion.
 All components must preserve the task ID, task revision, worktree identity,
 session ID, adapter identity, and evidence digests across boundaries.
 
+## AR-0005 supervisor boundary
+
+Supervisor admission is bound to the Coordinator task revision, project and
+exclusive worktree identity, session, worker, and lease. Every action is fenced
+by the current worker and lease. A heartbeat must advance both observation time
+and expiry; cancellation is an explicit cancelling/acknowledged transition.
+Handoff and stale recovery replace the worker and lease before resume, fencing
+the old worker. Expiry is fail-closed: the old worker cannot heartbeat or act,
+and recovery is allowed only after expiry.
+
+The offline reference model and checker are in `scripts/supervisor.py` and
+`scripts/check_supervisor.py`. They validate supplied evidence only and do not
+claim Coordinator, process, provider, or remote execution effects. Production
+integration remains the scope of AR-0018.
+
 ## AR-0004 execution boundary
 
 Before a session is active, the runtime boundary must carry the exact
