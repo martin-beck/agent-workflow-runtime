@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-production-provider-adapters",
+  "version": "1.0.0",
+  "title": "AR-0050 bounded production provider adapter contract",
+  "normative": true,
+  "task": {"id": "AR-0050", "revision": 5},
+  "adapters": {
+    "codex": {"model_identity": "codex-offline-1", "capabilities": ["streaming", "tool_use", "file_read", "resume"], "limits": {"max_in_flight": 1, "max_stream_frames": 8, "max_request_bytes": 4096}, "tools": ["read", "edit", "test"], "files": ["read"]},
+    "opencode": {"model_identity": "opencode-offline-1", "capabilities": ["streaming", "tool_use", "file_read", "file_write", "resume"], "limits": {"max_in_flight": 2, "max_stream_frames": 16, "max_request_bytes": 8192}, "tools": ["read", "edit", "test"], "files": ["read", "write"]},
+    "opendesk": {"model_identity": "opendesk-offline-1", "capabilities": ["streaming", "structured_output", "file_read", "resume"], "limits": {"max_in_flight": 1, "max_stream_frames": 4, "max_request_bytes": 2048}, "tools": ["read"], "files": ["read"]}
+  },
+  "lifecycle": {"states": ["admitted", "discovered", "negotiated", "active", "interrupted", "resumed", "completed", "failed"], "required": ["discover", "negotiate", "request", "stream", "interrupt", "resume", "close"], "terminal": ["completed", "failed"]},
+  "policy": {"tool_file_denial": "non_executing", "correlation": "unique request id and exact request digest", "model_identity": "provider and model digest are retained"},
+  "errors": {"mode": "fail_closed", "provider_error": "correlated non-success", "duplicate_request": "reject_without_state_change", "stale_checkpoint": "reject_without_state_change"},
+  "privacy": {"allowed": ["opaque identifiers", "bounded enums", "counts", "SHA-256 digests"], "forbidden": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "commands"]},
+  "offline_boundary": {"transport": "deterministic_fake_only", "provider": "not_performed", "network": "disabled", "llm": "not_performed", "credentials": "references_only", "live_verification": "unverified"},
+  "invariants": ["Each adapter independently enforces its profile and exact AR-0050 revision-5 binding.", "Streaming, interruption, and resume retain the exact request correlation and checkpoint digest.", "Tool and file policy denials never execute and never fabricate success.", "Provider errors are explicit non-success outcomes.", "Evidence is redacted and digest-only; raw provider output is never accepted."],
+  "limitations": ["Offline conformance uses a deterministic in-memory fake transport and cannot prove provider availability, authentication, network, model behavior, or live cancellation.", "A passing fixture is local qualification only; real provider qualification is separately gated per adapter."],
+  "compatibility": {"canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline", "major_change": "new specification_id or incompatible schema_version"}
+}
