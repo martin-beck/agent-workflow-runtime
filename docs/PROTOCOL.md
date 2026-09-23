@@ -27,6 +27,15 @@ The first protocol version covers `session_started`, `plan_proposed`,
 Each event carries a stable event ID, task ID, task revision, session ID,
 adapter ID/version, bounded disposition, and a public-safe evidence digest.
 
+AR-0002 makes this boundary machine-checkable in
+`specifications/session-event-protocol-v1.json`. A trace starts with
+`session_started` at sequence 1, links each later event to its immediate
+predecessor, keeps one exact task revision and worktree digest, and ends at a
+terminal event (`completed`, `failed`, or `interrupted`). Event, evidence, and
+canonical event digests are single-use. Unknown fields, unsupported protocol
+versions, privacy-bearing values, and any binding or ordering mismatch are
+rejected.
+
 ## Fail-closed rules
 
 - no claimed task means no mutation;
@@ -37,3 +46,10 @@ adapter ID/version, bounded disposition, and a public-safe evidence digest.
 - no exact-head review and required CI means no merge;
 - no durable state release and reconciliation means no completion claim.
 
+The local deterministic checker is:
+
+```text
+python3 scripts/check_session_events.py \
+  --trace specifications/fixtures/session-trace-ar0002-v1.json \
+  --expected-revision 5
+```

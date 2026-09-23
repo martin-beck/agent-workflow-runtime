@@ -1,0 +1,44 @@
+[
+  {
+    "schema_version": 1,
+    "protocol": {"id": "awr-normalized-session-events", "version": "1.0.0"},
+    "event_id": "EV-AR0002-START",
+    "event_digest": "sha256:19216d79d532ceaa2a14007de58f8e1fa5b92c165ab6d68404337f2e8c8c3efc",
+    "sequence": 1,
+    "event_type": "session_started",
+    "task": {"id": "AR-0002", "revision": 5},
+    "session": {"id": "SES-AR0002-OFFLINE", "worktree_key": "agent-workflow-runtime-0002", "worktree_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    "adapter": {"id": "fixture", "version": "1.0.0"},
+    "correlation": {"session_id": "SES-AR0002-OFFLINE", "parent_event_id": null},
+    "disposition": "started",
+    "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+    "schema_version": 1,
+    "protocol": {"id": "awr-normalized-session-events", "version": "1.0.0"},
+    "event_id": "EV-AR0002-CHECKPOINT",
+    "event_digest": "sha256:16e59e8e86e01f4ed47e08866f0edf77eeadf995393f4235bbe2ddf9bbf48949",
+    "sequence": 2,
+    "event_type": "checkpointed",
+    "task": {"id": "AR-0002", "revision": 5},
+    "session": {"id": "SES-AR0002-OFFLINE", "worktree_key": "agent-workflow-runtime-0002", "worktree_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    "adapter": {"id": "fixture", "version": "1.0.0"},
+    "correlation": {"session_id": "SES-AR0002-OFFLINE", "parent_event_id": "EV-AR0002-START"},
+    "disposition": "accepted",
+    "evidence_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+    "schema_version": 1,
+    "protocol": {"id": "awr-normalized-session-events", "version": "1.0.0"},
+    "event_id": "EV-AR0002-DONE",
+    "event_digest": "sha256:c62f6f68cad4c15043f2f0fd0fc71a1900856f777078a89f65ae6b329d54f50e",
+    "sequence": 3,
+    "event_type": "completed",
+    "task": {"id": "AR-0002", "revision": 5},
+    "session": {"id": "SES-AR0002-OFFLINE", "worktree_key": "agent-workflow-runtime-0002", "worktree_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    "adapter": {"id": "fixture", "version": "1.0.0"},
+    "correlation": {"session_id": "SES-AR0002-OFFLINE", "parent_event_id": "EV-AR0002-CHECKPOINT"},
+    "disposition": "completed",
+    "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+  }
+]
