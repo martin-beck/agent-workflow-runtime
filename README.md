@@ -153,6 +153,20 @@ publication remains `not_performed` and remote verification remains
 specifications/fixtures/fresh-clone-release-ar0027-v1.json
 --expected-revision 3`.
 
+AR-0029 adds `specifications/coordinator-live-state-v1.json` and a local,
+file-backed Coordinator-shaped harness. It models exact task identity,
+project/worktree/session bindings, claims, leases, revision-fenced state
+events, atomic persistence, digest-linked replay, and idempotent operation IDs.
+Validate it offline with:
+
+```text
+python3 scripts/check_coordinator_state.py --spec specifications/coordinator-live-state-v1.json --record specifications/fixtures/coordinator-live-state-ar0029-v1.json --expected-revision 3
+```
+
+This does not contact or mutate the Coordinator state repository. Live
+verification, providers, network, hosted CI, and remote execution remain
+unverified and require a separately approved integration path.
+
 AR-0028 adds `specifications/umbrella-maintenance-v1.json`, a revision-3-bound
 offline registration and maintenance workflow for Coordinator, runtime, AWQ,
 AWG, UI, release, and self-evolution phases. It preserves authority ownership

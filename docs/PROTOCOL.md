@@ -355,3 +355,20 @@ AR-0028 revision 3. The checker preserves the authority membership and
 requires self-evolution to remain proposal-only. Registration is supplied
 evidence; no umbrella update, Coordinator/AWQ/AWG/UI operation, release,
 publication, provider, network, LLM, or durable-state action is performed.
+
+## AR-0029 Coordinator identity, leases, and durable events
+
+`coordinator-live-state-v1.json` is the versioned machine-readable contract
+for consuming Coordinator state. Every operation carries the exact task ID and
+revision plus project, worktree, session, owner, and lease bindings. Claim is
+allowed only for an unclaimed open task; heartbeat, state-event, and release
+require the current owner and lease. Claim, state-event, and release advance
+the task revision; heartbeat does not. The Coordinator remains authoritative
+for all of these decisions.
+
+The local harness persists a canonical JSON document and digest-linked event
+chain using atomic replacement. Operation IDs provide replay/idempotency:
+identical replay returns the recorded result, while changed content, stale
+revision, crossed binding, unknown lease, malformed input, privacy fields, and
+unauthorized transitions fail closed. The checker is an offline
+qualification boundary and does not perform a live Coordinator operation.
