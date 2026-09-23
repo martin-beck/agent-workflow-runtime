@@ -190,3 +190,25 @@ python3 scripts/check_privacy_safe_journal.py \
 The model does not provide fsync, locking, signatures, crash durability, or
 general personal-data classification. It performs no network, provider,
 Coordinator, AWQ, AWG, UI, Git, or LLM operation.
+
+## AR-0017 provider-neutral OpenDesk-style adapter
+
+`opendesk-adapter-v1.json` defines a provider-neutral capability projection
+and normalized request outcome for an OpenDesk-style adapter. The reference
+model is `scripts/opendesk_adapter.py`; it has no provider, process, network,
+credential, or LLM connection. A known capability that is not advertised is
+returned as `unsupported_capability` with `execute: false` and no lifecycle
+state change. Unknown capabilities and malformed or stale inputs are rejected
+without state change. `scripts/check_opendesk_adapter.py` checks the exact
+revision-5 trace:
+
+```text
+python3 scripts/check_opendesk_adapter.py \
+  --spec specifications/opendesk-adapter-v1.json \
+  --trace specifications/fixtures/opendesk-trace-ar0017-v1.json \
+  --expected-revision 5
+```
+
+This is a contract and evidence check only. It does not establish OpenDesk or
+any provider availability, authorization, implementation support, streaming,
+tool/file execution, remote runtime success, or hosted CI.

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-opendesk-style-adapter",
+  "version": "1.0.0",
+  "title": "Provider-neutral OpenDesk-style adapter contract",
+  "normative": true,
+  "task": {"id": "AR-0017", "revision": 5},
+  "authority": {
+    "coordinator": ["task identity", "task revision", "worktree identity"],
+    "quality": ["requirements", "quality gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing discussion rendering and input"],
+    "runtime": ["offline capability projection", "normalized adapter outcomes"]
+  },
+  "adapter": {
+    "identity": {"id": "^[a-z][a-z0-9-]{1,31}$", "version": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "known_capabilities": ["conversation", "streaming", "structured_output", "tool_use", "file_read", "file_write", "resume"],
+    "capability_report": {"required": ["adapter", "capabilities", "limits", "digest"], "digest": "sha256:<64 lowercase hexadecimal characters>"},
+    "limits": {"max_capabilities": 16, "max_request_digest": 72, "max_trace_records": 64}
+  },
+  "lifecycle": {
+    "states": ["undiscovered", "ready", "active", "terminated", "failed"],
+    "transitions": [
+      {"operation": "discover", "from": "undiscovered", "to": "ready"},
+      {"operation": "request", "from": ["ready", "active"], "to": "active"},
+      {"operation": "terminate", "from": ["ready", "active"], "to": "terminated"},
+      {"operation": "fail", "from": ["ready", "active"], "to": "failed"}
+    ],
+    "terminal": ["terminated", "failed"],
+    "binding": ["task.id", "task.revision", "session.id", "session.worktree_key", "session.worktree_digest", "adapter.id", "adapter.version"]
+  },
+  "request": {
+    "request": ["capability", "request_digest"],
+    "terminate": ["reason"],
+    "fail": ["code"]
+  },
+  "unsupported_capability": {
+    "disposition": "unsupported_capability",
+    "required_fields": ["capability", "disposition", "state", "binding"],
+    "state_change": false,
+    "execution": false,
+    "retry": "only after a new capability report or adapter version"
+  },
+  "invariants": [
+    "The adapter is an offline model and never launches, authenticates, or contacts a provider.",
+    "A known but unadvertised capability returns unsupported_capability without execution or lifecycle state change.",
+    "An unknown capability, stale revision, malformed digest, privacy-bearing value, or invalid transition is rejected without state change.",
+    "Supported requests accept only bounded digest references; prompts, transcripts, credentials, paths, and raw output are not contract data.",
+    "Every outcome preserves one exact task revision, session/worktree binding, and adapter identity.",
+    "Terminal states fence all later requests, and unsupported capability is never reported as success."
+  ],
+  "failure_semantics": {"mode": "fail_closed", "invalid_input": "reject_without_state_change", "unsupported_capability": "return_explicit_nonexecuting_outcome", "interrupted": "terminate_with_reason_interrupted"},
+  "compatibility": {"major_change": "new specification_id or incompatible schema_version", "minor_change": "backward-compatible documented fields only", "canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline"},
+  "privacy": {"forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "personal_data", "raw_output"], "projection": "identities, capabilities, bounded dispositions, and digests only"},
+  "limitations": [
+    "The reference model proves contract shape and deterministic state transitions only; it does not prove OpenDesk or any provider availability.",
+    "Capability advertisement is an offline input and does not establish authorization, implementation support, model behavior, or network reachability.",
+    "Provider launch, credentials, streaming transport, tool execution, files, resume, supervision, and remote runtime are outside this AR."
+  ],
+  "follow_up": ["AR-0018 defines production supervision and provider process integration.", "Coordinator, AWQ, AWG, and UI remain authoritative for their respective domains."]
+}

@@ -85,3 +85,20 @@ The offline reference model accepts only complete normalized observations and
 rejects any exceeded budget, incomplete process-tree observation, timeout, or
 unacknowledged cancellation. It is evidence evaluation, not host enforcement;
 OS-specific containment and live measurement remain a later integration scope.
+
+## AR-0017 provider-neutral OpenDesk-style adapter
+
+The AR-0017 adapter contract projects a bounded capability set and accepts
+only digest-referenced requests. It deliberately models an OpenDesk-style
+interface without naming or launching OpenDesk or another provider. Supported
+capabilities produce normalized accepted outcomes with `execute: false`;
+known but unadvertised capabilities produce the explicit
+`unsupported_capability` disposition and preserve lifecycle state. Unknown
+capabilities, stale revisions, privacy-bearing values, and invalid transitions
+are rejected fail-closed.
+
+`scripts/opendesk_adapter.py` and `scripts/check_opendesk_adapter.py` are
+offline reference/model checks. They prove only the supplied contract shape
+and deterministic transitions. They do not prove provider availability,
+authorization, transport, model behavior, tool or file execution, or runtime
+success.

@@ -38,6 +38,11 @@ The runtime must fail closed when an agent action cannot be bound to a claimed
 task revision, an allowed capability, a valid worktree, a quality result, or a
 durable oracle outcome.
 
+AR-0017 adds the versioned provider-neutral OpenDesk-style adapter contract
+in `specifications/opendesk-adapter-v1.json`. Its offline model explicitly
+returns `unsupported_capability` without execution or state change for known
+but unadvertised capabilities; it does not launch OpenDesk or any provider.
+
 The admission root is `specifications/runtime-charter-v1.json`. Before a
 design or conceptual decision is implemented, an offline admission envelope
 must bind the canonical specification digest, the current Coordinator task
