@@ -6,9 +6,6 @@ project:
   kind: execution-runtime
   organization: martin-beck
   state_repository: martin-beck/agent-workflow-runtime-state
-  excluded_examples:
-    - agent-systems-benchmark
-    - agent-relay
 authorities:
   coordinator:
     repository: martin-beck/agent-workflow-coordinator
@@ -28,4 +25,3 @@ runtime_owns:
   - capability and worktree boundaries
   - evidence and publication bridges
   - adapter conformance and replay
-

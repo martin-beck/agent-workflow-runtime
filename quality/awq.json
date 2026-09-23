@@ -1,0 +1,1 @@
+{"adapters":[],"exceptions":[],"extensions":[],"fixture_paths":[],"governance":{"max_emergency_hours":24,"max_standard_days":30,"owners":["@martin-beck"]},"profiles":["core","docs","github-actions","interaction-gates","privacy","schemas","supply-chain"],"schema_version":3,"unknown_formats":"error"}
