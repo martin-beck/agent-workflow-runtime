@@ -53,3 +53,10 @@ python3 scripts/check_session_events.py \
   --trace specifications/fixtures/session-trace-ar0002-v1.json \
   --expected-revision 5
 ```
+
+AR-0003 adds the adapter boundary behind this event protocol. Adapters must
+report only bounded capabilities and identity, bind every lifecycle result to
+the exact task revision and worktree, and accept interaction by digest
+reference rather than prompts or transcripts. The reference implementation
+and hostile checker are documented in `specifications/README.md`; they are
+offline state-machine checks and do not establish provider availability.

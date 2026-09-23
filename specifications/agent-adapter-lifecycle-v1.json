@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-agent-adapter-lifecycle",
+  "version": "1.0.0",
+  "title": "Agent adapter capability and lifecycle contract",
+  "normative": true,
+  "task": {"id": "AR-0003", "revision": 5},
+  "authority": {
+    "coordinator": ["task identity", "task revision", "worktree identity"],
+    "quality": ["requirements", "quality gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing discussion rendering and input"],
+    "runtime": ["adapter discovery", "capability reporting", "session lifecycle", "normalized interaction results"]
+  },
+  "adapter": {
+    "identity": {"id": "^[a-z][a-z0-9-]{1,31}$", "version": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "capabilities": ["discover", "start", "interact", "terminate", "fail"],
+    "capability_report": {"required": ["adapter", "capabilities", "limits", "digest"], "digest": "sha256:<64 lowercase hexadecimal characters>"},
+    "limits": {"max_operation": 32, "max_capabilities": 16, "max_trace_records": 64}
+  },
+  "lifecycle": {
+    "states": ["undiscovered", "discovered", "started", "active", "terminated", "failed"],
+    "transitions": [
+      {"operation": "discover", "from": "undiscovered", "to": "discovered"},
+      {"operation": "capabilities", "from": ["discovered", "started", "active"], "to": "same"},
+      {"operation": "start", "from": "discovered", "to": "started"},
+      {"operation": "interact", "from": ["started", "active"], "to": "active"},
+      {"operation": "terminate", "from": ["started", "active"], "to": "terminated"},
+      {"operation": "fail", "from": ["started", "active"], "to": "failed"}
+    ],
+    "terminal": ["terminated", "failed"],
+    "binding": ["task.id", "task.revision", "session.id", "session.worktree_key", "session.worktree_digest", "adapter.id", "adapter.version"]
+  },
+  "request": {
+    "start": ["task", "session"],
+    "interact": ["operation", "request_digest"],
+    "terminate": ["reason"],
+    "fail": ["code"]
+  },
+  "invariants": [
+    "An adapter cannot start before discovery or after a terminal state.",
+    "Every lifecycle result preserves one exact task revision, session/worktree binding, and adapter identity.",
+    "Interaction accepts only bounded digest references; prompts, transcripts, credentials, paths, and raw output are not adapter contract data.",
+    "Unknown operations, states, fields, capabilities, and revisions are rejected.",
+    "A terminal transition fences all later operations; failure is not reported as successful completion."
+  ],
+  "failure_semantics": {"mode": "fail_closed", "invalid_input": "reject_without_state_change", "unsupported_capability": "reject_without_state_change", "interrupted": "terminate_with_reason_interrupted"},
+  "compatibility": {"major_change": "new specification_id or incompatible schema_version", "minor_change": "backward-compatible documented fields only", "canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline"},
+  "privacy": {"forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "personal_data", "raw_output"], "projection": "identities, states, bounded dispositions, and digests only"},
+  "limitations": [
+    "The reference adapter is an offline state machine and does not launch a provider, process, network connection, or LLM.",
+    "Capability discovery does not prove provider availability or authorization; Coordinator, AWQ, AWG, and UI remain authoritative for their domains.",
+    "Resume, supervision, resource containment, durable journaling, and provider-specific adapters are deferred to later ARs."
+  ],
+  "follow_up": ["AR-0005 defines supervisor and worker lifecycle authority.", "AR-0007 defines interruption and crash recovery.", "AR-0015 through AR-0017 define provider adapters."]
+}
