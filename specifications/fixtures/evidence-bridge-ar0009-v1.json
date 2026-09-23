@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-awq-evidence", "version": "1.0.0"},
+  "task": {"id": "AR-0009", "revision": 5},
+  "project": {"key": "agent-workflow-runtime", "revision": "9a5d605000000000000000000000000000000000"},
+  "worktree": {"key": "agent-workflow-runtime-0009", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "session": {"id": "SES-AR0009-REFERENCE"},
+  "observations": [
+    {"id": "OBS-AR0009-TEST", "sequence": 1, "category": "test", "result": "passed", "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+    {"id": "OBS-AR0009-PRIVACY", "sequence": 2, "category": "privacy", "result": "passed", "evidence_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+    {"id": "OBS-AR0009-REVIEW", "sequence": 3, "category": "provenance", "result": "not_run", "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"}
+  ]
+}

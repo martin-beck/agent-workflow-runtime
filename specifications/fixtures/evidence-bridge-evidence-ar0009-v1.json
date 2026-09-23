@@ -1,0 +1,22 @@
+{
+  "checker": "awr-awq-evidence-checker/1.0.0",
+  "record_digest": "sha256:d3dfcc9ea0d526c9bb2d46219b57f862a9a1667cfaf8cf5497791ff0b22215e1",
+  "projection": {
+    "observations": [
+      {"category": "test", "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "id": "OBS-AR0009-TEST", "result": "passed", "sequence": 1},
+      {"category": "privacy", "evidence_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "id": "OBS-AR0009-PRIVACY", "result": "passed", "sequence": 2},
+      {"category": "provenance", "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "id": "OBS-AR0009-REVIEW", "result": "not_run", "sequence": 3}
+    ],
+    "project": {"key": "agent-workflow-runtime", "revision": "9a5d605000000000000000000000000000000000"},
+    "projection_digest": "sha256:9c1f8f6aac5258d2670c07b5115210b2cf63a7aff508bd8f1ee2202c9ce57ebf",
+    "protocol": "awr-awq-evidence@1.0.0",
+    "quality_status": "not_decided",
+    "session": {"id": "SES-AR0009-REFERENCE"},
+    "specification_digest": "sha256:73ee4a19eaeae6a651cf307a43527264b7b953941bac5b4fefc111748ebf19fb",
+    "task": {"id": "AR-0009", "revision": 5},
+    "worktree": {"digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "key": "agent-workflow-runtime-0009"}
+  },
+  "safe_digest": "sha256:ed4dbee9e74bcc1c12908c07528570a6451f69ab58d8b16d461840d168c57003",
+  "specification_digest": "sha256:73ee4a19eaeae6a651cf307a43527264b7b953941bac5b4fefc111748ebf19fb",
+  "task_revision": 5
+}
