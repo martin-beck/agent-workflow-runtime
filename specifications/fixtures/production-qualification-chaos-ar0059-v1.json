@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "protocol": {
+    "id": "awr-production-qualification-chaos",
+    "version": "1.0.0"
+  },
+  "task": {
+    "id": "AR-0059",
+    "revision": 5
+  },
+  "project": {
+    "key": "agent-workflow-runtime",
+    "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "worktree": {
+    "key": "agent-workflow-runtime-0059",
+    "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "session": {
+    "id": "SES-AR0059-OFFLINE"
+  },
+  "qualification": {
+    "source": "supplied_observation",
+    "live_measurement": "not_performed",
+    "release_status": "blocked_pending_live_evidence"
+  },
+  "thresholds": {
+    "max_concurrency": 4,
+    "min_throughput_per_second": 40,
+    "max_p95_latency_ms": 250,
+    "max_rss_mib": 512,
+    "max_recovery_ms": 2000,
+    "min_isolation_percent": 100
+  },
+  "adapters": [
+    "codex",
+    "opencode",
+    "opendesk"
+  ],
+  "scenarios": [
+    "concurrency",
+    "throughput_latency",
+    "resource_budgets",
+    "provider_failures",
+    "host_loss",
+    "lease_expiry",
+    "ui_interruption",
+    "awq_unavailable",
+    "awg_unavailable",
+    "asb_replay",
+    "upgrade_rollback",
+    "multi_agent_comparison"
+  ],
+  "metrics": [
+    {
+      "name": "concurrency",
+      "value": 4,
+      "unit": "agents",
+      "operator": "less_or_equal",
+      "threshold": 4,
+      "evidence_digest": "sha256:b3a4911c21e6492c610d235153dd37025f94174c8a5df15d7b9348c61a55ae94"
+    },
+    {
+      "name": "throughput_per_second",
+      "value": 80,
+      "unit": "events_per_second",
+      "operator": "greater_or_equal",
+      "threshold": 40,
+      "evidence_digest": "sha256:61d863ecb26195ec29d6665d36bf49593f40d2a0ec1bad09d046530c8b58888b"
+    },
+    {
+      "name": "p95_latency_ms",
+      "value": 120,
+      "unit": "ms",
+      "operator": "less_or_equal",
+      "threshold": 250,
+      "evidence_digest": "sha256:5c68bfcc90703cbcd237a47a0138cb2a4c4263b9692d1b975c63a4cda2082866"
+    },
+    {
+      "name": "rss_mib",
+      "value": 256,
+      "unit": "MiB",
+      "operator": "less_or_equal",
+      "threshold": 512,
+      "evidence_digest": "sha256:595d2fdf11bb3c194d6a53ec6b0cd6d113364e4d771f4ef761f90f7fafd6ea96"
+    },
+    {
+      "name": "recovery_ms",
+      "value": 900,
+      "unit": "ms",
+      "operator": "less_or_equal",
+      "threshold": 2000,
+      "evidence_digest": "sha256:78fd9b6275ecacc0120dc00dec9e0cd2fc660d6edb7c754c18bdc90215575370"
+    },
+    {
+      "name": "isolation_percent",
+      "value": 100,
+      "unit": "percent",
+      "operator": "greater_or_equal",
+      "threshold": 100,
+      "evidence_digest": "sha256:1f9a5a8223c17738f5cb7e2c5713411449ef2d5e6b00c711477d6486e7569eff"
+    }
+  ],
+  "observations": [
+    {
+      "id": "OBS-AR0059-01",
+      "scenario": "concurrency",
+      "adapter": "codex",
+      "task": {
+        "id": "AR-0059",
+        "revision": 5
+      },
+      "session_id": "SES-AR0059-OFFLINE",
+      "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "disposition": "observed",
+      "recovery": "recovered",
+      "fence": "checkpoint_bound",
+      "duration_ms": 120,
+      "evidence_digest": "sha256:9c28134674d64ddcf99200be0910982c50f4150029368b2f390cc214b4966b62"
+    },
+    {
+      "id": "OBS-AR0059-02",
+      "scenario": "throughput_latency",
+      "adapter": "opencode",
+      "task": {
+        "id": "AR-0059",
+        "revision": 5
+      },
+      "session_id": "SES-AR0059-OFFLINE",
+      "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "disposition": "observed",
+      "recovery": "recovered",
+      "fence": "checkpoint_bound",
+      "duration_ms": 120,
+      "evidence_digest": "sha256:ebebde17496ea4bdde68f1510a246a389ee45fc8a3f83a133303b507bb180db5"
+    },
+    {
+      "id": "OBS-AR0059-03",
+      "scenario": "resource_budgets",
+      "adapter": "opendesk",
+      "task": {
+        "id": "AR-0059",
+        "revision": 5
+      },
+      "session_id": "SES-AR0059-OFFLINE",
+      "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "disposition": "observed",
+      "recovery": "blocked",
+      "fence": "terminal_blocked",
+      "duration_ms": 600,
+      "evidence_digest": "sha256:ceb85839d5cd36f5f0462dd1e1ec7acbb8f9a13d77e6b19c881fea98481bd59e"
+    },
+    {
+      "id": "OBS-AR0059-04",
+      "scenario": "provider_failures",
+      "adapter": "codex",
+      "task": {
+        "id": "AR-0059",
+        "revision": 5
+      },
+      "session_id": "SES-AR0059-OFFLINE",
+      "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "disposition": "observed",
+      "recovery": "recovered",
+      "fence": "new_worker_lease",
+      "duration_ms": 240,
+      "evidence_digest": "sha256:af32f85176f5b891bef4926ea6762035c27b12963632eb00eb83d8a6a4121c0f"
+    },
+    {
+      "id": "OBS-AR0059-05",
+      "scenario": "host_loss",
+      "adapter": "opencode",
+      "task": {
+        "id": "AR-0059",
+        "revision": 5
+      },
+      "session_id": "SES-AR0059-OFFLINE",
+      "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "disposition": "observed",
+      "recovery": "recovered",
+      "fence": "new_worker_lease",
+      "duration_ms": 380,
+      "evidence_digest": "sha256:8fce60ab012fe3dcec292cabbd639d14eb1a92c73464572f5c15904c539d026b"
+    },
+    {
+      "id": "OBS-AR0059-06",
+      "scenario": "lease_expiry",
+      "adapter": "opendesk",
+      "task": {
+        "id": "AR-0059",
+        "revision": 5
+      },
+      "session_id": "SES-AR0059-OFFLINE",
+      "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "disposition": "observed",
+      "recovery": "recovered",
+      "fence": "new_worker_lease",
+      "duration_ms": 160,
+      "evidence_digest": "sha256:a68e7a4a6305f5aa4b609dd448c2a1ee5154cb5f92ed7e4bd41f841278bdf72b"
+    },
+    {
+      "id": "OBS-AR0059-07",
+      "scenario": "ui_interruption",
+      "adapter": "codex",
+      "task": {
+        "id": "AR-0059",
+        "revision": 5
+      },
+      "session_id": "SES-AR0059-OFFLINE",
+      "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "disposition": "observed",
+      "recovery": "recovered",
+      "fence": "checkpoint_bound",
+      "duration_ms": 140,
+      "evidence_digest": "sha256:9abe303bfc300c4a4a832d968cd02e3c2b91efb4bc6d970376ccd2cdf95f0817"
+    },
+    {
+      "id": "OBS-AR0059-08",
+      "scenario": "awq_unavailable",
+      "adapter": "opencode",
+      "task": {
+        "id": "AR-0059",
+        "revision": 5
+      },
+      "session_id": "SES-AR0059-OFFLINE",
+      "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "disposition": "observed",
+      "recovery": "blocked",
+      "fence": "terminal_blocked",
+      "duration_ms": 200,
+      "evidence_digest": "sha256:2a4d181818913c4419302f28a00dc05dc81358aa6d7ca97fbf7352f5a2b293dd"
+    },
+    {
+      "id": "OBS-AR0059-09",
+      "scenario": "awg_unavailable",
+      "adapter": "opendesk",
+      "task": {
+        "id": "AR-0059",
+        "revision": 5
+      },
+      "session_id": "SES-AR0059-OFFLINE",
+      "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "disposition": "observed",
+      "recovery": "blocked",
+      "fence": "terminal_blocked",
+      "duration_ms": 200,
+      "evidence_digest": "sha256:02583f2b8ad906d8d5143a9ebebb89691493663308ad2078c39e9d768c23eab5"
+    },
+    {
+      "id": "OBS-AR0059-10",
+      "scenario": "asb_replay",
+      "adapter": "codex",
+      "task": {
+        "id": "AR-0059",
+        "revision": 5
+      },
+      "session_id": "SES-AR0059-OFFLINE",
+      "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "disposition": "observed",
+      "recovery": "recovered",
+      "fence": "checkpoint_bound",
+      "duration_ms": 160,
+      "evidence_digest": "sha256:7dd0283f7d73b3cb01b51384de89f67da80d08cef5fa0b6cc013c2d720d3cd11"
+    },
+    {
+      "id": "OBS-AR0059-11",
+      "scenario": "upgrade_rollback",
+      "adapter": "opencode",
+      "task": {
+        "id": "AR-0059",
+        "revision": 5
+      },
+      "session_id": "SES-AR0059-OFFLINE",
+      "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "disposition": "observed",
+      "recovery": "recovered",
+      "fence": "checkpoint_bound",
+      "duration_ms": 440,
+      "evidence_digest": "sha256:b06049d1779a9779c3138cc44a994d7f8690fdbb2699042fc1280707d954d0c5"
+    },
+    {
+      "id": "OBS-AR0059-12",
+      "scenario": "multi_agent_comparison",
+      "adapter": "opendesk",
+      "task": {
+        "id": "AR-0059",
+        "revision": 5
+      },
+      "session_id": "SES-AR0059-OFFLINE",
+      "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "disposition": "observed",
+      "recovery": "recovered",
+      "fence": "checkpoint_bound",
+      "duration_ms": 180,
+      "evidence_digest": "sha256:33ef5c3988ab37c5d781ad3991cd316871c7fe0304b0082d201d9400d24f534e"
+    }
+  ],
+  "result": {
+    "status": "qualified_offline",
+    "release": "blocked_pending_live_evidence",
+    "execute": false,
+    "provider": "not_performed",
+    "network": "disabled",
+    "llm": "not_performed",
+    "live_service": "not_performed",
+    "durable_state": "not_performed",
+    "remote_verification": "unverified",
+    "thresholds_passed": true,
+    "scenarios": 12
+  },
+  "evidence": {
+    "checker": "awr-production-qualification-chaos-checker/1.0.0",
+    "task_revision": 5,
+    "specification_digest": "sha256:dc7341abbfe3e7a2461790a1fd9f147f6ff53baa12fde3095c0e80e8dec83a6c",
+    "record_digest": "sha256:b40d0e8488f89eec79c98d5b6f59508624ed31dae6df7f92577390672dad8e53"
+  }
+}

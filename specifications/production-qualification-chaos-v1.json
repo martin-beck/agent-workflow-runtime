@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-production-qualification-chaos",
+  "version": "1.0.0",
+  "title": "Offline production qualification and deterministic chaos model",
+  "normative": true,
+  "task": {"id": "AR-0059", "revision": 5},
+  "adapters": ["codex", "opencode", "opendesk"],
+  "asb_workflows": ["setup", "preflight", "replay", "comparison", "interrupt_recovery"],
+  "scenarios": ["concurrency", "throughput_latency", "resource_budgets", "provider_failures", "host_loss", "lease_expiry", "ui_interruption", "awq_unavailable", "awg_unavailable", "asb_replay", "upgrade_rollback", "multi_agent_comparison"],
+  "thresholds": {"max_concurrency": 4, "min_throughput_per_second": 40, "max_p95_latency_ms": 250, "max_rss_mib": 512, "max_recovery_ms": 2000, "min_isolation_percent": 100},
+  "limits": {"max_observations": 32, "max_metrics": 8, "max_value": 1000000, "max_agents": 3},
+  "authority": {"coordinator": ["task", "revision", "claim", "lease", "durable state"], "awq": ["requirements", "gates", "evidence"], "awg": ["decisions", "guidance"], "ui": ["human rendering", "validated input"], "runtime": ["bounded translation", "offline qualification projection"]},
+  "offline_boundary": {"execute": false, "provider": "not_performed", "network": "disabled", "llm": "not_performed", "live_service": "not_performed", "durable_state": "not_performed", "remote_verification": "unverified"},
+  "privacy": {"reject": ["credential", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "raw_output", "command", "network_address"]},
+  "failure_semantics": {"mode": "fail_closed", "recovery_fence": "new worker and lease plus checkpoint digest before resume", "release": "all thresholds and scenarios required; otherwise blocked"},
+  "limitations": ["The checker evaluates deterministic supplied observations and does not run a workload or inject a failure.", "Synthetic qualification is not production readiness, provider support, host success, ASB benchmark execution, or authority acceptance.", "Exact environment, artifact provenance, AWQ acceptance, AWG decisions, Coordinator state, and live service evidence remain required for release."],
+  "follow_up": ["Run a separately approved live qualification with project-bound Coordinator state and exact environment provenance.", "Have AWQ independently accept the evidence and AWG resolve material workload or failure-taxonomy decisions before release."]
+}
