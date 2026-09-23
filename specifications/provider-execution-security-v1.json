@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-provider-execution-security",
+  "version": "1.0.0",
+  "title": "Provider execution security boundary",
+  "normative": true,
+  "task": "AR-0049 at Coordinator revision 5",
+  "authority": {"coordinator": ["task identity", "revisions", "leases", "durable state"], "runtime": ["provider session translation", "credential injection", "network and transport enforcement", "redaction"], "quality": ["requirements", "gates", "evidence acceptance"], "guidance": ["oracle escalation", "decisions"], "ui": ["human-facing rendering", "validated input"]},
+  "controls": {"credentials": "secret-manager references only; values never enter the contract; injection is ephemeral and cleaned on completion or cancellation", "network": "HTTPS port 443, TLS 1.3 peer verification, declared egress allowlist only", "transport": "bounded request/response bytes, frame size/count, timeout, idle timeout, stream window, and cancellation grace", "evidence": "redacted status/outcome and frame digests only; unknown provider outcomes remain unverified", "reliability": "retries are correlated, duplicate requests are rejected, and partial failure is explicit"},
+  "failure_semantics": {"mode": "fail_closed", "side_effects": "No provider, network, LLM, credential manager, process, Coordinator, or durable-state operation is performed."},
+  "offline_boundary": {"provider": "not_performed", "network": "disabled", "llm": "not_performed", "credentials": "references_only"},
+  "limitations": ["The checker validates synthetic observations and does not prove secret-manager behavior, TLS enforcement, host isolation, provider availability, or live cancellation.", "Offline qualification is not provider success, remote verification, or production security qualification."]
+}
