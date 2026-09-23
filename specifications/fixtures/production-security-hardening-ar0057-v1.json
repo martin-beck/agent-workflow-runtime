@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-production-security-hardening", "version": "1.0.0"},
+  "task": {"id": "AR-0057", "revision": 5},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+  "worktree": {"key": "agent-workflow-runtime-0057", "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+  "session": "SES-AR0057-OFFLINE",
+  "dependency_verification": {"status": "pass", "evidence_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "key_rotation": {"status": "pass", "evidence_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+  "secret_references": {"status": "pass", "evidence_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"},
+  "least_privilege": {"status": "pass", "evidence_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"},
+  "sandbox_egress": {"status": "pass", "evidence_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"},
+  "privacy_scan": {"status": "pass", "evidence_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"},
+  "audit_integrity": {"status": "pass", "evidence_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999"},
+  "vulnerability_response": {"status": "pass", "evidence_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888"},
+  "degraded_verification": {"status": "pass", "evidence_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"},
+  "audit": [
+    {"sequence": 1, "event_id": "AUD-01", "action": "admission_checked", "previous_digest": "sha256:c39d75c5426988326e58c908d94a01be5b0bd0825be7ccabbc98aca0d0bb856b", "event_digest": "sha256:174aa9203c6b7d3ecd6f9f2484d6dbcd9047b15aa453bfa03b2f460914e69f53"},
+    {"sequence": 2, "event_id": "AUD-02", "action": "controls_checked", "previous_digest": "sha256:174aa9203c6b7d3ecd6f9f2484d6dbcd9047b15aa453bfa03b2f460914e69f53", "event_digest": "sha256:cc43c53020fbc4df1519a3a90d0fa1545706da5f2fb7b5453d530cb7b92fb687"}
+  ],
+  "evidence": {
+    "dependencies": [{"name": "jsonschema", "version": "4.23.0", "source": "registry_pinned", "integrity_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "signature": "valid", "dco": "signed", "sbom_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "license_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"}],
+    "keys": {"active_key_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666", "next_key_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "rotation_due": false, "old_keys_revoked": true, "review_required": true},
+    "secrets": {"references_only": true, "values_absent": true, "manager": "local-vault", "versioned": true, "cleanup": "on_completion_or_cancel"},
+    "privilege": {"granted": ["read", "edit", "test"], "denied": ["network", "credentials", "provider", "llm", "durable_state"], "elevation": "none"},
+    "sandbox": {"argv_only": true, "inherit_environment": false, "filesystem": "worktree_only", "egress": "deny_by_default", "process_tree": "bounded_and_cleaned", "escape_attempts": "rejected"},
+    "privacy": {"scan_status": "pass", "raw_payloads": "absent", "private_values": "absent", "public_projection": "digest_only"},
+    "audit_digest": "sha256:cc43c53020fbc4df1519a3a90d0fa1545706da5f2fb7b5453d530cb7b92fb687",
+    "vulnerabilities": {"severity_bound": "critical_high_medium_low", "triage_sla_hours": 24, "stop_on_critical": true, "incident_reference_only": true},
+    "degradation": {"missing_signature": "fail_closed", "missing_sbom": "fail_closed", "stale_key": "fail_closed", "scanner_unavailable": "fail_closed", "audit_failure": "fail_closed"},
+    "record_digest": "sha256:954c2b061f4d77e15964cf7d7e68d9804d77d3214922b253827094b898a1b8b9"
+  }
+}

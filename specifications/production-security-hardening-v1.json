@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-production-security-hardening",
+  "version": "1.0.0",
+  "title": "Provider-neutral production security hardening",
+  "normative": true,
+  "task": {"id": "AR-0057", "revision": 5},
+  "controls": ["dependency_verification", "signature_and_dco", "sbom", "key_rotation", "secret_references", "least_privilege", "sandbox_egress", "privacy_scan", "audit_integrity", "vulnerability_response", "degraded_verification"],
+  "operations": {"rotation": "prepare_next_key_review_revoke_old_key", "incident": "stop_preserve_digest_only_evidence_escalate", "independent_review": "required_for_live_claims"},
+  "privacy": {"projection": "bounded enums booleans versions and SHA-256 digests only", "reject": ["credentials", "secrets", "prompts", "transcripts", "private paths", "host identifiers", "raw output"]},
+  "failure_semantics": {"mode": "fail_closed", "missing": ["signature", "DCO", "SBOM", "key freshness", "secret reference", "sandbox observation", "privacy scan", "audit integrity", "vulnerability triage"], "critical_vulnerability": "stop_and_escalate"},
+  "offline_boundary": {"scanner": "supplied_observations_only", "provider": "not_performed", "network": "disabled", "llm": "not_performed", "host": "not_inspected", "durable_state": "not_performed", "live_review": "required"},
+  "follow_up": ["Coordinator remains authoritative for identity, revisions, claims, leases, and durable state.", "AWQ remains authoritative for requirements, gates, and evidence acceptance.", "A passing fixture is structural evidence and does not prove a live host, provider, scanner, signature, or release."]
+}
