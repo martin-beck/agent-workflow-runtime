@@ -1,0 +1,16 @@
+{
+  "protocol": {"id": "awr-awg-decision-integration", "version": "1.0.0"},
+  "task": {"id": "AR-0053", "revision": 5},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+  "worktree": {"key": "agent-workflow-runtime-0053", "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+  "session": {"id": "SES-AR0053"},
+  "escalation": {"status": "required", "reason": "material_alternative", "context_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "batch_id": "BATCH-AR0053"},
+  "request": {"id": "REQ-AR0053", "batch_id": "BATCH-AR0053", "attempt": 1, "input_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "binding_digest": "sha256:1b964d1a7ba24a70183f560864859b0dd8b1916f38ea69a5aa8860c2501ea418"},
+  "transport": {"operation_id": "OP-AR0053", "state": "interrupted", "network": "not_performed", "checkpoint_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999", "interrupted": true},
+  "alternatives": [
+    {"id": "ALT-PROVIDER", "evidence_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"},
+    {"id": "ALT-WORKFLOW", "evidence_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"}
+  ],
+  "response": {"id": "DEC-AR0053", "batch_id": "BATCH-AR0053", "request_id": "REQ-AR0053", "source": "awg", "status": "received", "decision_status": "decided", "decision_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777", "selected_alternative_id": "ALT-WORKFLOW", "guidance": [{"id": "GUIDE-AR0053", "digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888"}], "expires_at": 200, "observed_at": 100, "binding_digest": "sha256:59b59b478f293552ce04690ec4a0befaa35a674cc4fc82a6aa8f7dca164c7256"},
+  "consumption": {"status": "applied", "decision_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777", "guidance_digests": ["sha256:8888888888888888888888888888888888888888888888888888888888888888"], "selected_alternative_id": "ALT-WORKFLOW", "binding_digest": "sha256:59b59b478f293552ce04690ec4a0befaa35a674cc4fc82a6aa8f7dca164c7256"}
+}

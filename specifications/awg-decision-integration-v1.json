@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-awg-decision-integration",
+  "version": "1.0.0",
+  "title": "Offline AWG decision request and consumption binding",
+  "normative": true,
+  "task": {"id": "AR-0053", "revision": 5},
+  "authority": {
+    "coordinator": ["task identity", "revision", "project", "worktree", "session"],
+    "awg": ["escalation classification", "decision status", "selected alternative", "guidance references", "expiry"],
+    "runtime": ["bounded request transport", "binding validation", "unresolved blocking", "decision consumption"]
+  },
+  "rules": [
+    "A material alternative is escalated with a stable batch ID and digest-only context.",
+    "A consumed decision must be attributed to AWG and bound to the exact request, task revision, and session.",
+    "Guidance references are opaque IDs and digests; runtime cannot author them.",
+    "An absent, rejected, conflicting, stale, or expired decision blocks the material alternative.",
+    "Runtime must not silently select an alternative or manufacture approval."
+  ],
+  "statuses": ["not_decided", "decided", "rejected", "conflicting", "expired"],
+  "limits": {"maximum_alternatives": 8, "maximum_guidance": 8},
+  "privacy": {"allowed": ["opaque identifiers", "enums", "bounded integers", "SHA-256 digests"], "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output"]},
+  "failure_semantics": {"mode": "fail_closed", "side_effects": "No AWG, network, LLM, provider, Coordinator, UI, Git, or durable-state operation is performed."},
+  "limitations": ["A passing fixture is deterministic structural qualification only.", "It is not a live AWG response or a production approval.", "Live transport and durable decision persistence require separately authorized integration."]
+}
