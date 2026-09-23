@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-production-readiness",
+  "version": "1.0.0",
+  "title": "Offline production-readiness, upgrade, rollback, incident, and maintenance harness",
+  "normative": true,
+  "task": {"id": "AR-0045", "revision": 5},
+  "sections": ["readiness", "upgrade", "rollback", "incident", "maintenance"],
+  "authority": {"coordinator": ["task identity", "claims", "revisions", "leases", "durable state"], "awq": ["requirements", "gates", "evidence"], "awg": ["decisions", "guidance"], "runtime": ["bounded offline translation and enforcement"]},
+  "states": ["qualified", "blocked", "not_performed", "unverified"],
+  "privacy": {"allowed": ["identifiers", "enums", "booleans", "versions", "digests", "bounded check names"], "reject": ["credentials", "secrets", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "network values"]},
+  "failure_semantics": {"mode": "fail_closed", "side_effects": "No release, publication, upgrade, rollback, incident response, maintenance, provider, network, Git, CI, Coordinator, or durable-state operation is performed."},
+  "limitations": ["The harness validates supplied structural observations only.", "A qualified fixture is not production readiness, a live upgrade or rollback, incident response, maintenance execution, provider support, or remote success.", "Release and publication remain not_performed; provider execution and remote verification remain unverified."],
+  "follow_up": ["A separately approved revision-bound live contract is required before any host or provider operation."]
+}
