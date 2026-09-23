@@ -1,0 +1,28 @@
+{
+  "task_id": "AR-0047",
+  "task_revision": 5,
+  "ambiguous_operation": true,
+  "operations": [
+    {
+      "request": {"operation": "claim", "operation_id": "OP-claim", "task_id": "AR-0047", "expected_revision": 5, "now": 10, "owner": "worker-a", "lease": "lease-a", "new_expires": 20},
+      "expected_error": "ambiguous outcome"
+    },
+    {
+      "request": {"operation": "claim", "operation_id": "OP-claim", "task_id": "AR-0047", "expected_revision": 5, "now": 10, "owner": "worker-a", "lease": "lease-a", "new_expires": 20},
+      "response": {"disposition": "accepted", "operation_id": "OP-claim", "task_revision": 6, "owner": "worker-a", "lease": "lease-a", "fence": 1, "lease_expires": 20, "status": "in_progress"}
+    },
+    {
+      "request": {"operation": "heartbeat", "operation_id": "OP-heartbeat", "task_id": "AR-0047", "expected_revision": 6, "now": 15, "owner": "worker-a", "lease": "lease-a", "fence": 1, "new_expires": 30},
+      "response": {"disposition": "accepted", "operation_id": "OP-heartbeat", "task_revision": 6, "owner": "worker-a", "lease": "lease-a", "fence": 1, "lease_expires": 30, "status": "in_progress"}
+    },
+    {
+      "request": {"operation": "handoff", "operation_id": "OP-handoff", "task_id": "AR-0047", "expected_revision": 6, "now": 18, "owner": "worker-a", "lease": "lease-a", "fence": 1, "new_owner": "worker-b", "new_lease": "lease-b", "new_expires": 40},
+      "response": {"disposition": "accepted", "operation_id": "OP-handoff", "task_revision": 7, "owner": "worker-b", "lease": "lease-b", "fence": 2, "lease_expires": 40, "status": "in_progress"}
+    },
+    {
+      "request": {"operation": "release", "operation_id": "OP-release", "task_id": "AR-0047", "expected_revision": 7, "now": 25, "owner": "worker-b", "lease": "lease-b", "fence": 2},
+      "response": {"disposition": "accepted", "operation_id": "OP-release", "task_revision": 8, "owner": null, "lease": null, "fence": 2, "lease_expires": 0, "status": "open"}
+    }
+  ],
+  "evidence": {"checker": "awr-lease-claim-fencing-checker/1.0.0", "live_verification": "unverified", "network": "not_performed", "safe_digest": "sha256:9281698ef0199bcf3dd4942d588810fa955a0829c8bc7c433f8363e4d9e3d7f2"}
+}
