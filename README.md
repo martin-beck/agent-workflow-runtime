@@ -188,3 +188,17 @@ python3 scripts/check_session_bootstrap.py --spec specifications/session-bootstr
 
 The fixture does not contact Coordinator, start a process, contact a provider,
 use an LLM, or establish live lease validity.
+
+AR-0058 adds `specifications/production-deployment-release-v1.json`, a
+revision-5-bound offline contract for deterministic packaging, deployment
+plans, exact compatibility, reversible upgrades, exact-target rollback, and
+bounded release automation. Validate it with:
+
+```text
+python3 scripts/check_production_deployment_release.py --spec specifications/production-deployment-release-v1.json --record specifications/fixtures/production-deployment-release-ar0058-v1.json --expected-revision 5
+```
+
+The checker requires supplied provenance and DCO/signature observations, never
+executes a package manager, deployment, upgrade, rollback, release, provider,
+network, or durable-state operation, and preserves publication as
+`not_performed` and remote verification as `unverified`.

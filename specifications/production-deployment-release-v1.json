@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-production-deployment-release",
+  "version": "1.0.0",
+  "title": "Offline production packaging, deployment, compatibility, upgrade, rollback, and release automation",
+  "normative": true,
+  "task": {"id": "AR-0058", "revision": 5},
+  "areas": ["packaging", "deployment", "compatibility", "upgrade", "rollback", "release"],
+  "states": ["unqualified", "qualified", "prepared", "compatible", "ready", "not_performed", "unverified"],
+  "invariants": [
+    "Package provenance, compatibility, and every transition are bound to exact supplied digests.",
+    "Deployment and release automation are bounded plans and never execute offline.",
+    "Upgrade interruption requires checkpoint recovery and rollback targets the exact prior artifact.",
+    "Missing, stale, crossed, replayed, or privacy-bearing observations fail closed."
+  ],
+  "privacy": {"allowed": ["bounded identifiers", "versions", "enums", "counts", "SHA-256 digests"], "forbidden": ["credentials", "secrets", "prompts", "transcripts", "private paths", "host identifiers", "raw output"]},
+  "failure_semantics": {"mode": "fail_closed", "invalid_input": "reject_without_partial_output", "execution": "false", "publication": "not_performed", "remote_verification": "unverified"},
+  "offline_boundary": {"package_manager": "not_performed", "deployment": "not_performed", "release": "not_performed", "network": "disabled", "providers": "not_performed", "llm": "not_performed", "durable_state": "not_performed"},
+  "follow_up": ["Coordinator remains authoritative for task identity, revisions, leases, and durable state.", "AWQ remains authoritative for requirements, gates, and evidence acceptance.", "A passing fixture is structural evidence only; it does not prove a live package, host, deployment, upgrade, rollback, publication, or remote success."]
+}

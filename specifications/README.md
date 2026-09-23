@@ -583,3 +583,20 @@ python3 scripts/check_umbrella_maintenance.py \
 
 The checker performs no authority transfer, publication, provider, network,
 LLM, or durable-state operation.
+
+## AR-0058 production deployment and release
+
+`production-deployment-release-v1.json` binds packaging, deployment,
+compatibility, upgrade, rollback, and bounded release automation to AR-0058
+revision 5. Its fixture requires exact artifact and compatibility digests,
+supplied signature/DCO observations, and an exact prior-version rollback target.
+
+```text
+python3 scripts/check_production_deployment_release.py \
+  --spec specifications/production-deployment-release-v1.json \
+  --record specifications/fixtures/production-deployment-release-ar0058-v1.json \
+  --expected-revision 5
+```
+
+This is offline structural evidence only: execution, publication, providers,
+network, package managers, and durable state remain untouched.
