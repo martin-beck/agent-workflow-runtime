@@ -550,3 +550,19 @@ python3 scripts/check_fresh_clone_release.py \
 
 The checker performs no installation, package-manager, Git, publication,
 provider, network, or durable-state operation.
+
+## AR-0028 umbrella registration and maintenance
+
+`umbrella-maintenance-v1.json` and its fixture bind registration and the
+ordered Coordinator, runtime, AWQ, AWG, UI, release, and self-evolution phases
+to AR-0028 revision 3. Run the offline checker with:
+
+```text
+python3 scripts/check_umbrella_maintenance.py \
+  --spec specifications/umbrella-maintenance-v1.json \
+  --record specifications/fixtures/umbrella-maintenance-ar0028-v1.json \
+  --expected-revision 3
+```
+
+The checker performs no authority transfer, publication, provider, network,
+LLM, or durable-state operation.

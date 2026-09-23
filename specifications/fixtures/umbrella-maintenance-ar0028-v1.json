@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-umbrella-maintenance", "version": "1.0.0"},
+  "task": {"id": "AR-0028", "revision": 3},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+  "worktree": {"key": "agent-workflow-runtime-0028", "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+  "registration": {
+    "status": "registered",
+    "family": "agent-workflow",
+    "runtime_key": "agent-workflow-runtime",
+    "authority_transfer": "none",
+    "members": ["coordinator", "runtime", "quality", "guidance", "ui"]
+  },
+  "maintenance": {
+    "cycle_id": "AR-0028-cycle-1",
+    "status": "qualified",
+    "release": "not_performed",
+    "remote_verification": "unverified",
+    "self_evolution": "proposal_only"
+  },
+  "transitions": [
+    {"id": "TR-1", "phase": "coordinator", "authority": "coordinator", "status": "observed", "input_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "output_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+    {"id": "TR-2", "phase": "runtime", "authority": "runtime", "status": "observed", "input_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "output_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+    {"id": "TR-3", "phase": "quality", "authority": "quality", "status": "observed", "input_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "output_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+    {"id": "TR-4", "phase": "guidance", "authority": "guidance", "status": "observed", "input_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "output_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+    {"id": "TR-5", "phase": "ui", "authority": "ui", "status": "observed", "input_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "output_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+    {"id": "TR-6", "phase": "release", "authority": "release", "status": "observed", "input_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "output_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+    {"id": "TR-7", "phase": "self_evolution", "authority": "self_evolution", "status": "observed", "input_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "output_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}
+  ],
+  "result": {"status": "maintenance_ready", "registration": "registered", "phases": 7, "release": "not_performed", "remote_verification": "unverified"},
+  "evidence": {"task_revision": 3, "specification_digest": "sha256:39a5732c4b15976884bcf7fcf86e8359f9b59128c34b1873029a80b293f58ae5", "record_digest": "sha256:378179a2d83aff52943894bd0087f10d41ffe08fee28dc82fd5d3fa6f6d1b258", "checker": "awr-umbrella-maintenance-checker/1.0.0"}
+}

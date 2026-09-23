@@ -278,3 +278,12 @@ rollback targeting. It requires bounded versions and digests, keeps
 publication non-executing, and prepares rollback only for the exact supplied
 source head. The model and checker do not install, publish, contact a
 provider, inspect a host, or mutate durable state.
+
+## AR-0028 umbrella registration and maintenance
+
+The umbrella boundary registers AWR as the provider-neutral execution and
+integration layer without transferring authority from Coordinator, AWQ, AWG,
+or UI. Its ordered maintenance phases cover coordinator, runtime, quality,
+guidance, UI, release, and proposal-only self-evolution observations. The
+offline model and checker do not update an umbrella, publish a release, or
+mutate durable state.
