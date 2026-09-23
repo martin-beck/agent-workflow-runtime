@@ -419,6 +419,23 @@ python3 scripts/check_ui_session_bridge.py \
   --expected-revision 1
 ```
 
+## AR-0054 production UI human-gate integration
+
+`production-ui-human-gate-v1.json` defines the revision-5-bound production-shaped
+session bridge. It validates private mode-0600 session metadata, rendering-input
+digests, human presence, approve/reject/clarify/timeout/cancel final events, and
+one idempotent final event. Persistence remains explicitly `not_performed` in
+the offline checker; no UI, Coordinator, network, or durable-state operation is
+performed and rendering is never approval.
+
+```text
+python3 scripts/check_production_ui_human_gate.py \
+  --spec specifications/production-ui-human-gate-v1.json \
+  --record specifications/fixtures/production-ui-human-gate-ar0054-v1.json \
+  --evidence specifications/fixtures/production-ui-human-gate-evidence-ar0054-v1.json \
+  --expected-revision 5
+```
+
 ## AR-0012 provider-neutral Git/publication evidence
 
 `publication-bridge-v1.json` defines a revision-3-bound envelope for branch,
