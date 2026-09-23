@@ -269,3 +269,12 @@ digests only. `scripts/operational_cli.py` and
 launch processes, contact providers, inspect a host, or mutate Coordinator
 state. They cannot prove that a real CLI, lease, worktree, or remote handoff
 exists.
+
+## AR-0027 fresh-clone release and compatibility lock
+
+The release boundary qualifies supplied observations for clean-checkout
+installation, exact compatibility declarations, release evidence, and
+rollback targeting. It requires bounded versions and digests, keeps
+publication non-executing, and prepares rollback only for the exact supplied
+source head. The model and checker do not install, publish, contact a
+provider, inspect a host, or mutate durable state.

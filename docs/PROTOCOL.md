@@ -339,3 +339,11 @@ resume, and diagnosis before shutdown. It performs no CLI, process, provider,
 network, shell, Git, Coordinator, AWQ, AWG, UI, or durable-state operation;
 shutdown remains `durable_state: not_performed` and
 `remote_verification: unverified`.
+
+## AR-0027 fresh-clone release and compatibility lock
+
+`fresh-clone-release-lock-v1.json` binds installation, compatibility, release,
+and rollback observations to AR-0027 revision 3. The checker requires exact
+bounded versions and digests, explicit supplied signature/DCO observations,
+and an exact rollback target. Installation, publication, remote verification,
+and rollback execution remain `not_performed` or `unverified`.

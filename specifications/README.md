@@ -534,3 +534,19 @@ python3 scripts/check_autonomous_workflow.py \\
 
 The model preserves authority ownership and recovery fencing while making no
 provider, network, remote, or durable-state call.
+
+## AR-0027 fresh-clone release and compatibility lock
+
+`fresh-clone-release-lock-v1.json` and its fixture bind clean-checkout
+installation, compatibility, supplied release evidence, and exact-target
+rollback preparation to AR-0027 revision 3. Run the offline checker with:
+
+```text
+python3 scripts/check_fresh_clone_release.py \
+  --spec specifications/fresh-clone-release-lock-v1.json \
+  --record specifications/fixtures/fresh-clone-release-ar0027-v1.json \
+  --expected-revision 3
+```
+
+The checker performs no installation, package-manager, Git, publication,
+provider, network, or durable-state operation.
