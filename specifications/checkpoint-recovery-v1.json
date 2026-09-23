@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-checkpoint-recovery",
+  "version": "1.0.0",
+  "title": "Durable checkpoint, interruption, replay, and crash recovery contract",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "task revision", "claims", "leases", "durable state"],
+    "quality": ["requirements", "quality gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing interruption input"],
+    "runtime": ["checkpoint protocol enforcement", "replay evaluation", "recovery fencing"]
+  },
+  "binding": {
+    "task_id": "^AR-[0-9]{4}$",
+    "revision": "positive integer supplied by Coordinator",
+    "checkpoint_id": "^CHK-[A-Z0-9-]{1,63}$",
+    "operation_id": "^OP-[A-Z0-9-]{1,63}$",
+    "worker_id": "^WRK-[A-Z0-9-]{1,63}$",
+    "lease_id": "^LSE-[A-Z0-9-]{1,63}$",
+    "digest": "sha256:64 lowercase hexadecimal characters"
+  },
+  "durability": {
+    "checkpoint": "A checkpoint is complete only after its canonical payload and digest are durably recorded; a caller claim is not evidence.",
+    "identity": "A checkpoint is immutable and binds task revision, session, worktree, worker, lease, sequence, and state digest.",
+    "restart": "Restart may use only the latest verified checkpoint for the exact task/session/worktree and a strictly newer fenced lease.",
+    "failure": ["host_failed", "agent_failed", "interrupted"]
+  },
+  "lifecycle": {
+    "states": ["active", "interrupting", "interrupted", "recovering", "replayed", "completed", "failed", "safe_mode"],
+    "transitions": [
+      ["active", "checkpoint", "active"],
+      ["active", "interrupt", "interrupting"],
+      ["interrupting", "interrupt_ack", "interrupted"],
+      ["active", "host_failed", "interrupted"],
+      ["active", "agent_failed", "interrupted"],
+      ["interrupted", "recover", "recovering"],
+      ["recovering", "resume", "active"],
+      ["active", "replay", "replayed"],
+      ["replayed", "resume", "active"],
+      ["active", "complete", "completed"],
+      ["active", "fail", "failed"]
+    ],
+    "terminal": ["completed", "failed", "safe_mode"]
+  },
+  "idempotence": {
+    "rule": "A retry with the same operation ID is accepted only when its canonical operation payload and result digest are identical; it returns the original result without a second mutation.",
+    "replay": "A replay consumes a checkpoint event at most once; a duplicate event ID, checkpoint ID, or operation ID with changed content fails closed.",
+    "ambiguity": "A missing or conflicting durable result is ambiguous and enters safe_mode; it is never guessed successful or retried with changed identity."
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale task revision", "cross-session or cross-worktree checkpoint", "unverified checkpoint", "old worker or lease", "duplicate or changed operation", "recovery before failure", "resume without recovery", "unknown fields", "privacy violation"],
+    "side_effects": "The checker and reference model perform no network, provider, process, Git, Coordinator, AWQ, AWG, UI, or filesystem operation."
+  },
+  "privacy": {
+    "forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "personal_data", "raw_output"],
+    "projection": "Evidence contains only stable opaque identifiers, bounded integers, revisions, dispositions, and digests."
+  },
+  "compatibility": {
+    "canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline",
+    "major_change": "new specification_id or incompatible schema_version",
+    "minor_change": "a compatible checker and new versioned fixture are required for additions"
+  },
+  "limitations": [
+    "This contract validates supplied observations and does not prove that Coordinator durably recorded them or that a host or agent actually failed.",
+    "The reference model does not implement a storage engine, fsync, process supervisor, or distributed consensus.",
+    "A passing trace does not establish provider availability, filesystem isolation, hosted CI, remote execution, or runtime recovery."
+  ],
+  "follow_up": ["AR-0008 defines the privacy-safe event journal and provenance chain.", "AR-0018 implements production supervision and durable recovery against Coordinator contracts.", "AR-0022 provides cross-adapter replay conformance."]
+}
