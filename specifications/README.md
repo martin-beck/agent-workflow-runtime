@@ -28,6 +28,23 @@ Specifications are contract evidence, not implementation-refinement proofs.
 They must not contain credentials, private paths, prompts, transcripts, host
 identifiers, or unbounded command output.
 
+## AR-0026 performance and reliability qualification
+
+`performance-reliability-qualification-v1.json` defines the five required
+qualification dimensions and distinguishes supplied qualification from live
+measurement. Run its offline checker with:
+
+```text
+python3 scripts/check_performance_reliability.py \
+  --spec specifications/performance-reliability-qualification-v1.json \
+  --record specifications/fixtures/performance-reliability-ar0026-v1.json \
+  --expected-revision 1
+```
+
+The checker rejects stale, replayed, over-budget, privacy-bearing, tampered,
+or live-measurement claims. It does not execute a benchmark or verify the
+truth or provenance of supplied values.
+
 ## AR-0001 admission checker
 
 `runtime-charter-v1.json` is the v1 runtime charter, authority matrix, and

@@ -303,3 +303,12 @@ and CI observations to one exact head. Signature and signed-DCO statuses are
 positive supplied observations; CI remains `verification: unverified`, and
 merge handoff remains non-executing. The checker performs no Git, CI, remote,
 provider, network, or publication operation.
+
+## AR-0026 performance and reliability qualification
+
+The qualification contract evaluates one bounded, digest-bound supplied
+observation for latency, throughput, recovery, resource use, and failure
+behavior. It preserves `source: supplied_qualification` and
+`live_measurement: not_performed`; it does not run benchmarks or contact a
+provider, network, LLM, host, or durable authority. The checker validates
+shape, budgets, comparisons, revision, replay, digests, and privacy only.

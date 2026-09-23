@@ -230,3 +230,14 @@ observations never become hosted-CI, remote, or release success. The model and
 checker are `scripts/publication_ci_bridge.py` and
 `scripts/check_publication_ci_bridge.py`. They perform no Git, CI, provider,
 network, merge, publication, or durable-state operation.
+
+## AR-0026 performance and reliability qualification
+
+The qualification contract evaluates exactly one bounded, digest-bound
+supplied observation for each of latency, throughput, recovery, resource use,
+and failure behavior. Each observation carries an explicit comparison and a
+numeric budget. The result preserves `source: supplied_qualification` and
+`live_measurement: not_performed`, so supplied values cannot be promoted to a
+claim about a live provider or host. The model and checker perform only
+deterministic shape, budget, comparison, revision, replay, digest, and privacy
+checks.

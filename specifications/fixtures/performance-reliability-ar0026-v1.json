@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-performance-reliability-qualification", "version": "1.0.0"},
+  "task": {"id": "AR-0026", "revision": 1},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "worktree": {"key": "agent-workflow-runtime-0026", "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+  "qualification": {"status": "qualified", "source": "supplied_qualification", "live_measurement": "not_performed", "max_observations": 5, "max_value": 1000000},
+  "observations": [
+    {"id": "OBS-LATENCY", "category": "latency", "metric": "p95_ms", "value": 120, "unit": "milliseconds", "specification": {"operator": "less_or_equal", "limit": 200}, "budget": {"max_value": 1000}, "source": "supplied_qualification", "measurement": "not_performed", "evidence_digest": "sha256:ccd3175c37bdfd18378d720dc4677b3127a84d79445a66c5fc987abeae8b4439"},
+    {"id": "OBS-THROUGHPUT", "category": "throughput", "metric": "requests_per_second", "value": 25, "unit": "requests_per_second", "specification": {"operator": "greater_or_equal", "limit": 20}, "budget": {"max_value": 1000}, "source": "supplied_qualification", "measurement": "not_performed", "evidence_digest": "sha256:dc0e78b32063d73159206e287d974a0bced65ec85f98be9d8370db96cd62ea9c"},
+    {"id": "OBS-RECOVERY", "category": "recovery", "metric": "recovery_seconds", "value": 8, "unit": "seconds", "specification": {"operator": "less_or_equal", "limit": 15}, "budget": {"max_value": 300}, "source": "supplied_qualification", "measurement": "not_performed", "evidence_digest": "sha256:460e69a09ed512b8ecbb375e0116446a1130d088946a845d132422c5a2faf820"},
+    {"id": "OBS-RESOURCE", "category": "resource_use", "metric": "memory_mb", "value": 512, "unit": "megabytes", "specification": {"operator": "less_or_equal", "limit": 768}, "budget": {"max_value": 4096}, "source": "supplied_qualification", "measurement": "not_performed", "evidence_digest": "sha256:204128e0dfa209cc273282a6e241d24be329a26632d2ae064059cc0a5114cf9e"},
+    {"id": "OBS-FAILURE", "category": "failure_behavior", "metric": "failure_rate_percent", "value": 0, "unit": "percent", "specification": {"operator": "less_or_equal", "limit": 1}, "budget": {"max_value": 100}, "source": "supplied_qualification", "measurement": "not_performed", "evidence_digest": "sha256:84804d0358ed2a95aa3f63156968f0ffb4aa3ab64ff9e124934e1be324f491d5"}
+  ],
+  "result": {"status": "qualified", "source": "supplied_qualification", "live_measurement": "not_performed", "categories": ["failure_behavior", "latency", "recovery", "resource_use", "throughput"]},
+  "evidence": {"task_revision": 1, "specification_digest": "sha256:4bcbbc34d710805936fcec1e86a7f8dab4bf00aafa7385eaaffdbc7a126443e9", "record_digest": "sha256:5787841a5a4460ea7481891b872758e0b43106b4013855f910285262c4595922", "checker": "awr-performance-reliability-checker/1.0.0"}
+}

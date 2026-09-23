@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-performance-reliability-qualification",
+  "version": "1.0.0",
+  "title": "Provider-neutral performance and reliability qualification",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "task revision", "worktree identity"],
+    "quality": ["qualification requirements and acceptance"],
+    "runtime": ["bounded offline evaluation of supplied observations"]
+  },
+  "binding": {
+    "task": "AR-0026 at Coordinator revision 1",
+    "project_revision": "sha256 digest",
+    "worktree": "stable key plus sha256 digest",
+    "observation": "unique id, category, specification, and evidence digest"
+  },
+  "categories": ["latency", "throughput", "recovery", "resource_use", "failure_behavior"],
+  "rules": [
+    "Every category has one bounded numeric observation and an explicit comparison specification.",
+    "Qualification is evaluated against supplied observations only; no benchmark, provider, network, or LLM operation is performed.",
+    "live_measurement is always not_performed in this contract and cannot be inferred from supplied qualification.",
+    "Observation count, value range, and evidence payload are bounded before evaluation.",
+    "A passing result means supplied values satisfy supplied specifications, not that a live system is qualified."
+  ],
+  "privacy": {
+    "allowed_values": "bounded identifiers, categories, enumerations, finite non-negative numbers, and SHA-256 digests",
+    "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "emails", "raw output", "unknown fields"]
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "replayed observation", "unknown fields", "private values", "missing category", "budget excess", "live measurement claim", "invalid comparison", "tampered result"],
+    "side_effects": "The model and checker perform no benchmark, provider, network, LLM, process, Git, Coordinator, AWQ, AWG, UI, or durable-state operation."
+  },
+  "limitations": [
+    "A valid envelope proves only that bounded supplied values satisfy the stated comparisons.",
+    "Supplied qualification is not live measurement, host enforcement, provider behavior, or production reliability.",
+    "The checker does not reproduce a workload, verify measurement provenance, inspect resources, or validate external evidence."
+  ],
+  "follow_up": [
+    "Coordinator remains authoritative for task revision, claims, leases, and durable state.",
+    "AWQ remains authoritative for requirements, gates, and acceptance of this evidence.",
+    "A future live harness must issue a distinct revision-bound measurement contract before collecting runtime data."
+  ]
+}

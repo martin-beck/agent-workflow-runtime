@@ -109,3 +109,11 @@ explicit non-executing capability mismatch report. The model and checker are
 offline only.
 
 MIT, with the Huawei copyright notice in `LICENSE`.
+
+AR-0026 adds `specifications/performance-reliability-qualification-v1.json`,
+a revision-1-bound qualification envelope for explicit latency, throughput,
+recovery, resource-use, and failure-behavior specifications. Its offline
+model/checker evaluate bounded supplied observations and preserve
+`live_measurement: not_performed`; they never run benchmarks or contact a
+provider, network, LLM, host, or durable authority. A passing envelope is not
+live measurement or production qualification.
