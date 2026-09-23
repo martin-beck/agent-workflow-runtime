@@ -176,3 +176,15 @@ scripts/check_umbrella_maintenance.py --spec
 specifications/umbrella-maintenance-v1.json --record
 specifications/fixtures/umbrella-maintenance-ar0028-v1.json
 --expected-revision 3`.
+
+AR-0030 adds the revision-bound admission, lease, and session-bootstrap
+boundary in `specifications/session-bootstrap-v1.json`. It requires exact
+task/project/worktree/session/owner/lease identity and rejects stale, expired,
+crossed, or replayed actions. Validate it offline with:
+
+```text
+python3 scripts/check_session_bootstrap.py --spec specifications/session-bootstrap-v1.json --fixture specifications/fixtures/session-bootstrap-ar0030-v1.json --expected-revision 5
+```
+
+The fixture does not contact Coordinator, start a process, contact a provider,
+use an LLM, or establish live lease validity.

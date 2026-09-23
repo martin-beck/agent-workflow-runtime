@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-admission-lease-session-bootstrap", "version": "1.0.0"},
+  "task": {"id": "AR-0030", "revision": 5},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+  "worktree": {"key": "agent-workflow-runtime-0030", "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+  "admission": {
+    "task_id": "AR-0030", "task_revision": 5, "project_key": "agent-workflow-runtime",
+    "project_revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "worktree_key": "agent-workflow-runtime-0030",
+    "worktree_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "session_id": "SES-AR0030-OFFLINE", "owner_id": "WRK-AR0030-OFFLINE", "lease_id": "LSE-AR0030-OFFLINE", "lease_expires": 100, "decision": "admit"
+  },
+  "gates": {"capability": "declared", "credentials": "not_required", "network": "disabled", "human_approval": "not_required"},
+  "actions": [
+    {"action_id":"ACT-BOOTSTRAP","operation":"bootstrap","sequence":1,"task_revision":5,"project_key":"agent-workflow-runtime","project_revision":"sha256:1111111111111111111111111111111111111111111111111111111111111111","worktree_key":"agent-workflow-runtime-0030","worktree_digest":"sha256:2222222222222222222222222222222222222222222222222222222222222222","session_id":"SES-AR0030-OFFLINE","owner_id":"WRK-AR0030-OFFLINE","lease_id":"LSE-AR0030-OFFLINE","time":1,"state":"active","action_digest":"sha256:87b600e19f7d7d9a7da2a4a8fc161f86c6da24c0e0d78bbccc5737acbce1c71e"},
+    {"action_id":"ACT-CHECKPOINT","operation":"checkpoint","sequence":2,"task_revision":5,"project_key":"agent-workflow-runtime","project_revision":"sha256:1111111111111111111111111111111111111111111111111111111111111111","worktree_key":"agent-workflow-runtime-0030","worktree_digest":"sha256:2222222222222222222222222222222222222222222222222222222222222222","session_id":"SES-AR0030-OFFLINE","owner_id":"WRK-AR0030-OFFLINE","lease_id":"LSE-AR0030-OFFLINE","time":2,"state":"active","evidence_digest":"sha256:3333333333333333333333333333333333333333333333333333333333333333","action_digest":"sha256:f91dc3305aac3bf7015928061b9dc035ab8bc09c5cbede7fdaf1a5ebb17e8f75"},
+    {"action_id":"ACT-INTERRUPT","operation":"interrupt","sequence":3,"task_revision":5,"project_key":"agent-workflow-runtime","project_revision":"sha256:1111111111111111111111111111111111111111111111111111111111111111","worktree_key":"agent-workflow-runtime-0030","worktree_digest":"sha256:2222222222222222222222222222222222222222222222222222222222222222","session_id":"SES-AR0030-OFFLINE","owner_id":"WRK-AR0030-OFFLINE","lease_id":"LSE-AR0030-OFFLINE","time":3,"state":"interrupted","evidence_digest":"sha256:4444444444444444444444444444444444444444444444444444444444444444","action_digest":"sha256:7e2303d255dad5e9a3f0a8ae00a6d45b4b2716fa24355da72639882587539fa6"}
+  ],
+  "evidence": {"checker":"awr-session-bootstrap-checker/1.0.0","specification_digest":"sha256:8db40e392c1e03f42943c398c85557f744fa11dee773c40cc69aa4820aabf06b","trace_digest":"sha256:d29ad1b0d8ad9dafa3f64266e2d335e47158e9e5569611dcdf7d76e4795208dd","live_verification":"unverified"},
+  "execution": {"mode":"offline_fixture","provider":"not_performed","network":"disabled","coordinator":"not_performed"}
+}
