@@ -1,0 +1,84 @@
+name: Agent Workflow Runtime CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: awr-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  offline-tests:
+    name: Offline tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13']
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Set up Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Compile source and tests
+        run: python -m compileall -q scripts tests
+      - name: Run offline test suite
+        run: python -m unittest discover -s tests -v
+
+  schemas-and-fixtures:
+    name: JSON schema and fixture integrity
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Set up Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+        with:
+          python-version: '3.12'
+      - name: Parse every JSON contract and fixture
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          paths = sorted(Path('.').glob('specifications/**/*.json'))
+          if not paths:
+              raise SystemExit('no specifications found')
+          for path in paths:
+              with path.open(encoding='utf-8') as handle:
+                  json.load(handle)
+          print(f'parsed {len(paths)} JSON specifications and fixtures')
+          PY
+      - name: Run contract checkers through tests
+        run: python -m unittest discover -s tests -q
+
+  source-hygiene:
+    name: Source hygiene and offline boundary
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Reject accidental private or network-bound source markers
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          forbidden = ('OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'AWS_SECRET_ACCESS_KEY')
+          for path in Path('.').rglob('*'):
+              if not path.is_file() or '.git' in path.parts or path.suffix not in {'.py', '.json', '.md', '.yaml', '.yml'}:
+                  continue
+              text = path.read_text(encoding='utf-8', errors='strict')
+              for marker in forbidden:
+                  if marker in text:
+                      raise SystemExit(f'forbidden credential marker {marker} in {path}')
+          PY
+      - name: Check whitespace and tracked-source integrity
+        run: git diff --check
