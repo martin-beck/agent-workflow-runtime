@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-host-admission",
+  "version": "1.0.0",
+  "normative": true,
+  "authority": {"coordinator": ["task identity", "revisions", "leases", "durable state"], "runtime": ["host admission", "enforcement", "cleanup", "recovery fencing"], "quality": ["requirements", "gates", "evidence acceptance"], "guidance": ["oracle escalation", "decisions"], "ui": ["human-facing rendering", "validated input"]},
+  "binding": {"task": "AR-0048 revision 5", "identity": "exact project, worktree, session, worker, and lease tuple", "action": "every action repeats the binding and has a unique id"},
+  "capability_matrix": {"required": ["process_launch", "filesystem_isolation", "resource_limits", "process_tree_cleanup", "network_isolation", "cancellation"], "unsupported": "reject admission before launch; never silently degrade"},
+  "launch_profile": {"argv_only": true, "inherit_environment": false, "privilege_escalation": false, "network": "deny", "filesystem": {"read": "worktree", "write": "worktree"}},
+  "resource_policy": {"bounded": ["cpu_ms", "memory_mb", "disk_mb", "network_bytes", "processes", "depth", "wall_ms"], "network_bytes": 0, "observation": "complete process tree required"},
+  "lifecycle": {"states": ["admitted", "running", "cancelling", "cancelled", "checkpointed", "recovering"], "recovery": "new worker and lease plus checkpoint digest; old binding is fenced"},
+  "failure_semantics": {"mode": "fail_closed", "reject": ["unsupported capability", "shell syntax", "crossed worktree", "network enabled", "resource excess", "incomplete cleanup", "expired lease", "old worker", "missing checkpoint"]},
+  "offline_boundary": {"process": "not_performed", "network": "disabled", "providers": "not_performed", "coordinator": "not_performed", "live_verification": "unverified"},
+  "limitations": ["The model validates supplied observations and does not prove OS namespaces, cgroups, process killing, filesystem isolation, lease validity, or live host support.", "Live qualification requires separately approved host evidence and authority gates."]
+}
