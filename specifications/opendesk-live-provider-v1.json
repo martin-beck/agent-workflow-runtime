@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-opendesk-live-provider",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0035", "revision": 3},
+  "authority": {
+    "coordinator": ["task identity", "task revision", "project and worktree binding"],
+    "runtime": ["bounded adapter translation", "lifecycle enforcement", "digest evidence"],
+    "provider": "not_performed"
+  },
+  "binding": {
+    "task": "exact Coordinator task revision",
+    "project": "agent-workflow-runtime",
+    "worktree": "exclusive key and SHA-256 digest",
+    "session": "opaque session identifier",
+    "events": "exact task and session binding"
+  },
+  "capabilities": ["conversation", "streaming", "structured_output", "tool_use"],
+  "lifecycle": {
+    "states": ["undiscovered", "discovered", "negotiated", "active", "awaiting_response", "interrupted", "completed"],
+    "operations": ["discover", "negotiate", "start", "request", "response", "interrupt", "resume", "close"],
+    "max_events": 64
+  },
+  "gates": {"credentials": "not_required", "network": "disabled", "human_approval": "not_required", "provider": "not_performed"},
+  "compatibility": {"protocol": "awr-opendesk-live-provider@1.0.0", "unknown_fields": "reject", "revision": "exact"},
+  "privacy": {
+    "allowed": ["opaque identifiers", "bounded enumerations", "SHA-256 digests"],
+    "forbidden": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output"]
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "replay": "reject",
+    "stale_revision": "reject",
+    "invalid_transition": "reject",
+    "unsupported_capability": "reject_without_execution_or_state_change"
+  },
+  "limitations": [
+    "This specification validates supplied offline observations only.",
+    "A passing fixture does not prove provider, network, LLM, remote, or Coordinator success."
+  ]
+}
