@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-publication-ci-bridge",
+  "version": "1.0.0",
+  "title": "Provider-neutral publication and CI implementation bridge",
+  "normative": true,
+  "binding": {"task": "AR-0021 at Coordinator revision 1", "project_revision": "sha256 digest", "worktree": "stable key plus sha256 digest", "git_object": "lowercase 40-hex Git object identifier"},
+  "observations": {
+    "required": ["branch", "commit", "review", "merge_handoff", "ci", "publication", "evidence"],
+    "head_rule": "branch.head, commit.id, review.target_head, merge_handoff.target_head, ci.target_head, and publication.target_head are identical",
+    "signature_rule": "commit.signature.status is valid and commit.dco.status is signed; these are supplied observations, not cryptographic verification",
+    "handoff_rule": "review is approved and merge_handoff is ready; no merge or publication is performed",
+    "ci_rule": "CI success is correlated to the review and exact head but remains verification: unverified",
+    "evidence_rule": "Each component and the review/CI/head correlation has exactly one unique canonical SHA-256 evidence reference"
+  },
+  "privacy": {"allowed_values": "bounded identifiers, enumerations, booleans, and SHA-256 or Git object digests", "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "emails", "raw output", "unknown fields"]},
+  "failure_semantics": {"mode": "fail_closed", "reject": ["stale revision", "replayed evidence", "unknown fields", "privacy-bearing values", "wrong head", "unsigned commit", "unsigned DCO", "wrong CI correlation", "verified remote claim", "merge or publication side effects"], "side_effects": "The model and checker perform no network, provider, Git, CI, review-system, merge, publication, or durable-state operation."},
+  "limitations": ["A valid envelope proves only that supplied observations are structurally and digest-consistent.", "The checker does not inspect Git or CI, verify cryptography or DCO trailers, contact a review system, merge, publish, or establish remote or hosted-CI success.", "Review, merge handoff, and CI statuses are observations for Coordinator and AWQ policy, not runtime approvals or task transitions."],
+  "follow_up": ["Coordinator remains authoritative for task identity, revisions, claims, leases, and durable state.", "AWQ remains authoritative for requirements, gates, and evidence acceptance.", "A future integration may consume this envelope only through approved Coordinator and AWQ contracts."]
+}

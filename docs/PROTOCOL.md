@@ -275,3 +275,11 @@ This is supplied-observation evidence only. `exclusive_supplied` is a binding
 label, not a claim that the checker inspected or isolated the filesystem.
 The model performs no provider, network, process, LLM, Git, Coordinator,
 AWQ, AWG, UI, or durable-state operation.
+
+## AR-0021 publication and CI implementation bridge
+
+`publication-ci-bridge-v1.json` binds branch, commit, review, merge handoff,
+and CI observations to one exact head. Signature and signed-DCO statuses are
+positive supplied observations; CI remains `verification: unverified`, and
+merge handoff remains non-executing. The checker performs no Git, CI, remote,
+provider, network, or publication operation.
