@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-awq-live-evidence",
+  "version": "1.0.0",
+  "title": "AWQ live evidence transport and gate consumption",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "task revision", "project and worktree binding", "leases and durable state"],
+    "quality": ["requirements", "quality gates", "evidence acceptance", "gate decisions"],
+    "guidance": ["uncertainty classification", "oracle escalation", "decisions", "reusable guidance"],
+    "ui": ["human-facing rendering", "validated human input"],
+    "runtime": ["bounded translation", "transport lifecycle observation", "digest and binding enforcement"]
+  },
+  "binding": {
+    "task": "AR-0037 at the exact Coordinator revision supplied to the checker",
+    "project_revision": "40 lowercase hexadecimal characters",
+    "worktree_digest": "sha256: followed by 64 lowercase hexadecimal characters",
+    "session": "opaque stable session identifier",
+    "gate_binding": "SHA-256 of task, project, worktree, and session objects in canonical JSON"
+  },
+  "evidence": {
+    "payload": "digest references only",
+    "qualification": ["offline", "live"],
+    "categories": ["test", "formal", "resource", "privacy", "provenance", "lifecycle"],
+    "results": ["passed", "failed", "blocked", "skipped", "not_run"],
+    "maximum_items": 64,
+    "single_use": "IDs and evidence digests are unique and sequences are contiguous"
+  },
+  "transport": {
+    "states": ["prepared", "interrupted", "recovered", "submitted"],
+    "fixture_state": "recovered",
+    "required_order": ["prepare", "checkpoint", "interrupt", "resume"],
+    "live_requirements": ["explicit capability", "credential reference", "bounded network", "human approval", "cancellation acknowledgement"],
+    "offline_rule": "The fixture and checker use network not_performed, credentials not_supplied, and approval not_granted."
+  },
+  "gate_consumption": {
+    "accepted_authority": "awq",
+    "decision_source": "external_observation",
+    "allowed_statuses": ["accepted", "rejected", "blocked", "not_decided"],
+    "runtime_status": "not_decided_by_runtime",
+    "rule": "AWR may correlate and expose an AWQ decision, but cannot author, promote, or replace it."
+  },
+  "privacy": {
+    "allowed": ["opaque identifiers", "bounded integers", "enumerations", "exact versions", "SHA-256 digests"],
+    "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "unknown fields"]
+  },
+  "compatibility": {
+    "major_version": "must match exactly",
+    "minor_version": "a checker may accept only the declared minor version",
+    "unknown_fields": "reject"
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "cross-binding envelope", "malformed input", "replay", "digest mismatch", "privacy-bearing value", "runtime-authored gate", "unapproved live transport", "unrecoverable interruption"],
+    "recovery": "An interruption is resumable only after a matching checkpoint and a new bounded resume event; otherwise the operation remains blocked."
+  },
+  "limitations": [
+    "The model validates supplied observations and does not submit to AWQ.",
+    "A gate observation is attributed to AWQ but is not independently verified by AWR.",
+    "Passing offline checks proves structural consistency only; live transport and remote consumption remain unverified."
+  ],
+  "follow_up": [
+    "AWQ must independently apply its authoritative requirements and acceptance policy.",
+    "Any enabled live adapter requires a separately approved capability, credential, network, cancellation, and human-approval gate.",
+    "Coordinator reconciliation and hosted qualification remain outside this offline AR."
+  ]
+}
