@@ -372,3 +372,13 @@ identical replay returns the recorded result, while changed content, stale
 revision, crossed binding, unknown lease, malformed input, privacy fields, and
 unauthorized transitions fail closed. The checker is an offline
 qualification boundary and does not perform a live Coordinator operation.
+
+## AR-0030 admission and session bootstrap
+
+`session-bootstrap-v1.json` binds bootstrap actions to an exact Coordinator
+task revision and project/worktree/session/owner/lease tuple. The allowed
+offline lifecycle is `admitted -> active`, followed by checkpoint,
+interruption, or failure; expiry and replay are rejected. Credentials,
+prompts, transcripts, private paths, host identifiers, and raw output are
+excluded from the evidence projection. The checker proves only the supplied
+offline fixture and reports live verification as `unverified`.

@@ -304,3 +304,12 @@ checker is privacy-safe and structural; it proves neither a real Coordinator
 write nor live lease expiry, distributed locking, network reachability, or
 remote success. A production client remains gated behind independent security,
 approval, and crash-injection qualification.
+
+## AR-0030 admission, lease, and session bootstrap
+
+AR-0030 consumes (but does not manufacture) Coordinator admission. A session
+is usable only while the exact task revision, project revision, worktree
+binding, session, owner, and lease match the admission. Expiry, crossed
+identity, replay, non-monotonic observations, and invalid lifecycle
+transitions fail closed. Interrupted or failed sessions require a new
+Coordinator admission; this boundary does not resume them.

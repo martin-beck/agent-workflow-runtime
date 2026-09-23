@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-admission-lease-session-bootstrap",
+  "version": "1.0.0",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "project revision", "claims", "leases", "durable state"],
+    "runtime": ["translation", "binding enforcement", "bootstrap supervision", "privacy projection"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "decisions", "reusable guidance"],
+    "ui": ["human-facing rendering", "validated input"]
+  },
+  "binding": {
+    "task_id": "^AR-[0-9]{4}$",
+    "task_revision": "positive integer from Coordinator",
+    "project_key": "opaque bounded project identity",
+    "project_revision": "sha256 digest of the exact project revision",
+    "worktree_key": "opaque isolated worktree identity",
+    "worktree_digest": "sha256 digest of the supplied worktree binding",
+    "session_id": "^SES-[A-Z0-9-]{1,63}$",
+    "owner_id": "^WRK-[A-Z0-9-]{1,63}$",
+    "lease_id": "^LSE-[A-Z0-9-]{1,63}$",
+    "lease_expires": "positive integer observation time"
+  },
+  "lifecycle": {
+    "states": ["admitted", "active", "interrupted", "failed"],
+    "transitions": [["admitted", "bootstrap", "active"], ["active", "checkpoint", "active"], ["active", "interrupt", "interrupted"], ["active", "fail", "failed"]],
+    "recovery": "an interrupted or failed session is not resumed by this boundary; a future AR must obtain a new Coordinator admission, owner, session, and lease"
+  },
+  "gates": {
+    "capability": "declared before bootstrap",
+    "credentials": "reference-only and absent from evidence",
+    "network": "disabled in offline mode; explicit bounded gate required for live integration",
+    "human_approval": "not silently inferred; UI authority owns validated approval"
+  },
+  "compatibility": {
+    "canonical_json": "UTF-8, sorted keys, compact separators",
+    "major_change": "new specification_id or incompatible schema_version",
+    "minor_change": "new version, checker, and fixture"
+  },
+  "privacy": {
+    "forbidden": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output"],
+    "projection": "opaque identifiers, bounded enums, integer observations, and sha256 digests only"
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "crossed task/project/worktree/session/owner/lease", "expired lease", "replay", "unknown fields", "privacy-bearing values", "invalid transition", "unbounded command"],
+    "external_effects": "none in this specification: no Coordinator, network, provider, LLM, process, Git, or durable-state operation"
+  },
+  "limitations": [
+    "The harness validates supplied observations and does not prove physical worktree isolation or a live lease.",
+    "Offline qualification is not provider, network, hosted-CI, remote, or Coordinator success.",
+    "Live transport, crash injection, and human approval remain separately gated integration work."
+  ]
+}
