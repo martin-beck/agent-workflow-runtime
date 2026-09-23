@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-opencode-style-adapter",
+  "version": "1.0.0",
+  "title": "Provider-neutral OpenCode-style adapter contract",
+  "normative": true,
+  "task": {"id": "AR-0016", "revision": 5},
+  "authority": {
+    "coordinator": ["task identity", "task revision", "worktree identity"],
+    "quality": ["requirements", "quality gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing discussion rendering and input"],
+    "runtime": ["native-event normalization", "replay validation"]
+  },
+  "adapter": {
+    "id": "opencode-style",
+    "version": "1.0.0",
+    "transport": "offline fixture input only",
+    "native_envelope": ["sequence", "kind", "task", "session", "payload_digest"],
+    "normalized_envelope": ["sequence", "event_type", "task", "session", "adapter", "disposition", "evidence_digest"]
+  },
+  "mapping": [
+    {"native_kind": "session.created", "normalized_event": "session_started", "required_payload": ["session_digest"]},
+    {"native_kind": "message.part", "normalized_event": "plan_proposed", "required_payload": ["part_kind", "content_digest"]},
+    {"native_kind": "tool.started", "normalized_event": "tool_call", "required_payload": ["tool_kind", "call_digest"], "disposition": "started"},
+    {"native_kind": "tool.completed", "normalized_event": "tool_call", "required_payload": ["tool_kind", "call_digest"], "disposition": "completed"},
+    {"native_kind": "file.changed", "normalized_event": "file_change", "required_payload": ["change_digest", "file_count"]},
+    {"native_kind": "session.failed", "normalized_event": "failed", "required_payload": ["error_code"], "disposition": "failed"},
+    {"native_kind": "session.completed", "normalized_event": "completed", "required_payload": ["result_digest"], "disposition": "completed"}
+  ],
+  "invariants": [
+    "Mapping is deterministic and preserves sequence, task revision, session, worktree, and adapter identity.",
+    "Native payloads are represented only by bounded digests, identifiers, and counts; prompts, transcripts, paths, credentials, and raw output are not accepted.",
+    "Unknown native kinds, fields, payload fields, revisions, sessions, and worktrees fail closed.",
+    "A replay must produce byte-identical normalized events and unique evidence digests.",
+    "The adapter model does not launch OpenCode, a process, a provider, a network connection, or an LLM."
+  ],
+  "limits": {"max_events": 64, "max_identifier": 64, "max_count": 1000000},
+  "failure_semantics": {"mode": "fail_closed", "invalid_input": "reject_without_partial_output"},
+  "compatibility": {"major_change": "new specification_id or incompatible schema_version", "minor_change": "backward-compatible mapping additions with a new documented version", "canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline"},
+  "privacy": {"forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "raw_output"], "projection": "opaque identifiers, bounded counts, states, dispositions, and digests only"},
+  "limitations": [
+    "The native envelopes and replay fixture are synthetic contract data, not a claim about a live OpenCode installation or provider behavior.",
+    "A passing replay proves canonical mapping and binding consistency only; it does not prove Coordinator truth, evidence truth, process isolation, hosted CI, or runtime success."
+  ],
+  "follow_up": ["A future integration AR may connect an approved provider through Coordinator and supervisor contracts.", "AWQ remains authoritative for accepting projected evidence."]
+}

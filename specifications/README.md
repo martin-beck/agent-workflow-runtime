@@ -191,6 +191,29 @@ The model does not provide fsync, locking, signatures, crash durability, or
 general personal-data classification. It performs no network, provider,
 Coordinator, AWQ, AWG, UI, Git, or LLM operation.
 
+## AR-0016 OpenCode-style normalized adapter
+
+`opencode-adapter-v1.json` defines a provider-neutral mapping from synthetic,
+bounded OpenCode-style native envelopes to normalized session events. Session
+creation, message parts, tool start/completion, file changes, failure, and
+completion each have a fixed normalized event and disposition. Only opaque
+payload digests, identifiers, and bounded counts cross the boundary; prompts,
+transcripts, paths, credentials, and raw output are rejected.
+
+Run the offline replay checker with:
+
+```text
+python3 scripts/check_opencode_adapter.py \\
+  --spec specifications/opencode-adapter-v1.json \\
+  --replay specifications/fixtures/opencode-replay-ar0016-v1.json \\
+  --expected-revision 5
+```
+
+The fixture is synthetic replay evidence only. The checker proves canonical
+mapping and exact revision/session/worktree binding; it does not launch
+OpenCode or any provider, use a network, consult Coordinator, or establish
+provider/runtime success.
+
 ## AR-0015 provider-neutral Codex-style adapter
 
 `codex-style-adapter-v1.json` defines the revision-5-bound, turn-oriented

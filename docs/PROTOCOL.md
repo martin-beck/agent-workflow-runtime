@@ -114,6 +114,15 @@ The checker validates supplied structure and digests only. It does not submit
 evidence, consult AWQ, or establish Coordinator, provider, hosted-CI, remote,
 or runtime success.
 
+AR-0016 adds the provider-neutral OpenCode-style adapter mapping. Native
+envelopes are accepted only as bounded fixture records with a kind, sequence,
+the exact AR-0016 revision-5 binding, a session/worktree binding, and a payload
+digest. The mapping produces deterministic normalized events for session start,
+plan part, tool call, file change, failure, and completion. It never accepts or
+publishes prompts, transcripts, paths, credentials, or raw output. Replay
+validation is offline and synthetic; it does not launch OpenCode or any other
+provider and does not prove runtime behavior.
+
 AR-0015 adds the provider-neutral Codex-style adapter boundary. A session must
 discover capabilities before starting, preserve the exact AR-0015 revision-5
 task/worktree/adapter binding, and submit turns by bounded digest reference.
