@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-asb-integration",
+  "version": "1.0.0",
+  "title": "Offline ASB production integration model",
+  "normative": true,
+  "task": {"id": "AR-0055", "revision": 5},
+  "workflow": ["setup_init", "add_first_agent", "agent_connection", "preflight_eligibility", "benchmark_run", "extend_identical_configuration", "llm_record_replay", "interrupt_recovery", "comparison"],
+  "boundaries": {"execute": false, "provider": "not_performed", "network": "disabled", "llm": "not_performed", "benchmark": "not_performed", "credentials": "references_only", "durable_state": "not_performed", "remote_verification": "unverified"},
+  "limits": {"max_events": 16, "max_agents": 8, "max_bytes": 4096, "max_retries": 1},
+  "hostile_qualification": ["stale_revision", "crossed_binding", "replayed_operation", "unsupported_agent", "non_identical_configuration", "unacknowledged_cancellation", "provider_execution", "raw_llm_payload", "confounded_comparison"],
+  "limitations": ["The model validates supplied deterministic observations only.", "It does not connect to ASB, a provider, an LLM, a UI, Coordinator, AWG, AWQ, a host, or a network.", "Eligibility and structural comparability are not benchmark execution, performance measurement, provider support, or authority acceptance."]
+}
