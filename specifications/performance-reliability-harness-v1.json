@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-performance-reliability-harness",
+  "version": "1.0.0",
+  "title": "Offline bounded performance and reliability qualification harness",
+  "normative": true,
+  "task": {"id": "AR-0041", "revision": 3},
+  "authority": {
+    "coordinator": ["task identity", "revision", "claim", "lease", "durable state"],
+    "awq": ["requirements", "quality gates", "evidence acceptance"],
+    "awg": ["uncertainty", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing rendering", "validated input"],
+    "runtime": ["bounded translation", "supervision", "offline qualification projection"]
+  },
+  "bindings": {
+    "exact": ["task", "project", "worktree", "session", "adapter", "supervisor", "journal"],
+    "adapter": "identity and version digest from the adapter contract",
+    "supervisor": "session, worker, lease, and expiry from the supervisor admission",
+    "journal": "session and chain-head digest from the event journal",
+    "observation": "every metric and chaos observation repeats all bindings"
+  },
+  "bounds": {"metrics": 5, "chaos_observations": 5, "max_value": 1000000, "evidence_digest": "sha256 canonical observation"},
+  "state_machine": {"states": ["admitted", "observing", "interrupted", "recovered", "qualified", "blocked"], "terminal": ["qualified", "blocked"], "interruption": "supplied observation only; no process is interrupted", "recovery": "must identify a bounded recovered or blocked outcome"},
+  "privacy": {"forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "raw_output", "command", "executable"], "projection": "identities, bounded values, units, dispositions, counts, and digests only"},
+  "failure_semantics": {"mode": "fail_closed", "reject": ["stale revision", "crossed binding", "replay", "malformed input", "privacy-bearing value", "unbounded metric", "live success claim", "unauthorized transition"], "side_effects": "no provider, network, LLM, process, host, Coordinator, AWQ, AWG, UI, Git, or durable-state operation"},
+  "limitations": ["The harness checks deterministic supplied observations and does not measure a real workload.", "A qualified fixture is not provider, host, production, hosted-CI, or remote execution evidence.", "Coordinator, AWQ, AWG, and UI remain authoritative; the runtime cannot manufacture their decisions."],
+  "follow_up": ["AWQ must independently accept any evidence before live integration.", "A future approved integration AR must provide Coordinator lease, host enforcement, credential, network, and human-approval evidence.", "AWG decides material workload or failure-taxonomy alternatives; UI handles any human gate."]
+}
