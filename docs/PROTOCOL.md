@@ -382,3 +382,15 @@ interruption, or failure; expiry and replay are rejected. Credentials,
 prompts, transcripts, private paths, host identifiers, and raw output are
 excluded from the evidence projection. The checker proves only the supplied
 offline fixture and reports live verification as `unverified`.
+
+## AR-0060 final pilot and operational acceptance
+
+`final-pilot-operational-acceptance-v1.json` composes the required admission,
+capability, security, readiness, reliability, chaos, deployment, publication,
+and operational gates into one ordered, digest-bound offline pilot. Missing,
+failed, reordered, stale, replayed, or privacy-bearing gate observations fail
+closed. The checker reports `qualified_offline` only while operational
+acceptance remains `blocked_pending_live_evidence`; provider, LLM, network,
+host, service, Coordinator, authority, publication, and durable-state work is
+not performed. This is not release, live execution, provider support, or
+operational acceptance.
