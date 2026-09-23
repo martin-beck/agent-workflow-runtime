@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-resource-boundary",
+  "version": "1.0.0",
+  "title": "Deterministic resource and termination boundary",
+  "normative": true,
+  "authority": "awr-enforcement",
+  "binding": {
+    "task": "AR-0006",
+    "project": "agent-workflow-runtime",
+    "worktree": "agent-workflow-runtime-0006",
+    "revision_source": "Coordinator"
+  },
+  "budgets": {
+    "cpu_ms": "maximum consumed CPU milliseconds",
+    "memory_bytes": "maximum resident memory bytes",
+    "disk_bytes": "maximum bytes written",
+    "network_bytes": "maximum transmitted plus received bytes",
+    "process_count": "maximum process-tree members including the root",
+    "process_depth": "maximum process-tree depth including the root",
+    "timeout_ms": "maximum wall-clock milliseconds"
+  },
+  "observations": [
+    "cpu_ms",
+    "memory_bytes",
+    "disk_bytes",
+    "network_bytes",
+    "process_count",
+    "process_depth",
+    "elapsed_ms",
+    "process_tree_complete",
+    "cancel_requested",
+    "cancel_acknowledged"
+  ],
+  "enforcement": {
+    "missing_observation": "reject",
+    "unknown_observation": "reject",
+    "budget_exceeded": "reject",
+    "incomplete_process_tree": "reject",
+    "timeout": "reject",
+    "cancellation": "accept only when requested and acknowledged",
+    "observation_type": "non-negative integers no greater than 2^63-1 and booleans",
+    "cancellation_consistency": "acknowledgement requires a request"
+  },
+  "privacy": {
+    "allowed": "normalized counters, booleans, stable public identifiers, digests",
+    "forbidden": ["credentials", "private paths", "prompts", "transcripts", "host identifiers", "raw output"]
+  },
+  "limitations": [
+    "The reference model evaluates supplied deterministic observations only.",
+    "It does not set OS limits, inspect a process tree, measure a host, send network traffic, or cancel a process.",
+    "Passing evidence does not establish real host enforcement or runtime/provider success."
+  ],
+  "follow_up": "A later integration task must bind these checks to an OS-specific supervisor and independently evidence enforcement."
+}

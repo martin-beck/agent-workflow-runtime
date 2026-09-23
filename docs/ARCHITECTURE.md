@@ -76,3 +76,12 @@ with the identical binding, or close, but cannot manufacture a claim, quality
 acceptance, oracle decision, merge, publication, or completion. The AR-0004
 offline checker validates this projection only; it does not prove filesystem
 isolation or execute tools.
+
+## AR-0006 resource and termination boundary
+
+The resource boundary is a versioned, fail-closed contract for bounded CPU,
+memory, disk, network, process-tree, timeout, and cancellation observations.
+The offline reference model accepts only complete normalized observations and
+rejects any exceeded budget, incomplete process-tree observation, timeout, or
+unacknowledged cancellation. It is evidence evaluation, not host enforcement;
+OS-specific containment and live measurement remain a later integration scope.
