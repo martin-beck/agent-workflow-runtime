@@ -329,3 +329,13 @@ qualification dimensions to revision 1. The checker preserves
 `source: supplied_qualification` and `live_measurement: not_performed`, and
 performs no benchmark, provider, network, LLM, host, or durable-authority
 operation.
+
+## AR-0024 operational CLI, configuration, and onboarding
+
+`operational-cli-v1.json` defines a bounded, revision-3 command trace for
+setup, run, observe, interrupt, resume, diagnose, and safe shutdown. The
+offline checker requires setup before run, an acknowledged checkpoint before
+resume, and diagnosis before shutdown. It performs no CLI, process, provider,
+network, shell, Git, Coordinator, AWQ, AWG, UI, or durable-state operation;
+shutdown remains `durable_state: not_performed` and
+`remote_verification: unverified`.

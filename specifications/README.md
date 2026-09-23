@@ -37,6 +37,25 @@ Specifications are contract evidence, not implementation-refinement proofs.
 They must not contain credentials, private paths, prompts, transcripts, host
 identifiers, or unbounded command output.
 
+## AR-0024 operational CLI, configuration, and onboarding
+
+`operational-cli-v1.json` defines the versioned, provider-neutral command and
+state contract. Its fixture covers setup, run, observe, acknowledged
+interruption, checkpoint-bound resume, diagnosis, and safe shutdown. Validate
+it offline with:
+
+```text
+python3 scripts/check_operational_cli.py \
+  --spec specifications/operational-cli-v1.json \
+  --fixture specifications/fixtures/operational-cli-ar0024-v1.json \
+  --expected-revision 3
+```
+
+The checker rejects stale, crossed, malformed, replayed, privacy-bearing, and
+unauthorized traces. It performs no CLI, process, provider, network, Git,
+Coordinator, AWQ, AWG, UI, or durable-state operation. `not_performed` and
+`unverified` are explicit limitations, not success claims.
+
 ## AR-0026 performance and reliability qualification
 
 `performance-reliability-qualification-v1.json` defines the five required
