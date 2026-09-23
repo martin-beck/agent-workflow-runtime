@@ -434,3 +434,24 @@ yield `unsupported` with `execute: false` and `state_change: false`. The
 offline checker proves only the supplied contract and deterministic
 normalization; it does not prove provider support, authorization, execution,
 network, or live service behavior.
+
+## AR-0062 durable fair scheduler and worker leases
+
+`durable-scheduler-v1.json` defines the deterministic kernel above the AR-0061
+job contract. Admission validates dependencies and applies bounded queue
+backpressure. Dispatch orders eligible jobs by priority plus deterministic
+waiting-time aging, applies tenant concurrency limits, and reserves declared
+resources. A lease is fenced by worker, lease ID, and monotonically increasing
+fence; expiry releases the reservation and permits only a bounded retry or
+terminal failure. Heartbeats extend the current lease only. Checkpoints are
+digest references, cancellation requires worker acknowledgement, and operation
+IDs replay only when their request digest is identical. Dependency failures and
+terminal outcomes are reconciled deterministically.
+
+The reference model is `scripts/durable_scheduler.py`; the checker and hostile
+tests are offline and do not persist state, launch workers, contact providers,
+use an LLM, or access a live service:
+
+```text
+python3 scripts/check_durable_scheduler.py --spec specifications/durable-scheduler-v1.json --fixture specifications/fixtures/durable-scheduler-ar0062-v1.json --expected-revision 1
+```

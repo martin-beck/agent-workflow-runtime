@@ -63,6 +63,22 @@ not manufacture Coordinator persistence, AWQ acceptance, AWG decisions, UI
 human input, provider execution, or remote success. Schema evolution is
 additive-only with a version bump and unknown fields fail closed.
 
+## AR-0062 durable scheduler boundary
+
+The scheduler kernel consumes the AR-0061 job policy without becoming a
+Coordinator authority. It admits only known dependency graphs, releases jobs
+when predecessors are terminal-successful, and applies queue backpressure.
+Eligible work is selected by priority with deterministic aging, tenant limits,
+and resource-fit reservations. Every running job has one fenced worker lease;
+heartbeat, checkpoint, completion, failure, and cancellation acknowledgement
+must present that lease before expiry. Expiry releases resources and creates a
+bounded retry or terminal outcome. Operation IDs are replay-safe only for the
+same request digest, and reconciliation propagates dependency failures.
+
+`scripts/durable_scheduler.py` and its checker are an offline reference model.
+They do not persist Coordinator state, enforce host resources, start workers,
+contact providers, or establish remote success.
+
 ## AR-0005 supervisor boundary
 
 Supervisor admission is bound to the Coordinator task revision, project and

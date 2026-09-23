@@ -24,6 +24,25 @@ python3 scripts/check_adapter_conformance.py \
 It rejects stale, private, unknown, crossed, duplicate, or tampered records
 and reports capability mismatches without execution or state change.
 
+## AR-0062 durable fair scheduling and worker leases
+
+`durable-scheduler-v1.json` is the revision-1 scheduler kernel above the
+AR-0061 durable job contract. Its reference model admits dependency-bound jobs,
+applies queue backpressure, priority aging, tenant/resource reservations,
+fenced worker leases, expiry/retry, checkpoint recovery, cancellation, and
+idempotent dispatch. The canonical offline fixture is checked with:
+
+```text
+python3 scripts/check_durable_scheduler.py \
+  --spec specifications/durable-scheduler-v1.json \
+  --fixture specifications/fixtures/durable-scheduler-ar0062-v1.json \
+  --expected-revision 1
+```
+
+The checker evaluates supplied deterministic observations only. It performs no
+Coordinator mutation, persistence, worker execution, provider or LLM call,
+network access, or live-service operation.
+
 ## AR-0025 security, privacy, and supply-chain assurance
 
 `security-privacy-supply-chain-v1.json` and its fixture bind bounded

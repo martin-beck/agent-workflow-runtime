@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-durable-fair-scheduler-worker-lease",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0062", "revision": 1},
+  "parent": {"id": "AR-0061", "revision": 1, "contract": "awr-durable-revision-bound-job"},
+  "invariants": [
+    "admission is bounded by dependency validity and queue backpressure",
+    "dispatch is priority ordered with deterministic aging and tenant fairness",
+    "a lease reserves declared resources and only its worker, lease, and fence may act",
+    "expiry fences the worker and recovery requires a bounded retry or terminal failure",
+    "same operation ID and request digest replay identically; conflicts reject",
+    "checkpoint recovery and terminal reconciliation preserve dependency outcomes"
+  ],
+  "states": ["submitted", "queued", "running", "cancelling", "succeeded", "failed", "cancelled"],
+  "terminal_states": ["succeeded", "failed", "cancelled"],
+  "fairness": {"aging": "priority plus waited-seconds divided by aging quantum", "tie_break": "queued time then job ID", "tenant_limit": "bounded running jobs per tenant"},
+  "lease": {"expiry": "inclusive deadline fences old worker", "heartbeat": "extends current lease only", "recovery": "expiry releases reservation and retries or fails"},
+  "offline_boundary": {"execute": false, "network": "disabled", "provider": "not_performed", "llm": "not_performed", "live_service": "not_performed", "durable_state": "not_performed"},
+  "failure_semantics": {"mode": "fail_closed", "unknown_job": "reject", "stale_lease": "reject", "idempotency_conflict": "reject", "dependency_failure": "terminal_failure", "over_capacity": "backpressure"},
+  "limitations": ["The model evaluates in-memory deterministic observations only.", "It does not persist Coordinator state, enforce OS resources, launch workers, or prove live lease validity."],
+  "follow_up": ["Integrate with Coordinator-owned revision, claim, lease, and durable event APIs after independent review."],
+  "required_fixture_fields": ["capacity", "limits", "jobs", "operations", "expected"]
+}
