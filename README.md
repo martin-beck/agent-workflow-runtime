@@ -82,6 +82,14 @@ cancellation acknowledgement, stale recovery, and digest-only lifecycle
 evidence. Its checker is offline and does not launch workers, contact
 Coordinator, or claim provider, network, remote, or durable-state success.
 
+AR-0019 adds the provider-neutral capability broker and worktree enforcement
+boundary in `specifications/capability-broker-v1.json`. The offline model and
+checker bind every granted `read`, `edit`, or `test` action to task revision 1,
+project, supplied exclusive worktree observation, session, and grant. Stale,
+replayed, unknown, private, cross-worktree, cross-project, and unauthorized
+actions fail closed. The checker does not inspect the filesystem or claim
+filesystem isolation, provider, network, process, or durable-state success.
+
 ## License
 
 MIT, with the Huawei copyright notice in `LICENSE`.

@@ -194,3 +194,14 @@ transitions, cancellation acknowledgement, stale recovery, and digest-only
 lifecycle evidence. Recovery fences the old worker and requires a future lease;
 the model and checker perform no process supervision, provider, network, or
 Coordinator mutation.
+
+## AR-0019 capability broker and worktree enforcement
+
+The capability broker is a provider-neutral enforcement model. A revision-1
+grant contains only versioned `read`, `edit`, and `test` tools; each accepted
+action repeats the exact task, project, worktree, session, and grant identity.
+Unknown, stale, replayed, private, cross-project, cross-worktree, and
+unauthorized actions are rejected before acceptance. The worktree field is an
+exclusive binding observation supplied to the model. It is not a filesystem
+inspection and does not prove physical isolation. The checker performs no tool,
+provider, network, process, Git, or durable-state operation.
