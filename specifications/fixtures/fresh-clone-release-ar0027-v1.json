@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-fresh-clone-release-lock", "version": "1.0.0"},
+  "task": {"id": "AR-0027", "revision": 3},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "worktree": {"key": "agent-workflow-runtime-0027", "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+  "installation": {
+    "status": "reproducible",
+    "source": "clean_checkout",
+    "network": "not_required",
+    "credentials": "not_required",
+    "max_dependencies": 2,
+    "dependencies": [
+      {"name": "python", "version": "3.11.0", "source": "stdlib", "integrity_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "license_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+      {"name": "schema", "version": "1.0.0", "source": "repository_lock", "integrity_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "license_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"}
+    ]
+  },
+  "compatibility": {
+    "status": "compatible",
+    "mode": "exact",
+    "required_contracts": ["awr-operational-cli@1.0.0", "awr-performance-reliability-qualification@1.0.0", "awr-security-privacy-supply-chain@1.0.0"],
+    "contracts": [
+      {"id": "awr-operational-cli", "version": "1.0.0", "mode": "exact", "digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"},
+      {"id": "awr-performance-reliability-qualification", "version": "1.0.0", "mode": "exact", "digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"},
+      {"id": "awr-security-privacy-supply-chain", "version": "1.0.0", "mode": "exact", "digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"}
+    ]
+  },
+  "release": {
+    "status": "qualified",
+    "source_head_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+    "signature": "supplied_observation",
+    "dco": "supplied_observation",
+    "publication": "not_performed",
+    "remote_verification": "unverified"
+  },
+  "rollback": {
+    "status": "ready",
+    "target_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+    "execution": "not_performed",
+    "durable_state": "not_performed"
+  },
+  "result": {"status": "rollback_ready", "installation": "reproducible", "compatibility": "compatible", "publication": "not_performed", "remote_verification": "unverified"},
+  "evidence": {"task_revision": 3, "specification_digest": "sha256:db639b418ac67fef042fb6e36981f5845ba987eceaad33c5d58f0ac708d5f952", "record_digest": "sha256:8c2ddddbf46e92580ca4cc6f588778949034e8efdd13a12c4aee03a8e5c8eaff", "checker": "awr-fresh-clone-release-checker/1.0.0"}
+}

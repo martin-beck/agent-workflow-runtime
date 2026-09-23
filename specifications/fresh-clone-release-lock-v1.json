@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-fresh-clone-release-lock",
+  "version": "1.0.0",
+  "title": "Fresh-clone installation, compatibility, release evidence, and rollback lock",
+  "normative": true,
+  "task": {"id": "AR-0027", "revision": 3},
+  "authority": {
+    "coordinator": ["task identity", "claims", "revisions", "leases", "durable state"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["uncertainty", "oracle decisions", "reusable guidance"],
+    "runtime": ["bounded installation projection", "compatibility enforcement", "rollback preparation"]
+  },
+  "invariants": [
+    "A lock is bound to the exact AR-0027 revision, project revision digest, worktree key, and specification digest.",
+    "Installation is reproducible only when a clean-checkout recipe has bounded exact dependency versions and digests, and requires no network or credentials.",
+    "Compatibility declarations are explicit, versioned, and fail closed when a required contract is missing, changed, or outside its declared range.",
+    "Release evidence records an exact source head, signature and DCO observations, while publication and remote verification remain not_performed and unverified.",
+    "Rollback is prepared only for the exact qualified source head and cannot mutate durable state or claim that rollback was executed.",
+    "Every observation is single-use, digest-bound, privacy-safe, and rejected on stale, replayed, interrupted, unauthorized, or crossed input."
+  ],
+  "states": ["unqualified", "qualified", "rollback_ready"],
+  "required_sections": ["installation", "compatibility", "release", "rollback"],
+  "compatibility": {
+    "modes": ["exact", "minimum"],
+    "required_contracts": ["awr-operational-cli@1.0.0", "awr-performance-reliability-qualification@1.0.0", "awr-security-privacy-supply-chain@1.0.0"],
+    "unknown_contracts": "reject",
+    "changed_contract_digest": "reject"
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "invalid_input": "reject_without_partial_output",
+    "stale_or_replayed": "reject_without_state_change",
+    "interrupted": "retain_no_release_claim_and_require_requalification",
+    "side_effects": "No installation, package-manager, Git, provider, network, process, LLM, Coordinator, AWQ, AWG, UI, publication, or durable-state operation is performed."
+  },
+  "privacy": {
+    "allowed_values": "bounded identifiers, versions, enumerations, booleans, finite limits, and SHA-256 digests",
+    "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "emails", "personal data", "raw command output"]
+  },
+  "limitations": [
+    "A passing record qualifies supplied contract observations only; it does not install from a clone, inspect a filesystem, execute a test, or verify dependency provenance.",
+    "Signature and DCO values are supplied observations; the checker does not verify cryptographic signatures or contact Git hosting.",
+    "Publication remains not_performed and remote verification remains unverified; no release is claimed.",
+    "Rollback is an exact-target preparation record, not an executed rollback or proof of recovery. Coordinator, AWQ, AWG, and UI remain authoritative."
+  ],
+  "follow_up": ["AR-0028 may register the runtime and define ongoing release maintenance after independent review."]
+}

@@ -142,3 +142,13 @@ specifications/fixtures/operational-cli-ar0024-v1.json --expected-revision 3`.
 Shutdown remains `durable_state: not_performed` and
 `remote_verification: unverified`, so a passing trace is not live process,
 provider, filesystem, network, or remote-handoff evidence.
+
+AR-0027 adds `specifications/fresh-clone-release-lock-v1.json`, a
+revision-3-bound offline lock for clean-checkout installation observations,
+exact compatibility declarations, supplied release/signature/DCO evidence,
+and exact-target rollback preparation. It requires no network or credentials;
+publication remains `not_performed` and remote verification remains
+`unverified`. Validate with `python3 scripts/check_fresh_clone_release.py
+--spec specifications/fresh-clone-release-lock-v1.json --record
+specifications/fixtures/fresh-clone-release-ar0027-v1.json
+--expected-revision 3`.
