@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-full-workflow-orchestrator",
+  "version": "1.0.0",
+  "title": "Offline full-workflow orchestration and terminal semantics",
+  "normative": true,
+  "task": {"id": "AR-0043", "revision": 3},
+  "authority": {
+    "coordinator": ["task identity", "dependencies", "revisions", "claims", "leases", "durable state"],
+    "admission": ["session admission and exact binding"],
+    "supervisor": ["worker lifecycle, lease fencing, recovery"],
+    "adapter": ["provider-neutral normalized session observations"],
+    "journal": ["ordered event and replay evidence"],
+    "awq": ["requirements, gates, evidence acceptance"],
+    "awg": ["oracle escalation, decisions, reusable guidance"],
+    "ui": ["human-facing rendering and validated input"],
+    "publication": ["review, merge, release, and remote observations"],
+    "security": ["policy, privacy, and supply-chain observations"],
+    "runtime": ["translation, dependency enforcement, and terminal projection"]
+  },
+  "workflow": {
+    "components": ["admission", "supervisor", "adapter", "journal", "awq", "awg", "ui", "publication", "security"],
+    "dependencies": [["admission", "supervisor"], ["supervisor", "adapter"], ["adapter", "journal"], ["journal", "awq"], ["awq", "awg"], ["awg", "ui"], ["ui", "publication"], ["publication", "security"]],
+    "terminal": ["success", "failure", "blocked"],
+    "terminal_authority": "runtime_projection"
+  },
+  "semantics": {
+    "success": "all components observed, AWQ accepted, AWG approved, UI completed, security passed, publication not performed, and remote verification unverified",
+    "failure": "a bound component reports an explicit terminal failure; no later component or authority result may be invented",
+    "blocked": "a required component is unavailable, undecided, incomplete, or dependency-gated; partial state is never success",
+    "replay": "exact operation ID and canonical payload are idempotent; changed or reordered replay is rejected"
+  },
+  "privacy": {"allowed": ["identifiers", "enums", "booleans", "versions", "digests", "bounded counts"], "reject": ["credentials", "secrets", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "network values"]},
+  "failure_semantics": {"mode": "fail_closed", "side_effects": "No provider, network, LLM, process, Coordinator, AWQ, AWG, UI, Git, publication, or durable-state operation is performed."},
+  "limitations": ["The harness validates supplied observations only.", "A terminal projection is not a live Coordinator transition, provider result, hosted-CI result, publication, or authority decision."]
+}
