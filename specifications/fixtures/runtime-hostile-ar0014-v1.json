@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-runtime-model", "version": "1.0.0"},
+  "cases": [
+    {"id":"stale-revision","violation":"stale task revision","mutation":{"task.revision":0}},
+    {"id":"replayed-event","violation":"replayed event","mutation":{"actions[1].event_id":"EV-001"}},
+    {"id":"authority-confusion","violation":"authority mismatch","mutation":{"actions[4].authority":"runtime"}},
+    {"id":"privacy-bearing","violation":"privacy violation","mutation":{"evidence.prompt":"do not publish"}},
+    {"id":"terminal-follow-up","violation":"invalid lifecycle transition","mutation":{"actions[12].operation":"execute"}}
+  ]
+}

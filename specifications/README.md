@@ -256,6 +256,24 @@ The evidence fixture binds the canonical specification and trace digests.
 These files do not launch Codex, any provider, a process, network, or LLM,
 and do not prove provider availability or runtime success.
 
+## AR-0014 formal runtime model
+
+`runtime-model-v1.json` is the revision-1-bound normative model for runtime
+lifecycle, oracle, recovery, publication, reconciliation, authority, and
+terminal invariants. Run its one checker offline with:
+
+```text
+python3 scripts/check_runtime_model.py \
+  --spec specifications/runtime-model-v1.json \
+  --trace specifications/fixtures/runtime-trace-ar0014-v1.json \
+  --expected-revision 1
+```
+
+`runtime-hostile-ar0014-v1.json` names the stale, replay, authority, privacy,
+and terminal corpus; focused tests add oracle, recovery, and publication
+hostile cases. The model validates supplied deterministic traces only and
+makes no external-tool, network, provider, LLM, Git, or durable-state call.
+
 ## AR-0009 AWQ evidence bridge
 
 `awq-evidence-bridge-v1.json` defines the smallest versioned projection from
