@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-provider-adapter-protocol",
+  "version": "1.0.0",
+  "title": "Provider-neutral adapter protocol and capability router",
+  "normative": true,
+  "task": {"id": "AR-0063", "revision": 5},
+  "lifecycle": {"states": ["new", "admitted", "discovered", "ready", "active", "streaming", "interrupted", "closed", "failed"], "terminal": ["closed", "failed"]},
+  "capabilities": ["request", "stream", "tool", "file_read", "file_write", "interrupt", "checkpoint", "resume"],
+  "boundaries": {"requests": "sha256 references only", "stream_events": "bounded digest chunks only", "tool_file": "digest or secret-ref references only", "execution": false, "provider": false, "network": false, "llm": false},
+  "router": {"known_but_unadvertised": "unsupported", "unknown": "reject", "unsupported_state_change": false, "unsupported_execute": false},
+  "privacy": {"projection": "identities, enums, bounded metadata and digests only", "forbidden": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output"]},
+  "failure_semantics": {"mode": "fail_closed", "invalid_input": "reject_without_state_change", "interruption": "acknowledged_then_checkpointable", "resume": "exact_checkpoint_digest_required"},
+  "invariants": ["Every event repeats one exact task revision and worktree/session binding.", "Secret values never cross the boundary; only secret-ref identifiers may appear.", "Unsupported capability outcomes are explicit, non-executing, and non-mutating.", "Close and failure fence all later events.", "Capability routing is an observation, not provider support or authorization."],
+  "limitations": ["The checker validates supplied deterministic records only.", "No provider, network, LLM, process, filesystem, credential store, or durable state is contacted or mutated."]
+}

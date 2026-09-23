@@ -600,3 +600,12 @@ python3 scripts/check_production_deployment_release.py \
 
 This is offline structural evidence only: execution, publication, providers,
 network, package managers, and durable state remain untouched.
+
+## AR-0063 provider-neutral adapter protocol and capability router
+
+`provider-adapter-protocol-v1.json` defines revision-5-bound admission,
+discovery, negotiation, bounded request/stream events, tool/file references,
+interruption, checkpoint/resume fencing, failure, and close. The reference
+model and checker are offline only. Unknown capabilities are rejected; known
+but unadvertised capabilities return `unsupported` with no execution or state
+change. Inputs are digests or opaque `secret-ref:` identifiers only.

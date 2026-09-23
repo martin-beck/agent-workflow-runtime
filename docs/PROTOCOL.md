@@ -419,3 +419,18 @@ be removed, enum values cannot be reused, unknown fields are rejected, and a
 reader accepts only its declared schema version. The fixture is offline
 structural evidence; human-gate and remote verification remain undecided or
 unverified.
+
+## AR-0063 provider-neutral adapter protocol
+
+AR-0063 extends the adapter boundary into a complete bounded protocol:
+admission, capability discovery and negotiation, request and stream events,
+tool/file references, interruption acknowledgement, checkpoint/resume
+fencing, failure, and close. Every event repeats the exact revision and
+session/worktree binding. Payloads are represented by SHA-256 references;
+secret material can only be named by an opaque `secret-ref:` identifier.
+
+Unknown capabilities are rejected, while known but unadvertised capabilities
+yield `unsupported` with `execute: false` and `state_change: false`. The
+offline checker proves only the supplied contract and deterministic
+normalization; it does not prove provider support, authorization, execution,
+network, or live service behavior.
