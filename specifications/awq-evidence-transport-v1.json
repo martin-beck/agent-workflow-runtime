@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-awq-evidence-transport",
+  "version": "1.0.0",
+  "title": "Offline production-shaped AWQ evidence transport and acceptance",
+  "task": {"id": "AR-0052", "revision": 5},
+  "authority": {"runtime": ["bounded transport", "retry and interruption", "projection"], "quality": ["evidence acceptance", "gate decision"], "coordinator": ["task identity", "revision"]},
+  "rules": ["AWQ alone may acknowledge acceptance", "same operation and request is idempotent", "changed replay, stale binding, duplicate evidence, private values, and ambiguous outcomes fail closed", "network and live verification remain disabled"],
+  "statuses": ["accepted", "rejected", "blocked", "unknown_outcome"],
+  "limits": {"maximum_attempts": 3, "maximum_evidence": 64},
+  "live_verification": "unverified",
+  "network": "not_performed"
+}

@@ -1,0 +1,13 @@
+{
+  "protocol": {"id": "awr-awq-evidence-transport", "version": "1.0.0"},
+  "task": {"id": "AR-0052", "revision": 5},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+  "worktree": {"key": "agent-workflow-runtime-0052", "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+  "session": {"id": "SES-AR0052"},
+  "evidence": [
+    {"id": "EVID-TESTS", "sequence": 1, "kind": "test", "outcome": "passed", "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"},
+    {"id": "EVID-FORMAL", "sequence": 2, "kind": "formal", "outcome": "passed", "evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"}
+  ],
+  "submission": {"operation_id": "OP-AR0052-SUBMIT", "attempt": 2, "max_attempts": 3, "state": "accepted", "network": "not_performed", "acknowledged": true, "interrupted": true, "evidence_digests": ["sha256:3333333333333333333333333333333333333333333333333333333333333333", "sha256:4444444444444444444444444444444444444444444444444444444444444444"]},
+  "gate": {"id": "GATE-AR0052", "authority": "awq", "status": "accepted", "decision_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555", "ack_id": "ACK-AR0052", "binding_digest": "sha256:d4be8e5bb7538793e440f78d378841f018c5d45ed4348dc2f943f636ddcd541e"}
+}

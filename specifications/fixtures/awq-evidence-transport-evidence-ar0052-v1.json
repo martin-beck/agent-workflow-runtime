@@ -1,0 +1,7 @@
+{
+  "checker": "awr-awq-evidence-transport-checker/1.0.0",
+  "task_revision": 5,
+  "record_digest": "sha256:318335b54433c5a923ae4424eb0d285f068ff5d7007a67a1a191ab240e6f770b",
+  "projection": {"protocol": "awr-awq-evidence-transport@1.0.0", "binding": {"task": {"id": "AR-0052", "revision": 5}, "project": {"key": "agent-workflow-runtime", "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}, "worktree": {"key": "agent-workflow-runtime-0052", "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"}, "session": {"id": "SES-AR0052"}}, "evidence_digests": ["sha256:3333333333333333333333333333333333333333333333333333333333333333", "sha256:4444444444444444444444444444444444444444444444444444444444444444"], "gate": {"authority": "awq", "status": "accepted", "decision_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"}, "quality_status": "not_decided_by_runtime", "network": "not_performed", "projection_digest": "sha256:86b02b21c51a7a1826956272cc40076211fdae3dfd55d740aaa37b1cd83e19d5"},
+  "live_verification": "unverified"
+}
