@@ -1,0 +1,481 @@
+{
+  "alerts": [
+    {
+      "disposition": "observed",
+      "name": "provider_error_rate",
+      "observed": 1.0,
+      "threshold": 0.2
+    },
+    {
+      "disposition": "observed",
+      "name": "provider_latency_ms",
+      "observed": 2400,
+      "threshold": 2000
+    },
+    {
+      "disposition": "observed",
+      "name": "lease_expiry_total",
+      "observed": 1,
+      "threshold": 1
+    }
+  ],
+  "audit": [
+    {
+      "action": "admission_observed",
+      "authority": "coordinator_observation",
+      "correlation_id": "CORR-RUN-1",
+      "disposition": "observed_not_authoritative",
+      "event_id": "EVT-01",
+      "evidence_digest": "sha256:f695ea45d3f0587fd9c7a7a63f9701412c2001d5125233b0b02782a030d2e857",
+      "previous_digest": "sha256:c39d75c5426988326e58c908d94a01be5b0bd0825be7ccabbc98aca0d0bb856b",
+      "sequence": 1
+    },
+    {
+      "action": "worker_started_observed",
+      "authority": "runtime_observation",
+      "correlation_id": "CORR-RUN-1",
+      "disposition": "observed_not_authoritative",
+      "event_id": "EVT-02",
+      "evidence_digest": "sha256:034e8c8aafcef83e4b58b833af342fd0b55bfebc04d6a3530ce30caa11edb722",
+      "previous_digest": "sha256:b5e9dd88bcf31d2d667f8d413133f5e01d314832636b2c6c83f86d4e9dde9d15",
+      "sequence": 2
+    },
+    {
+      "action": "provider_call_observed",
+      "authority": "provider_observation",
+      "correlation_id": "CORR-RUN-1",
+      "disposition": "observed_not_authoritative",
+      "event_id": "EVT-03",
+      "evidence_digest": "sha256:9477746d99bb642ee476380d004aa87e92c7a92260de842f4312808af8709cf5",
+      "previous_digest": "sha256:bc19b13612989a5ac787ac5632e11ca5398c478c447e67264cdac89a2e118793",
+      "sequence": 3
+    },
+    {
+      "action": "provider_result_observed",
+      "authority": "provider_observation",
+      "correlation_id": "CORR-RUN-1",
+      "disposition": "observed_not_authoritative",
+      "event_id": "EVT-04",
+      "evidence_digest": "sha256:b573657339f8376af79cd46078eb7f9c88ec0d390e758ede6b1ae0ad4dfff634",
+      "previous_digest": "sha256:14795e11559ba01e86d2b3bcc2a64df323bb08bdf9a109fd29548a08f59da17e",
+      "sequence": 4
+    },
+    {
+      "action": "resource_sample_observed",
+      "authority": "runtime_observation",
+      "correlation_id": "CORR-RUN-1",
+      "disposition": "observed_not_authoritative",
+      "event_id": "EVT-05",
+      "evidence_digest": "sha256:8bdf88d5a06a5e602126488b42256af00ca4ec148ce3ab31d380a3b193bab004",
+      "previous_digest": "sha256:3fd2c5dc7ea73f87ee3ac030372ae68aa72bfe9eecbdc0869eea5c4f2c96b54b",
+      "sequence": 5
+    },
+    {
+      "action": "cancellation_observed",
+      "authority": "runtime_observation",
+      "correlation_id": "CORR-RUN-1",
+      "disposition": "observed_not_authoritative",
+      "event_id": "EVT-06",
+      "evidence_digest": "sha256:7d8ac15fc2537cbfb60f806b2179dfeb3fead002be4b53ff78f05ae0ad0b4aef",
+      "previous_digest": "sha256:3d8f337014cce3c6b3961c76a03d9987a396733b47cc16c5feb49f9ac9377a53",
+      "sequence": 6
+    },
+    {
+      "action": "lease_expiry_observed",
+      "authority": "coordinator_observation",
+      "correlation_id": "CORR-RUN-1",
+      "disposition": "observed_not_authoritative",
+      "event_id": "EVT-07",
+      "evidence_digest": "sha256:e598d4d2c4fb694381effe10321a40064e9307c17518d45a1594e663e1d10006",
+      "previous_digest": "sha256:cfcde885ce0161fde5fbe321b7eba8af59fdb580f99cfeb33336cce8f95d94e1",
+      "sequence": 7
+    },
+    {
+      "action": "quality_gate_observed",
+      "authority": "awq_observation",
+      "correlation_id": "CORR-RUN-1",
+      "disposition": "observed_not_authoritative",
+      "event_id": "EVT-08",
+      "evidence_digest": "sha256:b2f0ae8776499ec8458ba50090c7610edba8a0c80dbb3d7f5e39b0f7f8ddef01",
+      "previous_digest": "sha256:e27d8d89998cebf76280474eaeef84a60ff6b974169022e127a15de32993e068",
+      "sequence": 8
+    },
+    {
+      "action": "guidance_gate_observed",
+      "authority": "awg_observation",
+      "correlation_id": "CORR-RUN-1",
+      "disposition": "observed_not_authoritative",
+      "event_id": "EVT-09",
+      "evidence_digest": "sha256:6c38228fcaa2ea215238ab8660538c6b79ced17641a9dccca1902735f71c9623",
+      "previous_digest": "sha256:620b39ab6be78888f71634b37bd6c59e6c595c2b237a6e1b5f51071b41e8bd59",
+      "sequence": 9
+    },
+    {
+      "action": "ui_gate_observed",
+      "authority": "ui_observation",
+      "correlation_id": "CORR-RUN-1",
+      "disposition": "observed_not_authoritative",
+      "event_id": "EVT-10",
+      "evidence_digest": "sha256:44b9623ed723e488fd301d9f2c08d2720f50a68ad9d47e0a11cb4067e2cbf9fb",
+      "previous_digest": "sha256:e83bdf21a91dfe9c277d31584b23da98eda386c58c8bad67846142fb394faf1a",
+      "sequence": 10
+    },
+    {
+      "action": "asb_outcome_observed",
+      "authority": "asb_observation",
+      "correlation_id": "CORR-RUN-1",
+      "disposition": "observed_not_authoritative",
+      "event_id": "EVT-11",
+      "evidence_digest": "sha256:2f40aa6dd236c6829626e9dda11b576fb31df74a8b92675ae12639903e0f0816",
+      "previous_digest": "sha256:3018f110ba0ddfd6ebffbadbfddf2871565f4bf5e0ea721c60c814c73f464093",
+      "sequence": 11
+    },
+    {
+      "action": "terminal_observed",
+      "authority": "runtime_observation",
+      "correlation_id": "CORR-RUN-1",
+      "disposition": "observed_not_authoritative",
+      "event_id": "EVT-12",
+      "evidence_digest": "sha256:b640b58ab270f3deda4cac783db853e8237acd588e0e8edd9b50f5835bef386f",
+      "previous_digest": "sha256:0c7e79cae99e4d7ea0821cca8ec75bb756dc32e5233c192988703c5c45d020ed",
+      "sequence": 12
+    }
+  ],
+  "boundary": {
+    "collector": "supplied_observations_only",
+    "durable_state": "not_performed",
+    "llm": "not_performed",
+    "network": "disabled",
+    "provider": "not_performed",
+    "remote_verification": "unverified"
+  },
+  "dashboards": {
+    "lease": {
+      "active": 0,
+      "expired": 1,
+      "fenced": true
+    },
+    "provider": {
+      "calls": 1,
+      "errors": 1,
+      "latency_ms_p95": 2400
+    },
+    "worker": {
+      "cancelled": 1,
+      "started": 1,
+      "terminal": 1
+    }
+  },
+  "events": [
+    {
+      "attributes": {
+        "revision_observed": 5,
+        "source": "coordinator"
+      },
+      "correlation_id": "CORR-RUN-1",
+      "id": "EVT-01",
+      "ingested_at": 1001,
+      "occurred_at": 1001,
+      "payload_digest": "sha256:651a24427c2284c7adf9d041a0e1b5ef7c359a538872a748dee199f82efeacdd",
+      "previous_id": null,
+      "sequence": 1,
+      "state": "admitted",
+      "status": "observed",
+      "type": "admission"
+    },
+    {
+      "attributes": {
+        "lease": "lease-1",
+        "worker": "worker-1"
+      },
+      "correlation_id": "CORR-RUN-1",
+      "id": "EVT-02",
+      "ingested_at": 1002,
+      "occurred_at": 1002,
+      "payload_digest": "sha256:eaa20d68ea22bed9b03b943775d2d13a9e84fc7dea65ff3b217a4cb980c9db93",
+      "previous_id": "EVT-01",
+      "sequence": 2,
+      "state": "active",
+      "status": "observed",
+      "type": "worker_started"
+    },
+    {
+      "attributes": {
+        "operation": "request",
+        "provider": "provider-a"
+      },
+      "correlation_id": "CORR-RUN-1",
+      "id": "EVT-03",
+      "ingested_at": 1003,
+      "occurred_at": 1003,
+      "payload_digest": "sha256:5e41a65a04cfaa33479871ff6784ce1fa0afa64ce99db0941124b70e56098189",
+      "previous_id": "EVT-02",
+      "sequence": 3,
+      "state": "active",
+      "status": "observed",
+      "type": "provider_call"
+    },
+    {
+      "attributes": {
+        "error_class": "timeout",
+        "latency_ms": 2400,
+        "outcome": "error",
+        "provider": "provider-a"
+      },
+      "correlation_id": "CORR-RUN-1",
+      "id": "EVT-04",
+      "ingested_at": 1004,
+      "occurred_at": 1004,
+      "payload_digest": "sha256:51bf38daec5ef5558f1e82ad12b4c14f5644efe5707745ccb55b5e13ea584875",
+      "previous_id": "EVT-03",
+      "sequence": 4,
+      "state": "active",
+      "status": "observed",
+      "type": "provider_result"
+    },
+    {
+      "attributes": {
+        "budget_status": "within_budget",
+        "cpu_percent": 42,
+        "memory_bytes": 524288000
+      },
+      "correlation_id": "CORR-RUN-1",
+      "id": "EVT-05",
+      "ingested_at": 1005,
+      "occurred_at": 1005,
+      "payload_digest": "sha256:4e1343b1ab0f4ef67fea1f65c625b08fdf5b3e8e9a39c1f8e5b1911655c45a2e",
+      "previous_id": "EVT-04",
+      "sequence": 5,
+      "state": "active",
+      "status": "observed",
+      "type": "resource_sample"
+    },
+    {
+      "attributes": {
+        "acknowledged": true,
+        "reason": "operator_signal",
+        "requested": true
+      },
+      "correlation_id": "CORR-RUN-1",
+      "id": "EVT-06",
+      "ingested_at": 1006,
+      "occurred_at": 1006,
+      "payload_digest": "sha256:7d9d85eb8efe7a27e531ea3630e876ef6563983c509f47681264af4906fe70c0",
+      "previous_id": "EVT-05",
+      "sequence": 6,
+      "state": "cancelling",
+      "status": "observed",
+      "type": "cancellation"
+    },
+    {
+      "attributes": {
+        "lease": "lease-1",
+        "outcome": "expired",
+        "recovery": "fenced",
+        "worker": "worker-1"
+      },
+      "correlation_id": "CORR-RUN-1",
+      "id": "EVT-07",
+      "ingested_at": 1007,
+      "occurred_at": 1007,
+      "payload_digest": "sha256:95f3627b2d88d1a6c10e67411e5425f7db514dca5e816226e727e516af84f188",
+      "previous_id": "EVT-06",
+      "sequence": 7,
+      "state": "recovered",
+      "status": "observed",
+      "type": "lease_expiry"
+    },
+    {
+      "attributes": {
+        "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "status": "not_decided"
+      },
+      "correlation_id": "CORR-RUN-1",
+      "id": "EVT-08",
+      "ingested_at": 1008,
+      "occurred_at": 1008,
+      "payload_digest": "sha256:86c9fdef5230863fcb5d822bd460e8f02bcc5bf632aee6609ce9a10ce92c65cb",
+      "previous_id": "EVT-07",
+      "sequence": 8,
+      "state": "recovered",
+      "status": "observed",
+      "type": "quality_gate"
+    },
+    {
+      "attributes": {
+        "guidance_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+        "status": "not_decided"
+      },
+      "correlation_id": "CORR-RUN-1",
+      "id": "EVT-09",
+      "ingested_at": 1009,
+      "occurred_at": 1009,
+      "payload_digest": "sha256:4a463a4cfe1c0ffbb353154fcb83c2e72621750a5920ee2b07fa41a8d8ce3951",
+      "previous_id": "EVT-08",
+      "sequence": 9,
+      "state": "recovered",
+      "status": "observed",
+      "type": "guidance_gate"
+    },
+    {
+      "attributes": {
+        "input_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+        "status": "not_decided"
+      },
+      "correlation_id": "CORR-RUN-1",
+      "id": "EVT-10",
+      "ingested_at": 1010,
+      "occurred_at": 1010,
+      "payload_digest": "sha256:f78f5c04633231f8971c80c2b2ca6610abaf0ba308e7980c9d1bb20e90a46689",
+      "previous_id": "EVT-09",
+      "sequence": 10,
+      "state": "recovered",
+      "status": "observed",
+      "type": "ui_gate"
+    },
+    {
+      "attributes": {
+        "comparison": "not_performed",
+        "run": "not_performed",
+        "status": "observed"
+      },
+      "correlation_id": "CORR-RUN-1",
+      "id": "EVT-11",
+      "ingested_at": 1011,
+      "occurred_at": 1011,
+      "payload_digest": "sha256:e22ad0298684740febe630c5132bd52de51e0af3f1693f7e53ef9ba05a92ea6f",
+      "previous_id": "EVT-10",
+      "sequence": 11,
+      "state": "recovered",
+      "status": "observed",
+      "type": "asb_outcome"
+    },
+    {
+      "attributes": {
+        "outcome": "cancelled",
+        "status": "terminal_observed"
+      },
+      "correlation_id": "CORR-RUN-1",
+      "id": "EVT-12",
+      "ingested_at": 1012,
+      "occurred_at": 1012,
+      "payload_digest": "sha256:eb7b14e2b0348f2f6d22085d491c28444f7c18af7687a360d95f5d9d8d6c8de9",
+      "previous_id": "EVT-11",
+      "sequence": 12,
+      "state": "terminal",
+      "status": "observed",
+      "type": "terminal"
+    }
+  ],
+  "evidence": {
+    "checker": "awr-runtime-observability-checker/1.0.0",
+    "live_verification": "unverified",
+    "record_digest": "sha256:0af280a4f9f736ba016bf5075ae1d888f7e221d3655db3ac89d5fcdfd06a6ab3"
+  },
+  "health": {
+    "clock": "within_bound",
+    "collector": "offline",
+    "exporter": "available",
+    "status": "observed"
+  },
+  "incident_export": {
+    "audit_digest": "sha256:ee64c27ab1a4561a4bc325885e22dc3f40e018e59e24164525b93746264d0fd0",
+    "durable_state": "not_performed",
+    "event_count": 12,
+    "format": "jsonl",
+    "network": "disabled",
+    "on_failure": "retain_bounded_redacted",
+    "redacted": true,
+    "status": "prepared_not_exported",
+    "on_failure": "retain_bounded_redacted"
+  },
+  "limits": {
+    "max_audit_events": 32,
+    "max_clock_skew_seconds": 30,
+    "max_events": 32,
+    "max_label_cardinality": 8,
+    "max_metrics": 64,
+    "max_trace_bytes": 8192
+  },
+  "metrics": [
+    {
+      "correlation_id": "CORR-RUN-1",
+      "kind": "histogram",
+      "labels": {
+        "outcome": "error",
+        "provider": "provider-a"
+      },
+      "name": "provider_latency_ms",
+      "unit": "ms",
+      "value": 2400
+    },
+    {
+      "correlation_id": "CORR-RUN-1",
+      "kind": "counter",
+      "labels": {
+        "provider": "provider-a"
+      },
+      "name": "provider_errors_total",
+      "unit": "errors",
+      "value": 1
+    },
+    {
+      "correlation_id": "CORR-RUN-1",
+      "kind": "gauge",
+      "labels": {
+        "budget": "within"
+      },
+      "name": "resource_memory_bytes",
+      "unit": "bytes",
+      "value": 524288000
+    },
+    {
+      "correlation_id": "CORR-RUN-1",
+      "kind": "counter",
+      "labels": {
+        "worker": "worker-1"
+      },
+      "name": "lease_expiry_total",
+      "unit": "events",
+      "value": 1
+    }
+  ],
+  "project": {
+    "key": "agent-workflow-runtime",
+    "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "protocol": {
+    "id": "awr-runtime-observability",
+    "version": "1.0.0"
+  },
+  "readiness": {
+    "live_service": "not_performed",
+    "network": "disabled",
+    "provider": "not_performed",
+    "status": "observed"
+  },
+  "redaction": {
+    "identifiers": "bounded",
+    "paths": "rejected",
+    "raw_payloads": "absent",
+    "secrets": "rejected"
+  },
+  "retention": {
+    "export_max_bytes": 16384,
+    "mode": "digest_only",
+    "raw_payloads": false,
+    "retention_days": 7
+  },
+  "schema_version": 1,
+  "session": {
+    "id": "SES-OBS-1"
+  },
+  "task": {
+    "id": "AR-0056",
+    "revision": 5
+  },
+  "worktree": {
+    "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "key": "agent-workflow-runtime-0056"
+  }
+}
