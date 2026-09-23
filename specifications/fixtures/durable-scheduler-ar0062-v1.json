@@ -1,0 +1,19 @@
+{
+  "capacity": {"cpu": 2, "memory": 2, "disk": 2},
+  "limits": {"max_concurrency": 2, "max_queued": 8, "lease_seconds": 5, "tenant_limits": {"tenant-a": 1, "tenant-b": 2}, "aging_quantum": 2},
+  "jobs": [
+    {"job_id": "JOB-A", "dependencies": [], "priority": 80, "tenant": "tenant-a", "resources": {"cpu": 1, "memory": 1, "disk": 1}, "max_attempts": 2, "submitted_at": 0},
+    {"job_id": "JOB-B", "dependencies": ["JOB-A"], "priority": 70, "tenant": "tenant-b", "resources": {"cpu": 1, "memory": 1, "disk": 1}, "max_attempts": 1, "submitted_at": 0},
+    {"job_id": "JOB-C", "dependencies": [], "priority": 10, "tenant": "tenant-b", "resources": {"cpu": 1, "memory": 1, "disk": 1}, "max_attempts": 1, "submitted_at": 0}
+  ],
+  "operations": [
+    {"kind": "release", "now": 0},
+    {"kind": "dispatch", "operation_id": "DISPATCH-A", "worker_id": "WRK-A", "now": 0},
+    {"kind": "complete", "operation_id": "COMPLETE-A", "job_id": "JOB-A", "worker_id": "WRK-A", "lease_id": "LSE-JOB-A-1", "now": 1},
+    {"kind": "release", "now": 1},
+    {"kind": "dispatch", "operation_id": "DISPATCH-B", "worker_id": "WRK-B", "now": 1},
+    {"kind": "complete", "operation_id": "COMPLETE-B", "job_id": "JOB-B", "worker_id": "WRK-B", "lease_id": "LSE-JOB-B-2", "now": 2},
+    {"kind": "dispatch", "operation_id": "DISPATCH-C", "worker_id": "WRK-C", "now": 2}
+  ],
+  "expected": {"states": {"JOB-A": "succeeded", "JOB-B": "succeeded", "JOB-C": "running"}, "events": 11, "available": {"cpu": 1, "memory": 1, "disk": 1}}
+}

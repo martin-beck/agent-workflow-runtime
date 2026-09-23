@@ -212,3 +212,19 @@ and provenance to one exact revision. Schema evolution is additive-only with
 a version bump; unknown fields, stale or crossed bindings, invalid transitions,
 replays, and privacy-bearing data fail closed. Validation performs no
 execution, network, provider, LLM, live-service, or durable-state operation.
+
+AR-0062 adds the offline durable fair scheduler and worker-lease kernel in
+`specifications/durable-scheduler-v1.json`. It admits AR-0061 jobs with
+dependency release and queue backpressure, performs priority/aging dispatch
+with tenant and resource reservations, and models fenced leases, expiry,
+checkpoint recovery, cancellation acknowledgement, bounded retries,
+idempotent dispatch, starvation prevention, and terminal reconciliation.
+Validate it with:
+
+```text
+python3 scripts/check_durable_scheduler.py --spec specifications/durable-scheduler-v1.json --fixture specifications/fixtures/durable-scheduler-ar0062-v1.json --expected-revision 1
+```
+
+The model is deterministic and offline: it does not mutate Coordinator state,
+execute workers, contact providers or live services, use an LLM, or claim
+durable persistence or remote success.
