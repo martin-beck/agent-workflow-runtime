@@ -1,0 +1,18 @@
+{
+  "task": {"id": "AR-0036", "revision": 3},
+  "session_id": "SES-AR0036-X",
+  "worker_id": "WRK-AR0036-A",
+  "lease_id": "LSE-AR0036-A",
+  "specification_digest": "sha256:4bc80922d895b2cbd7c4cd6b08401ac6e7262c1fba2e0e65edc732e90ef08056",
+  "actions": [
+    {"kind": "append", "operation_id": "OP-AR0036-START", "event": "start", "payload": {"phase": "recovery"}},
+    {"kind": "append", "operation_id": "OP-AR0036-PROGRESS", "event": "progress", "payload": {"step": "prepared"}},
+    {"kind": "checkpoint", "checkpoint_id": "CHK-AR0036-BASE", "operation_id": "OP-AR0036-PROGRESS", "state_digest": "sha256:693b296bc46beeacc77cc4aa5e9ac77771a82d8ce84e28d182b5854e935a3ce2", "input_digest": "sha256:ddc495972a7cd6a828592a3372b219ec8ea06c04f4043c7a6653cc3adc4e9603", "result_digest": "sha256:e5afdf00bdd21f5243d717d557083253ab82e1bca7e6d0b91624c6603c94a18c"},
+    {"kind": "crash", "operation_id": "OP-AR0036-UNCERTAIN"},
+    {"kind": "recover", "checkpoint_id": "CHK-AR0036-BASE", "worker": "WRK-AR0036-B", "lease": "LSE-AR0036-B", "fence": 2},
+    {"kind": "replay", "checkpoint_id": "CHK-AR0036-BASE"},
+    {"kind": "append", "operation_id": "OP-AR0036-COMPLETE", "event": "complete", "payload": {"result": "recovered"}}
+  ],
+  "expected_head_digest": "sha256:27473b25dd4715e720e2c477a225322d890955664a1e8df6b7e72dedc79c6e14",
+  "expected_state": "completed"
+}

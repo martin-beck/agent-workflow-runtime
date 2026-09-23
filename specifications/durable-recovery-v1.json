@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-durable-journal-recovery",
+  "version": "1.0.0",
+  "title": "Offline durable journal, checkpoint, and fenced recovery contract",
+  "normative": true,
+  "task": {"id": "AR-0036", "revision": 3},
+  "authority": {
+    "coordinator": ["task identity", "revision", "owner", "lease", "durable authority state"],
+    "runtime": ["bounded append/replay translation", "checkpoint verification", "recovery fencing", "privacy projection"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["uncertainty classification", "decisions", "reusable guidance"],
+    "ui": ["human-facing rendering", "validated human input"]
+  },
+  "binding": {
+    "project_key": "agent-workflow-runtime",
+    "worktree_key": "agent-workflow-runtime-0036",
+    "task_id": "AR-0036",
+    "task_revision": 3,
+    "session_id": "SES-[A-Z0-9-]{1,63}",
+    "worker_id": "WRK-[A-Z0-9-]{1,63}",
+    "lease_id": "LSE-[A-Z0-9-]{1,63}",
+    "operation_id": "OP-[A-Z0-9-]{1,63}",
+    "digest": "sha256:64 lowercase hexadecimal characters"
+  },
+  "state_machine": {
+    "states": ["active", "interrupted", "recoverable", "ambiguous", "completed", "blocked"],
+    "events": ["append", "checkpoint", "interrupt", "crash", "recover", "replay", "complete", "block"],
+    "rules": [
+      "append is accepted only for the current task, project, worktree, session, worker, lease, and fence",
+      "a committed append has a contiguous sequence and previous-record digest",
+      "a checkpoint is immutable and references the committed journal head and state/input/result digests",
+      "an exact operation replay returns the original committed result; changed replay is rejected",
+      "a crash after append before fsync creates an ambiguous operation and fences the old worker permanently",
+      "recovery requires a durable checkpoint, a newer worker and lease, and a new fencing token",
+      "resume replays only the exact checkpoint and cannot manufacture completion or authority decisions",
+      "ambiguous operations are never guessed, retried, or marked successful"
+    ]
+  },
+  "durability": {
+    "format": "canonical UTF-8 JSON records with a SHA-256 hash chain",
+    "commit": "prepare a complete record, flush/fsync, then expose it as committed",
+    "recovery": "discard no uncertain operation silently; preserve ambiguity as blocked and fail closed",
+    "replay": "single-use operation IDs; byte-identical input returns the original result",
+    "checkpoint": "immutable committed record, bound to the journal head and fencing token"
+  },
+  "privacy": {
+    "forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "raw_output", "command", "executable"],
+    "projection": "opaque identifiers, bounded enums, counters, and SHA-256 digests only"
+  },
+  "compatibility": {
+    "canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline",
+    "major_change": "new specification_id or schema_version",
+    "minor_change": "new version with a new checker and fixture"
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "crossed binding", "wrong worker or lease", "replayed changed operation", "broken chain", "missing checkpoint", "old fencing token", "ambiguous fsync", "privacy-bearing value", "unknown field", "terminal follow-up"],
+    "external_effects": "none: no network, provider, LLM, Coordinator, Git, hosted CI, UI, or durable state mutation"
+  },
+  "evidence_boundary": {
+    "offline": "deterministic model, fixture, checker, and local unit tests only",
+    "live": "unverified; real fsync, locking, crash injection, process recovery, and Coordinator integration require a separately approved AR",
+    "follow_up": ["Integrate the model with project-bound Coordinator lease and durable state APIs after independent AWQ/AWG/security review.", "Add platform-specific atomic replace, fsync-directory, lock, and power-loss qualification without weakening ambiguity handling."]
+  }
+}
