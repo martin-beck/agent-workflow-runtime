@@ -38,7 +38,15 @@ The runtime must fail closed when an agent action cannot be bound to a claimed
 task revision, an allowed capability, a valid worktree, a quality result, or a
 durable oracle outcome.
 
+The admission root is `specifications/runtime-charter-v1.json`. Before a
+design or conceptual decision is implemented, an offline admission envelope
+must bind the canonical specification digest, the current Coordinator task
+revision, and unique privacy-safe evidence. The checker and hostile cases are
+in `scripts/check_admission.py` and `tests/test_admission.py`; run
+`python3 -m unittest discover -s tests -v` from a clean checkout. This check
+does not replace Coordinator, AWQ, AWG, or UI authority and cannot establish
+remote, hosted-CI, provider, or runtime success.
+
 ## License
 
 MIT, with the Huawei copyright notice in `LICENSE`.
-
