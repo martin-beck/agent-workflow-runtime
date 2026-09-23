@@ -101,3 +101,20 @@ can resume only after a newer fenced worker/lease replays a verified checkpoint.
 The offline model and checker are `scripts/checkpoint_recovery.py` and
 `scripts/check_checkpoint_recovery.py`. They validate observations only and do
 not implement durable storage, process supervision, or real crash recovery.
+
+AR-0015 adds the provider-neutral Codex-style adapter boundary. A session must
+discover capabilities before starting, preserve the exact AR-0015 revision-5
+task/worktree/adapter binding, and submit turns by bounded digest reference.
+Interrupt, close, and failure are terminal; unknown fields, provider commands,
+prompts, transcripts, private values, stale bindings, and replayed records are
+rejected. The deterministic checker is:
+
+```text
+python3 scripts/check_codex_adapter.py \
+  --spec specifications/codex-style-adapter-v1.json \
+  --trace specifications/fixtures/codex-replay-ar0015-v1.json \
+  --expected-revision 5
+```
+
+It does not launch Codex or any provider and does not connect to a network,
+process, LLM, Coordinator, AWQ, AWG, or UI.

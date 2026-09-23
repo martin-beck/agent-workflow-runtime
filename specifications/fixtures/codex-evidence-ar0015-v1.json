@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "task": {"id": "AR-0015", "revision": 5},
+  "specification": {"id": "awr-codex-style-adapter", "version": "1.0.0", "sha256": "sha256:72de3a8a6213351a873c97b236591fcd5b5ae59239b26283cf69ee23d99dbba7"},
+  "trace": {"sha256": "sha256:6036e28df4ac44e8b2e42beddb897fe241e30b7e68089dbfaf2ebbd8a7630cfe"},
+  "evidence": [{"id": "EV-AR0015-CAPABILITIES", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, {"id": "EV-AR0015-CLOSE", "digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"}],
+  "tools": {"python": "3.12.3", "network": "not_used", "provider": "not_used", "llm": "not_used"},
+  "result": "offline_checker_passed"
+}
