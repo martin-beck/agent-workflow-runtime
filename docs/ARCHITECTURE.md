@@ -139,3 +139,15 @@ project, worktree, and session identity and carries only bounded uncertainty,
 alternative evidence digests, and confidence metadata. The projection is
 always `not_decided`; AWG remains authoritative for admission and decisions.
 The offline model and checker do not contact AWG or any provider.
+
+## AR-0012 provider-neutral Git/publication bridge
+
+The publication bridge accepts a bounded observation envelope for one branch,
+commit, review, merge, and publication state. It binds the exact branch head
+through every stage and requires positive valid-signature and signed-DCO
+observations. Evidence is canonical JSON with SHA-256 digests; unknown fields,
+stale revision-3 bindings, replay, privacy-bearing values, wrong heads, and
+unsigned evidence fail closed. Merge and publication must remain
+`not_performed`, so this AR performs no provider, Git, review-system, merge, or
+remote publication operation. The model and checker validate supplied evidence
+only and do not verify cryptographic signatures or DCO trailers themselves.

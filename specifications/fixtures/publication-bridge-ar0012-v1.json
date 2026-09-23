@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-publication-bridge", "version": "1.0.0"},
+  "task": {"id": "AR-0012", "revision": 3},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "worktree": {"key": "agent-workflow-runtime-0012", "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+  "branch": {"name": "feature/ar-0012", "head": "0123456789abcdef0123456789abcdef01234567"},
+  "commit": {
+    "id": "0123456789abcdef0123456789abcdef01234567",
+    "tree": "89abcdef0123456789abcdef0123456789abcdef",
+    "parents": ["fedcba9876543210fedcba9876543210fedcba98"],
+    "exact_head": true,
+    "signature": {"status": "valid", "algorithm": "ssh", "key_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+    "dco": {"status": "signed", "trailer_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"}
+  },
+  "review": {"id": "RV-AR0012-01", "status": "approved", "target_head": "0123456789abcdef0123456789abcdef01234567", "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"},
+  "merge": {"status": "not_performed", "target_head": "0123456789abcdef0123456789abcdef01234567", "evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"},
+  "publication": {"status": "not_performed", "target_head": "0123456789abcdef0123456789abcdef01234567", "evidence_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"},
+  "evidence": [
+    {"id": "EV-AR0012-BRANCH", "kind": "branch", "digest": "sha256:3c07b3bc978d98e52ff5bcac9e8a0ca9d774ab7327f98143afe1ee68a01f2d8a"},
+    {"id": "EV-AR0012-COMMIT", "kind": "commit", "digest": "sha256:15499faa9c2eecd1729e413fa86b2054fe79e01e7fca7deb473685df13e80a3e"},
+    {"id": "EV-AR0012-REVIEW", "kind": "review", "digest": "sha256:c96a485330a43f323fd31d53d0136d091cbfbe7467aaca6f3ec44aa0b83c6452"},
+    {"id": "EV-AR0012-MERGE", "kind": "merge", "digest": "sha256:1bc07fd446b12bc71718d0379dd338b901b0ceaf7f1d095284627f6e60fce7fa"},
+    {"id": "EV-AR0012-PUBLICATION", "kind": "publication", "digest": "sha256:81b9d43ef725eea1fc206bd116b757770e6d652d2003988527205a46d5871ffc"}
+  ]
+}

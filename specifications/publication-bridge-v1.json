@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-publication-bridge",
+  "version": "1.0.0",
+  "title": "Provider-neutral Git and publication evidence bridge",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "task revision", "worktree identity"],
+    "quality": ["review and publication requirements", "evidence acceptance"],
+    "runtime": ["bounded Git observation projection", "exact-head and signature evidence preservation"]
+  },
+  "binding": {
+    "task": "AR-0012 at Coordinator revision 3",
+    "project_revision": "sha256 digest",
+    "worktree": "stable key plus sha256 digest",
+    "git_object": "lowercase 40-hex Git object identifier"
+  },
+  "observations": {
+    "required": ["branch", "commit", "review", "merge", "publication", "evidence"],
+    "head_rule": "branch.head, commit.id, review.target_head, merge.target_head, and publication.target_head are identical",
+    "signature_rule": "commit.signature.status is valid and commit.dco.status is signed; both are observations, not cryptographic verification",
+    "merge_rule": "merge.status is not_performed",
+    "publication_rule": "publication.status is not_performed",
+    "evidence_rule": "Each component has exactly one unique evidence reference whose digest is the canonical SHA-256 digest of that component"
+  },
+  "privacy": {
+    "allowed_values": "bounded identifiers, enumerations, booleans, integer revision, and SHA-256 or Git object digests",
+    "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "emails", "raw output", "unknown fields"]
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "replayed evidence", "unknown fields", "privacy-bearing values", "wrong head", "unsigned commit", "unsigned DCO", "merge or publication side effects"],
+    "side_effects": "The model and checker perform no network, provider, Git, Coordinator, AWQ, AWG, UI, merge, or publication operation."
+  },
+  "limitations": [
+    "A valid envelope proves only that supplied observations are structurally and digest-consistent.",
+    "The checker does not inspect a repository, verify a signature, verify a DCO trailer, contact a review system, merge, publish, or establish remote or hosted-CI success.",
+    "Review status is an observation for AWQ and Coordinator policy; it is not a runtime approval or task transition."
+  ],
+  "follow_up": [
+    "Coordinator remains authoritative for task revision, claims, leases, and durable state.",
+    "AWQ remains authoritative for requirements, gates, and acceptance of this evidence.",
+    "A future integration may consume this envelope only through approved Coordinator and AWQ contracts."
+  ]
+}

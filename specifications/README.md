@@ -276,3 +276,28 @@ projection is always `admission_status: not_decided`. The model and checker
 are `scripts/awg_oracle_bridge.py` and `scripts/check_awg_oracle_bridge.py`.
 They reject stale, replayed, unknown, private, cross-boundary, and
 decision-bearing input and perform no external operation.
+
+## AR-0012 provider-neutral Git/publication evidence
+
+`publication-bridge-v1.json` defines a revision-3-bound envelope for branch,
+commit, review, merge, and publication observations. The exact branch head is
+carried through all five observations. The commit requires valid signature and
+signed-DCO statuses, while component evidence and the complete envelope use
+canonical SHA-256 digests. Merge and publication are non-executing
+`not_performed` observations.
+
+Run the deterministic checker with:
+
+```text
+python3 scripts/check_publication_bridge.py \\
+  --spec specifications/publication-bridge-v1.json \\
+  --record specifications/fixtures/publication-bridge-ar0012-v1.json \\
+  --evidence specifications/fixtures/publication-evidence-ar0012-v1.json \\
+  --expected-revision 3
+```
+
+The checker includes hostile coverage for stale revision, replay, unknown and
+private fields, wrong head, unsigned signature/DCO, and attempted merge or
+publication. It is offline evidence validation only: it does not inspect Git,
+verify cryptography, contact a provider or review system, merge, publish, or
+mutate durable state.
