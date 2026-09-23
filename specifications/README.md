@@ -213,6 +213,28 @@ This is a contract and evidence check only. It does not establish OpenDesk or
 any provider availability, authorization, implementation support, streaming,
 tool/file execution, remote runtime success, or hosted CI.
 
+## AR-0019 capability broker and worktree enforcement
+
+`capability-broker-v1.json` defines the revision-1-bound provider-neutral
+grant, exact project/worktree/session identity, and fail-closed tool-action
+enforcement. `scripts/capability_broker.py` is the in-memory model and
+`scripts/check_capability_broker.py` checks the positive fixture and its
+canonical evidence. Hostile tests cover stale, replayed, unknown, private,
+cross-worktree, cross-project, and unauthorized-tool input.
+
+Run it offline:
+
+```text
+python3 scripts/check_capability_broker.py \
+  --spec specifications/capability-broker-v1.json \
+  --trace specifications/fixtures/capability-broker-ar0019-v1.json \
+  --expected-revision 1
+```
+
+The exclusive worktree value is only a supplied observation. This contract
+does not inspect or prove filesystem isolation and performs no provider,
+network, process, or durable-state operation.
+
 ## AR-0016 OpenCode-style normalized adapter
 
 `opencode-adapter-v1.json` defines a provider-neutral mapping from synthetic,

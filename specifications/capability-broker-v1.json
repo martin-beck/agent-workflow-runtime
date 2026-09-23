@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-capability-broker",
+  "version": "1.0.0",
+  "normative": true,
+  "title": "Revision-1-bound provider-neutral capability broker and worktree enforcement",
+  "authority": {
+    "coordinator": ["task identity", "claims", "revisions", "leases", "durable state"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing discussion rendering", "human-facing discussion input"],
+    "runtime": ["capability grant enforcement", "project/worktree binding", "safe action rejection"]
+  },
+  "binding": {
+    "task_revision": 1,
+    "required_action_identity": ["task", "project", "worktree", "session", "grant"],
+    "worktree_binding": "exclusive supplied observation; immutable for the trace",
+    "grant_binding": "revision 1 grant and exact allowed tool versions",
+    "action_rule": "Every action must repeat the exact admission identity and use one granted tool."
+  },
+  "capabilities": {
+    "allowed_tools": ["read", "edit", "test"],
+    "tool_record": ["id", "version"],
+    "denied_tools": ["network", "provider", "credential", "publish", "merge", "state_mutation", "authority_decision"],
+    "rule": "Unknown, denied, or ungranted tools are rejected before an action is accepted."
+  },
+  "enforcement": {
+    "mode": "fail_closed",
+    "replay": "action IDs and action identity tuples are single-use",
+    "cross_worktree": "the exact worktree key, revision, and digest must match admission",
+    "cross_project": "the exact project key and revision must match admission",
+    "private_input": "private keys and values are prohibited from public evidence"
+  },
+  "lifecycle": {
+    "states": ["bound", "active", "closed"],
+    "actions": ["read", "edit", "test", "close"],
+    "rule": "Only granted read/edit/test actions are accepted while active; close is terminal."
+  },
+  "privacy": {
+    "forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "personal_data", "raw_output"],
+    "projection": "Identifiers, revisions, digests, tool metadata, counts, and dispositions only."
+  },
+  "limitations": [
+    "The model validates supplied observations and does not inspect, create, or isolate a filesystem worktree.",
+    "An exclusive worktree binding is an input observation, not proof of filesystem isolation or tool behavior.",
+    "The checker performs no provider, network, process, LLM, Git, Coordinator, AWQ, AWG, UI, or durable-state operation."
+  ]
+}

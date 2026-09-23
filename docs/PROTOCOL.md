@@ -235,3 +235,24 @@ are checked fail-closed; cancellation requires acknowledgement and recovery
 fences the prior worker. `scripts/supervisor_runtime.py` and
 `scripts/check_supervisor_runtime.py` are offline models only and do not launch
 or inspect a worker or mutate Coordinator state.
+
+## AR-0019 capability broker and worktree enforcement
+
+`capability-broker-v1.json` binds a revision-1 capability grant to the exact
+task, project revision, supplied exclusive worktree binding, session, and
+allowed tool versions. Every action repeats that identity and must use one of
+the granted `read`, `edit`, or `test` tools. The checker rejects stale,
+replayed, unknown, private, cross-worktree, cross-project, and unauthorized
+input before accepting an action:
+
+```text
+python3 scripts/check_capability_broker.py \
+  --spec specifications/capability-broker-v1.json \
+  --trace specifications/fixtures/capability-broker-ar0019-v1.json \
+  --expected-revision 1
+```
+
+This is supplied-observation evidence only. `exclusive_supplied` is a binding
+label, not a claim that the checker inspected or isolated the filesystem.
+The model performs no provider, network, process, LLM, Git, Coordinator,
+AWQ, AWG, UI, or durable-state operation.
