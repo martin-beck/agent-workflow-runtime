@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-awq-live-evidence", "version": "1.0.0"},
+  "task": {"id": "AR-0037", "revision": 3},
+  "project": {"key": "agent-workflow-runtime", "revision": "0123456789abcdef0123456789abcdef01234567"},
+  "worktree": {"key": "agent-workflow-runtime-0037", "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+  "session": {"id": "SES-AR0037-OFFLINE"},
+  "tool_versions": [
+    {"id": "OP-AR0037-CHECKER", "version": "1.0.0"},
+    {"id": "OP-AR0037-HARNESS", "version": "1.0.0"}
+  ],
+  "evidence": [
+    {"id": "EVID-AR0037-UNIT", "sequence": 1, "category": "test", "result": "passed", "qualification": "offline", "evidence_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+    {"id": "EVID-AR0037-SPEC", "sequence": 2, "category": "formal", "result": "passed", "qualification": "offline", "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"}
+  ],
+  "transport": {
+    "operation_id": "OP-AR0037-EVIDENCE",
+    "attempt": 1,
+    "state": "recovered",
+    "network": "not_performed",
+    "auth_state": "not_supplied",
+    "approval": "not_granted",
+    "events": [
+      {"id": "EVT-AR0037-PREPARE", "sequence": 1, "kind": "prepare"},
+      {"id": "CHK-AR0037-EVIDENCE", "sequence": 2, "kind": "checkpoint"},
+      {"id": "EVT-AR0037-INTERRUPT", "sequence": 3, "kind": "interrupt"},
+      {"id": "EVT-AR0037-RESUME", "sequence": 4, "kind": "resume"}
+    ]
+  },
+  "gate_observation": {
+    "id": "GATE-AR0037-AWQ",
+    "authority": "awq",
+    "status": "accepted",
+    "binding_digest": "sha256:9bd67ad4209bae8afbfa029b2d843136dd9671c33a09bbb18fb2012f3cefbeff",
+    "evidence_digests": [
+      "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+    ],
+    "decision_source": "external_observation",
+    "gate_digest": "sha256:e0b1356976bd5c4519ff9202616a9c09658319a540215329370174805a25de3f"
+  }
+}
