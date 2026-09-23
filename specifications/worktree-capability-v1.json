@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-worktree-capability",
+  "version": "1.0.0",
+  "title": "Versioned project, worktree, capability, and authority boundary",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "claims", "dependencies", "revisions", "leases", "durable state"],
+    "quality": ["requirements", "quality gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing discussion rendering", "human-facing discussion input"],
+    "runtime": ["session execution", "worktree isolation", "capability enforcement", "normalized evidence"]
+  },
+  "binding": {
+    "required": ["task", "project", "worktree", "capabilities", "authority"],
+    "task_id": "^AR-[0-9]{4}$",
+    "task_revision": "positive integer supplied by Coordinator",
+    "project_key": "^[a-z][a-z0-9-]{2,63}$",
+    "worktree_key": "^[a-z0-9][a-z0-9._-]{0,63}$",
+    "revision": "40 lowercase hexadecimal characters",
+    "digest": "sha256: followed by 64 lowercase hexadecimal characters"
+  },
+  "capabilities": {
+    "allowed_tools": ["read", "edit", "test"],
+    "tool_record": ["id", "version"],
+    "rule": "An action is accepted only when its tool is granted and its capability is allowed.",
+    "denied": ["network", "provider", "credential", "publish", "merge", "state_mutation", "authority_decision"]
+  },
+  "authority_rules": [
+    "Coordinator-owned task, claim, revision, lease, and durable-state decisions are observations, never runtime grants.",
+    "AWQ-owned quality acceptance and AWG-owned oracle decisions cannot be manufactured by a runtime action.",
+    "The runtime may enforce and report a boundary but cannot approve, complete, merge, publish, or mutate authority-owned state."
+  ],
+  "lifecycle": {
+    "states": ["admitted", "active", "interrupted", "closed"],
+    "transitions": [
+      ["admitted", "start", "active"],
+      ["active", "interrupt", "interrupted"],
+      ["active", "close", "closed"],
+      ["interrupted", "resume", "active"],
+      ["interrupted", "close", "closed"]
+    ],
+    "rule": "Resume requires the identical task revision, project, worktree, capability grant, and session; closed sessions cannot resume."
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["unknown fields", "malformed binding", "stale revision", "wrong project or worktree", "unapproved tool", "authority mutation", "replayed action", "invalid lifecycle transition", "privacy violation"],
+    "side_effects": "The checker performs no network, provider, process, Git, Coordinator, AWQ, AWG, or UI operation."
+  },
+  "privacy": {
+    "forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "personal_data", "raw_output"],
+    "projection": "Only stable identifiers, revisions, digests, bounded tool metadata, dispositions, and error codes are public evidence."
+  },
+  "compatibility": {
+    "canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline",
+    "major_change": "new specification_id or incompatible schema_version",
+    "minor_change": "backward-compatible documented additions require a new compatible checker"
+  },
+  "limitations": [
+    "This contract validates supplied bindings and actions; it does not prove Coordinator state, filesystem isolation, tool behavior, evidence truth, or implementation refinement.",
+    "A worktree digest identifies the supplied binding but does not authenticate the worktree or prove that its path is isolated.",
+    "The offline checker does not launch commands, access providers, consult GitHub or hosted CI, or persist durable state."
+  ],
+  "follow_up": ["Implement a capability broker and real worktree inspection under AR-0019.", "Add adapter-specific capability reporting under AR-0003 and AR-0015."]
+}

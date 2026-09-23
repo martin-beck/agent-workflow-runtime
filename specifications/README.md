@@ -56,3 +56,28 @@ python3 scripts/check_session_events.py \
 This checker validates supplied trace consistency only. It does not consult or
 prove Coordinator state, AWQ/AWG/UI decisions, evidence truth, signing,
 process isolation, provider behavior, hosted CI, or remote runtime success.
+
+## AR-0004 project, worktree, and capability boundary
+
+`worktree-capability-v1.json` binds an admitted session to one Coordinator task
+revision, project revision, exclusive worktree identity, bounded tool grant,
+and explicit authority observations. `scripts/check_boundary.py` accepts only
+the documented `read`, `edit`, and `test` tools, fences lifecycle transitions,
+and rejects stale, cross-boundary, replayed, privacy-bearing, and authority-
+mutating input.
+
+Run the deterministic checker offline:
+
+```text
+python3 scripts/check_boundary.py \
+  --spec specifications/worktree-capability-v1.json \
+  --record specifications/fixtures/boundary-ar0004-v1.json \
+  --expected-revision 5 \
+  --expected-project agent-workflow-runtime \
+  --expected-worktree agent-workflow-runtime-0004
+```
+
+The fixture records only the task revision, specification/evidence digests,
+checker version, and safe identifiers. The checker does not inspect or create
+a worktree, execute a tool, consult Coordinator/AWQ/AWG/UI, or establish
+filesystem isolation; those claims require later integration work (AR-0019).

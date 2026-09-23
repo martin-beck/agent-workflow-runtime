@@ -53,3 +53,19 @@ python3 scripts/check_session_events.py \
   --trace specifications/fixtures/session-trace-ar0002-v1.json \
   --expected-revision 5
 ```
+
+The separate AR-0004 boundary checker validates the admission-side binding
+that a session must have before these events can represent execution:
+
+```text
+python3 scripts/check_boundary.py \
+  --spec specifications/worktree-capability-v1.json \
+  --record specifications/fixtures/boundary-ar0004-v1.json \
+  --expected-revision 5 \
+  --expected-project agent-workflow-runtime \
+  --expected-worktree agent-workflow-runtime-0004
+```
+
+It is an offline structural check. It records no private path or tool output,
+and a passing result is not proof that a worktree is physically isolated or
+that a provider, remote host, Coordinator, AWQ, AWG, or UI was reached.

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-worktree-capability", "version": "1.0.0"},
+  "session": {"id": "SES-AR0004-BOUNDARY"},
+  "task": {"id": "AR-0004", "revision": 5},
+  "project": {"key": "agent-workflow-runtime", "revision": "96d242f2525a04596e6d07b8261203d4a1f9bf34"},
+  "worktree": {"key": "agent-workflow-runtime-0004", "base_revision": "96d242f2525a04596e6d07b8261203d4a1f9bf34", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "isolation": "exclusive"},
+  "capabilities": [{"id": "read", "version": "1.0.0"}, {"id": "edit", "version": "1.0.0"}, {"id": "test", "version": "1.0.0"}],
+  "authority": {"coordinator": "observed", "quality": "observed", "guidance": "observed", "ui": "observed", "runtime": "enforce"},
+  "lifecycle": {"initial": "admitted", "final": "interrupted"},
+  "actions": [
+    {"id": "ACT-START", "sequence": 1, "state": "admitted", "tool": "read", "operation": "start", "disposition": "accepted"},
+    {"id": "ACT-READ", "sequence": 2, "state": "active", "tool": "read", "operation": "read", "disposition": "accepted"},
+    {"id": "ACT-EDIT", "sequence": 3, "state": "active", "tool": "edit", "operation": "edit", "disposition": "accepted"},
+    {"id": "ACT-TEST", "sequence": 4, "state": "active", "tool": "test", "operation": "test", "disposition": "accepted"},
+    {"id": "ACT-INTERRUPT", "sequence": 5, "state": "active", "tool": "read", "operation": "interrupt", "disposition": "interrupted"}
+  ],
+  "evidence": {"task_revision": 5, "specification_digest": "sha256:3c3de80216e67a24d76be4ef830dc74bc82370cf74da2e135969d33fba29c181", "checker": "awr-boundary-checker/1.0.0", "safe_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}
+}
