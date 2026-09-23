@@ -394,3 +394,28 @@ acceptance remains `blocked_pending_live_evidence`; provider, LLM, network,
 host, service, Coordinator, authority, publication, and durable-state work is
 not performed. This is not release, live execution, provider support, or
 operational acceptance.
+
+## AR-0061 durable revision-bound jobs
+
+`durable-job-v1.json` defines the offline durable job envelope. A job is bound
+to the exact AR-0061 task revision, project revision, exclusive worktree,
+session, input digest, contract digest, and idempotency key. Its explicit
+sections cover objective, inputs, dependencies, capabilities, adapters,
+acceptance criteria, budgets, deadline, bounded retries, priority, tenancy,
+privacy, artifacts, human gates, cancellation, idempotency, and provenance.
+
+The reference state machine is `submitted -> admitted -> queued -> running`,
+with explicit checkpoint, human-gate, cancellation, failure, and terminal
+paths. Events form a contiguous digest chain; stale or crossed bindings,
+duplicate events, unknown fields, privacy-bearing values, invalid transitions,
+and altered provenance are rejected. Validate the canonical fixture with:
+
+```text
+python3 scripts/check_durable_job.py --spec specifications/durable-job-v1.json --fixture specifications/fixtures/durable-job-ar0061-v1.json --expected-revision 1
+```
+
+Schema evolution is additive-only with a version bump: required fields cannot
+be removed, enum values cannot be reused, unknown fields are rejected, and a
+reader accepts only its declared schema version. The fixture is offline
+structural evidence; human-gate and remote verification remain undecided or
+unverified.

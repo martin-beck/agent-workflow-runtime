@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-durable-revision-bound-job", "version": "1.0.0"},
+  "task": {"id": "AR-0061", "revision": 1},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+  "worktree": {"key": "agent-workflow-runtime-0061", "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+  "session": {"id": "SES-AR0061-REFERENCE"},
+  "job": {
+    "objective": {"summary": "validate the durable revision-bound job contract", "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"},
+    "inputs": {"payload_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "count": 1},
+    "dependencies": {"task_ids": [], "digests": []},
+    "capabilities": {"requested": ["read", "edit", "test"], "denied": ["network", "provider", "llm", "durable_state"]},
+    "adapters": [{"id": "offline-reference", "version": "1.0.0", "digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"}],
+    "acceptance": {"criteria": ["focused_tests_pass", "full_tests_pass"], "criteria_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"},
+    "budget": {"max_attempts": 3, "max_events": 32, "max_runtime_seconds": 900},
+    "deadline": {"kind": "absolute", "at": "2026-12-31T23:59:59Z"},
+    "retry": {"policy": "bounded-exponential", "max_attempts": 3, "retryable": ["worker_lost", "transient_unavailable"]},
+    "priority": {"class": "normal", "value": 50},
+    "tenancy": {"tenant": "agent-workflow-runtime", "isolation": "exclusive-worktree"},
+    "privacy": {"classification": "public-safe-digest-only", "raw_payload": "forbidden"},
+    "artifacts": {"allowed": ["digest", "test_result", "checkpoint"], "retention": "until-terminal"},
+    "human_gates": {"required": ["acceptance-review"], "decision": "not_decided", "input_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"},
+    "cancellation": {"mode": "cooperative", "ack_required": true, "deadline_seconds": 30},
+    "idempotency": {"key": "JOB-AR0061-REFERENCE", "replay": "same_digest_same_result", "conflict": "reject"},
+    "provenance": {"input_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "contract_digest": "sha256:144fcf9fdcc4875aab3dbd4592c1bfff2e860a4d77eb5785d42b4df5820c6618", "parent_revision": 1}
+  },
+  "events": [
+    {"event_id": "EV-AR0061-01", "sequence": 1, "from": "submitted", "to": "admitted", "task_revision": 1, "session_id": "SES-AR0061-REFERENCE", "previous_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "evidence_digest": "sha256:9223660556058793ce7fd55dad5cd94e3e813b7b0787d8a81a8d224be1e00f64"},
+    {"event_id": "EV-AR0061-02", "sequence": 2, "from": "admitted", "to": "queued", "task_revision": 1, "session_id": "SES-AR0061-REFERENCE", "previous_digest": "sha256:9223660556058793ce7fd55dad5cd94e3e813b7b0787d8a81a8d224be1e00f64", "evidence_digest": "sha256:f5c93a41ae6e6ff644a77f67892d96a67f2ac5df1a076dccae58fbe4ba320718"},
+    {"event_id": "EV-AR0061-03", "sequence": 3, "from": "queued", "to": "running", "task_revision": 1, "session_id": "SES-AR0061-REFERENCE", "previous_digest": "sha256:f5c93a41ae6e6ff644a77f67892d96a67f2ac5df1a076dccae58fbe4ba320718", "evidence_digest": "sha256:c53228a2c7942b6b1dee55b7de56c611ad3d57cb8f5be6aea156ce9069e9ecbc"},
+    {"event_id": "EV-AR0061-04", "sequence": 4, "from": "running", "to": "awaiting_human_gate", "task_revision": 1, "session_id": "SES-AR0061-REFERENCE", "previous_digest": "sha256:c53228a2c7942b6b1dee55b7de56c611ad3d57cb8f5be6aea156ce9069e9ecbc", "evidence_digest": "sha256:362c20514bbf17c5083e718fa9034d48f6697d242ead6e232f92708a1b016dce"},
+    {"event_id": "EV-AR0061-05", "sequence": 5, "from": "awaiting_human_gate", "to": "running", "task_revision": 1, "session_id": "SES-AR0061-REFERENCE", "previous_digest": "sha256:362c20514bbf17c5083e718fa9034d48f6697d242ead6e232f92708a1b016dce", "evidence_digest": "sha256:aaa8df42ab058a2d85d6d3e1f571fb53001322a6a8f9a12864f6de43e07b32e0"},
+    {"event_id": "EV-AR0061-06", "sequence": 6, "from": "running", "to": "succeeded", "task_revision": 1, "session_id": "SES-AR0061-REFERENCE", "previous_digest": "sha256:aaa8df42ab058a2d85d6d3e1f571fb53001322a6a8f9a12864f6de43e07b32e0", "evidence_digest": "sha256:bf745fe720b43802642cf669f9e1107883ba204ae5d355a91aeb74a538ea2fb4"}
+  ],
+  "terminal": {"state": "succeeded", "execute": false, "network": "disabled", "provider": "not_performed", "llm": "not_performed", "live_service": "not_performed", "durable_state": "not_performed", "human_gate": "not_decided", "remote_verification": "unverified"},
+  "evidence": {"checker": "awr-durable-revision-bound-job-checker/1.0.0", "task_revision": 1, "contract_digest": "sha256:144fcf9fdcc4875aab3dbd4592c1bfff2e860a4d77eb5785d42b4df5820c6618", "record_digest": "sha256:34be929ae2a8fb68ccad81e0f0e0069cc4c5597319c0c1cb22416ca560cfc386"}
+}

@@ -202,3 +202,13 @@ The checker requires supplied provenance and DCO/signature observations, never
 executes a package manager, deployment, upgrade, rollback, release, provider,
 network, or durable-state operation, and preserves publication as
 `not_performed` and remote verification as `unverified`.
+
+AR-0061 adds the offline durable revision-bound job contract in
+`specifications/durable-job-v1.json`, with its canonical fixture,
+`scripts/durable_job.py` state machine, and `scripts/check_durable_job.py`
+checker. It binds job policy, inputs, capabilities, budgets, deadlines,
+retries, tenancy, privacy, artifacts, human gates, cancellation, idempotency,
+and provenance to one exact revision. Schema evolution is additive-only with
+a version bump; unknown fields, stale or crossed bindings, invalid transitions,
+replays, and privacy-bearing data fail closed. Validation performs no
+execution, network, provider, LLM, live-service, or durable-state operation.
