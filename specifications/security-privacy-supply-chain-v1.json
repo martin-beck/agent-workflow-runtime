@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-security-privacy-supply-chain",
+  "version": "1.0.0",
+  "title": "Provider-neutral security, privacy, and supply-chain assurance",
+  "normative": true,
+  "task": "AR-0025 at Coordinator revision 1",
+  "observations": {
+    "required": ["secret_handling", "least_privilege", "dependency_provenance", "redaction", "public_evidence", "hostile_boundaries", "evidence"],
+    "binding": "Every observation repeats the exact task revision, project revision, worktree digest, and session identifier through the record binding.",
+    "secret_handling": "Secrets are absent from supplied evidence, storage and transport are none, and exposure is false.",
+    "least_privilege": "The granted capability set is bounded to read, edit, and test; network, credentials, provider, LLM, and durable-state mutation are denied.",
+    "dependency_provenance": "Every dependency has an exact non-floating version, source, integrity digest, license digest, and a manifest/lockfile digest.",
+    "redaction": "Raw content and private values are absent; public evidence is digest-only.",
+    "public_evidence": "Only bounded identifiers, enums, booleans, versions, and digests are eligible; publication remains not_performed.",
+    "hostile_boundaries": "Unknown fields, stale revisions, replay, crossed bindings, credentials, and privacy-bearing values are rejected fail-closed."
+  },
+  "privacy": {
+    "allowed_values": "bounded identifiers, enumerations, booleans, exact versions, and SHA-256 digests",
+    "reject": ["credentials", "secrets", "prompts", "transcripts", "private paths", "host identifiers", "emails", "raw output", "network requests", "unknown fields"]
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "side_effects": "The model and checker perform no scanner, network, provider, LLM, Git, package-manager, process, or durable-state operation.",
+    "limitations": ["A valid record proves only that supplied observations are structurally complete and digest-consistent.", "It does not inspect dependencies, verify signatures or licenses, detect secrets, enforce OS privileges, or establish runtime or remote success."]
+  },
+  "follow_up": ["Coordinator remains authoritative for task identity, revisions, claims, leases, and durable state.", "AWQ remains authoritative for requirements, gates, and evidence acceptance.", "Future integration may consume this envelope only through approved Coordinator and AWQ contracts."]
+}

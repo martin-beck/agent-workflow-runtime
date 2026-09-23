@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-security-privacy-supply-chain", "version": "1.0.0"},
+  "task": {"id": "AR-0025", "revision": 1},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "worktree": {"key": "agent-workflow-runtime-0025", "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+  "session": "SES-AR0025-OFFLINE",
+  "secret_handling": {"status": "pass", "secrets_exposed": false, "storage": "none", "transport": "none", "evidence_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"},
+  "least_privilege": {"status": "pass", "granted": ["read", "edit", "test"], "denied": ["network", "credentials", "provider", "llm", "durable_state"], "elevation": "none", "evidence_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"},
+  "dependency_provenance": {"status": "pass", "manifest_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "lockfile_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "dependencies": [{"name": "example-runtime", "version": "1.2.3", "source": "vendored", "integrity_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "license_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}], "evidence_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"},
+  "redaction": {"status": "pass", "raw_content_absent": true, "digest_only": true, "private_values_absent": true, "evidence_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"},
+  "public_evidence": {"status": "pass", "allowed_fields": ["identifiers", "enums", "booleans", "versions", "digests"], "payload_free": true, "publication": "not_performed", "evidence_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"},
+  "hostile_boundaries": {"status": "pass", "unknown_rejected": true, "stale_rejected": true, "replay_rejected": true, "cross_binding_rejected": true, "credential_rejected": true, "evidence_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"},
+  "evidence": [
+    {"id": "EV-AR0025-SECRET", "kind": "secret_handling", "digest": "sha256:35128f1c0543579b95a7609fc7c2103f387868a0055f81158a53257c09a608d7"},
+    {"id": "EV-AR0025-PRIVILEGE", "kind": "least_privilege", "digest": "sha256:e884d4b2278ed4593a5e5a45cd492399faa3a7deb5142cb4c43c087907470ffa"},
+    {"id": "EV-AR0025-PROVENANCE", "kind": "dependency_provenance", "digest": "sha256:77dff2e906571194277ff6ed55b1721e88a09cc5ba73dc8b4fd8c2f0851cafe0"},
+    {"id": "EV-AR0025-REDACTION", "kind": "redaction", "digest": "sha256:4ef237f02d9f41ed664e28bc97dd8e7c564460282c407ce7d1b5b50fc11da21a"},
+    {"id": "EV-AR0025-PUBLIC", "kind": "public_evidence", "digest": "sha256:ec9a16300516e662a636a9dc391628ab70557ce29c4a5ec80b22e3b2b5211d91"},
+    {"id": "EV-AR0025-HOSTILE", "kind": "hostile_boundaries", "digest": "sha256:f58edf9dbc21469b4522d7c8f38a5a4ed25997b3c4a9a36516e959b8400295f7"},
+    {"id": "EV-AR0025-BINDING", "kind": "binding", "digest": "sha256:afc0dff7acf585d7fdf27c83b11d46610bd0f6a7e791d032f989eeef4d1f2e86"}
+  ]
+}

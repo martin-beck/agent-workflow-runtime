@@ -304,6 +304,16 @@ positive supplied observations; CI remains `verification: unverified`, and
 merge handoff remains non-executing. The checker performs no Git, CI, remote,
 provider, network, or publication operation.
 
+## AR-0025 security, privacy, and supply-chain assurance
+
+`security-privacy-supply-chain-v1.json` binds six bounded observation areas to
+Coordinator revision 1: secret handling, least privilege, dependency
+provenance, redaction, public evidence, and hostile boundaries. Dependency
+observations require exact versions plus source, integrity, and license
+digests. Public evidence contains no raw payload and publication is
+`not_performed`. The checker performs no scanner, network, package-manager,
+provider, LLM, or durable-state operation.
+
 ## AR-0023 end-to-end autonomous workflow
 
 `autonomous-workflow-v1.json` defines a revision-1-bound trace from plan

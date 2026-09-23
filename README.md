@@ -99,6 +99,14 @@ AWG, provider, network, LLM, or durable-state operation.
 
 AR-0021 adds `specifications/publication-ci-bridge-v1.json`, a revision-1-bound implementation bridge joining signed-DCO publication observations, review/merge handoff, exact-head CI correlation, and explicit `verification: unverified` remote status. Its offline model/checker validate supplied evidence only; merge, publication, CI, provider, network, Git, and durable-state operations are not performed.
 
+AR-0025 adds `specifications/security-privacy-supply-chain-v1.json`, a
+revision-1-bound assurance envelope for secret handling, least privilege,
+dependency provenance, redaction, public evidence, and hostile boundaries.
+Exact dependency versions and integrity/license digests are required; public
+evidence is payload-free and publication remains `not_performed`. Its offline
+model/checker performs no scanner, network, provider, LLM, Git, package-manager,
+or durable-state operation.
+
 AR-0023 adds `specifications/autonomous-workflow-v1.json`, a revision-1-bound
 offline end-to-end workflow trace covering planning, execution, quality, oracle
 discussion, review, merge observation, recovery, reconciliation, and terminal

@@ -24,6 +24,15 @@ python3 scripts/check_adapter_conformance.py \
 It rejects stale, private, unknown, crossed, duplicate, or tampered records
 and reports capability mismatches without execution or state change.
 
+## AR-0025 security, privacy, and supply-chain assurance
+
+`security-privacy-supply-chain-v1.json` and its fixture bind bounded
+secret-handling, least-privilege, dependency-provenance, redaction,
+public-evidence, and hostile-boundary observations to AR-0025 revision 1.
+The checker requires exact dependency versions and digest references, rejects
+private or credential-bearing content, and performs no scanner, network,
+provider, package-manager, Git, or durable-state operation.
+
 Specifications are contract evidence, not implementation-refinement proofs.
 They must not contain credentials, private paths, prompts, transcripts, host
 identifiers, or unbounded command output.
@@ -457,6 +466,23 @@ python3 scripts/check_publication_ci_bridge.py \\
 
 The checker validates supplied observations only and has no Git, CI, remote,
 provider, network, merge, publication, or durable-state side effects.
+
+## AR-0025 security, privacy, and supply-chain assurance
+
+`security-privacy-supply-chain-v1.json` defines the revision-1-bound assurance
+envelope and its six observation areas. Dependency records require exact
+versions plus source, integrity, and license digests; public evidence is
+payload-free and publication is `not_performed`.
+
+```text
+python3 scripts/check_security_privacy_supply_chain.py \\
+  --spec specifications/security-privacy-supply-chain-v1.json \\
+  --record specifications/fixtures/security-privacy-supply-chain-ar0025-v1.json \\
+  --expected-revision 1
+```
+
+This is offline structural evidence only and performs no scanner, network,
+provider, package-manager, LLM, or durable-state operation.
 
 ## AR-0023 end-to-end autonomous workflow
 
