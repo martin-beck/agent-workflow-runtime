@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-codex-live-adapter",
+  "version": "1.0.0",
+  "title": "Offline deterministic Codex live provider adapter contract",
+  "normative": true,
+  "task": {"id": "AR-0033", "revision": 3},
+  "authority": {
+    "coordinator": ["task identity", "task revision", "worktree identity", "lease and durable state"],
+    "quality": ["requirements", "quality gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing rendering and validated input"],
+    "runtime": ["Codex translation", "bounded lifecycle", "request/response correlation", "fail-closed enforcement"]
+  },
+  "capabilities": ["discover", "start", "request", "response", "interrupt", "close", "fail"],
+  "lifecycle": {
+    "states": ["admitted", "discovered", "active", "awaiting_response", "interrupted", "closed", "failed"],
+    "terminal": ["interrupted", "closed", "failed"],
+    "binding": ["task", "project", "worktree", "session", "adapter"],
+    "request_requires_response": true,
+    "max_in_flight": 1
+  },
+  "request_response": {
+    "request_id": "REQ-[A-Z0-9-]{1,63}",
+    "payload": "digest-only; no prompt, transcript, command, or provider payload",
+    "response": "correlated by the exact outstanding request_id and represented only by an evidence digest",
+    "determinism": "canonical JSON replay must produce the same result"
+  },
+  "gates": {"credential": "reference_only", "human_approval": "not_granted", "network": "denied", "provider": "not_selected", "execute": false},
+  "privacy": {"forbidden": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "commands"], "projection": "bounded identifiers, states, dispositions, and SHA-256 digests only"},
+  "failure_semantics": {"mode": "fail_closed", "invalid_input": "reject_without_state_change", "stale_revision": "reject", "replay": "reject", "unmatched_response": "reject", "interruption": "terminal_observation"},
+  "compatibility": {"canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline", "major_change": "new specification_id or incompatible schema_version", "minor_change": "backward-compatible documented fields only"},
+  "limitations": [
+    "The model, checker, and fixture are synthetic offline observations; they do not launch Codex, a provider, a process, network, LLM, Coordinator, AWQ, AWG, or UI.",
+    "Closed gates and a passing replay are not provider availability, authorization, model behavior, filesystem isolation, hosted-CI success, or remote execution.",
+    "A terminal local observation is not Coordinator completion, AWQ acceptance, AWG guidance, or a live provider result."
+  ],
+  "follow_up": ["A separately approved integration AR must bind a real provider only after Coordinator lease, credential, network, supervision, and human-approval gates are independently satisfied.", "AWQ must independently qualify any evidence before release or publication."]
+}
