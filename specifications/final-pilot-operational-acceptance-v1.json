@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-final-pilot-operational-acceptance",
+  "version": "1.0.0",
+  "title": "Offline final pilot and operational acceptance composition",
+  "normative": true,
+  "task": {"id": "AR-0060", "revision": 5},
+  "gates": ["coordinator_admission", "capability_preflight", "security_hardening", "production_readiness", "performance_reliability", "chaos_qualification", "deployment_release", "publication_review", "operational_acceptance"],
+  "authority": {"coordinator": ["task identity", "revision", "claims", "leases", "durable state"], "awq": ["requirements", "gates", "evidence acceptance"], "awg": ["decisions", "guidance"], "ui": ["human rendering", "validated input"], "runtime": ["bounded composition", "offline qualification projection"]},
+  "offline_boundary": {"execute": false, "provider": "not_performed", "network": "disabled", "llm": "not_performed", "live_service": "not_performed", "durable_state": "not_performed", "publication": "not_performed", "remote_verification": "unverified"},
+  "privacy": {"reject": ["credential", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "raw_output", "command", "network"]},
+  "failure_semantics": {"mode": "fail_closed", "missing_or_failed_gate": "reject", "replay_or_binding_mismatch": "reject", "live_acceptance": "blocked_pending_live_evidence"},
+  "limitations": ["The checker composes supplied gate observations only.", "A passing fixture is offline structural evidence, not provider support, benchmark execution, operational acceptance, release, or live workflow success.", "No provider, LLM, network, process, host, service, Coordinator, AWQ, AWG, UI, Git, publication, or durable-state operation is performed."],
+  "follow_up": ["Obtain separately approved revision-bound live evidence for every operational gate.", "Have Coordinator, AWQ, AWG, UI, and release authorities independently perform their owned decisions before acceptance or release."]
+}
