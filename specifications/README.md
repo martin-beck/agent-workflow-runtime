@@ -317,6 +317,29 @@ are `scripts/awg_oracle_bridge.py` and `scripts/check_awg_oracle_bridge.py`.
 They reject stale, replayed, unknown, private, cross-boundary, and
 decision-bearing input and perform no external operation.
 
+## AR-0020 AWQ submission and AWG batched oracle bridge
+
+`awq-awg-bridge-v1.json` defines the revision-1-bound bridge for unique,
+digest-only evidence references and batched AWG discussion, decision, and
+guidance envelopes. Runtime requests are marked `requested`; decisions and
+guidance must be `received` from `awg`. Neither authority result is created by
+the runtime: the projection keeps both statuses `not_decided`.
+
+Run the deterministic checker with:
+
+```text
+python3 scripts/check_awq_awg_bridge.py \
+  --spec specifications/awq-awg-bridge-v1.json \
+  --record specifications/fixtures/awq-awg-bridge-ar0020-v1.json \
+  --evidence specifications/fixtures/awq-awg-evidence-ar0020-v1.json \
+  --expected-revision 1
+```
+
+The positive fixture and focused tests cover stale, replay, unknown, private,
+cross-binding, authority, decision, and acceptance violations. This is
+structural offline evidence only; no AWQ, AWG, provider, network, LLM, or
+durable state is contacted.
+
 ## AR-0011 provider-neutral UI session bridge
 
 `ui-session-bridge-v1.json` defines the revision-1-bound UI bridge. The

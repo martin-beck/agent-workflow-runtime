@@ -157,6 +157,25 @@ The checker validates supplied structure and digests only. It does not submit
 evidence, consult AWQ, or establish Coordinator, provider, hosted-CI, remote,
 or runtime success.
 
+AR-0020 adds the revision-1-bound AWQ/AWG bridge. Evidence crosses the
+boundary as unique digest references with `offered_for_awq_review`, never as
+AWQ acceptance. Oracle interaction is batched: each batch carries one
+runtime-requested discussion and externally attributed AWG decision and
+guidance observations. Payloads remain digest-only, and both statuses remain
+`not_decided`.
+
+```text
+python3 scripts/check_awq_awg_bridge.py \
+  --spec specifications/awq-awg-bridge-v1.json \
+  --record specifications/fixtures/awq-awg-bridge-ar0020-v1.json \
+  --evidence specifications/fixtures/awq-awg-evidence-ar0020-v1.json \
+  --expected-revision 1
+```
+
+The checker rejects stale, replayed, unknown, private, cross-binding, and
+runtime-authored authority envelopes. It performs no AWQ/AWG submission,
+provider, network, LLM, UI, or durable-state operation.
+
 AR-0010 adds the provider-neutral AWG oracle bridge. Runtime observations are
 projected into a canonical, digest-bound `discussion_admission` envelope at
 exact Coordinator task revision 3, preserving exact project, worktree, and
