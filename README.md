@@ -131,3 +131,14 @@ model/checker evaluate bounded supplied observations and preserve
 `live_measurement: not_performed`; they never run benchmarks or contact a
 provider, network, LLM, host, or durable authority. A passing envelope is not
 live measurement or production qualification.
+
+AR-0024 adds `specifications/operational-cli-v1.json`, a provider-neutral
+operator contract for setup, run, observe, interrupt, resume, diagnose, and
+safe shutdown. Its offline model and checker accept only a bounded,
+revision-bound command trace; they do not implement or launch a CLI. Run it
+with `python3 scripts/check_operational_cli.py --spec
+specifications/operational-cli-v1.json --fixture
+specifications/fixtures/operational-cli-ar0024-v1.json --expected-revision 3`.
+Shutdown remains `durable_state: not_performed` and
+`remote_verification: unverified`, so a passing trace is not live process,
+provider, filesystem, network, or remote-handoff evidence.

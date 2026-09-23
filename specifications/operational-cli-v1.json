@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-operational-cli",
+  "version": "1.0.0",
+  "title": "Provider-neutral operational CLI, configuration, and onboarding",
+  "normative": true,
+  "task": {"id": "AR-0024", "revision": 3},
+  "commands": ["setup", "run", "observe", "interrupt", "resume", "diagnose", "shutdown"],
+  "states": ["new", "configured", "running", "observed", "interrupted", "diagnosed", "stopped"],
+  "authorities": {
+    "coordinator": ["task identity", "revision", "worktree", "lease", "durable state"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["uncertainty", "oracle decisions", "reusable guidance"],
+    "runtime": ["bounded command translation", "supervision", "local lifecycle observation"]
+  },
+  "invariants": [
+    "Every command is bound to AR-0024 revision 3, one project, worktree, session, and supplied invocation.",
+    "Configuration and command arguments contain bounded identifiers, enumerations, finite limits, and SHA-256 digests only; no command executes a provider, process, network, or shell operation.",
+    "Setup precedes run; observe precedes interruption; resume requires the exact acknowledged checkpoint; diagnosis and shutdown are observations, not authority decisions.",
+    "Safe shutdown is acknowledged only after diagnosis and always reports durable_state not_performed and remote_verification unverified.",
+    "One command event ID and one evidence digest are used at most once; malformed, stale, crossed, replayed, or unauthorized transitions fail closed."
+  ],
+  "configuration": {
+    "required": ["profile", "worktree_digest", "session_id", "limits"],
+    "profiles": ["offline"],
+    "limits": ["timeout_seconds", "max_events", "max_output_bytes"]
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "invalid_input": "reject_without_partial_output",
+    "stale_or_replayed": "reject_without_state_change",
+    "side_effects": "No provider, LLM, network, process, shell, Git, Coordinator, AWQ, AWG, UI, or durable-state operation is performed."
+  },
+  "privacy": {
+    "allowed_values": "bounded identifiers, offline profile, enumerations, finite non-negative limits, booleans, and SHA-256 digests",
+    "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "emails", "raw output", "unknown fields"]
+  },
+  "limitations": [
+    "A passing trace proves only deterministic command contract and supplied observation shape.",
+    "It does not install, launch, inspect, resume, or stop a real runtime and does not prove filesystem isolation, lease validity, provider behavior, or remote consumption.",
+    "Coordinator, AWQ, AWG, and UI remain authoritative; runtime statuses cannot manufacture their decisions or durable state.",
+    "A future live implementation must introduce a separately versioned revision-bound execution contract and host enforcement evidence."
+  ],
+  "follow_up": ["AR-0027 may consume this interface for operational integration after independent qualification."]
+}

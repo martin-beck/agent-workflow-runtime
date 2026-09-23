@@ -257,3 +257,15 @@ throughput, recovery, resource use, and failure behavior. It keeps
 `live_measurement: not_performed` and cannot turn supplied values into live
 provider or host qualification. The model and checker are deterministic and
 offline only.
+
+## AR-0024 operational CLI boundary
+
+The operational CLI contract is a bounded translation boundary for setup, run,
+observation, interruption, resume, diagnosis, and safe shutdown. The offline
+state model requires setup before run, an acknowledged checkpoint before
+resume, and diagnosis before shutdown. It carries opaque identifiers and
+digests only. `scripts/operational_cli.py` and
+`scripts/check_operational_cli.py` do not parse or execute shell commands,
+launch processes, contact providers, inspect a host, or mutate Coordinator
+state. They cannot prove that a real CLI, lease, worktree, or remote handoff
+exists.
