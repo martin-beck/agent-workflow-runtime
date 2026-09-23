@@ -146,3 +146,26 @@ python3 scripts/check_resource_boundary.py \
 This is an offline standard-library model. It does not set OS limits, inspect
 or stop processes, measure a host, send network traffic, or establish provider,
 remote, hosted-CI, or real runtime enforcement.
+
+## AR-0007 checkpoint, interruption, and crash recovery
+
+`checkpoint-recovery-v1.json` defines immutable, revision-bound durable
+checkpoints; exact idempotent retries; interruption acknowledgement; host or
+agent failure; and restart through a newer worker/lease and verified replay.
+`scripts/checkpoint_recovery.py` is the standard-library reference model and
+`scripts/check_checkpoint_recovery.py` is its fail-closed checker.
+
+Run the deterministic trace check offline:
+
+```text
+python3 scripts/check_checkpoint_recovery.py \
+  --spec specifications/checkpoint-recovery-v1.json \
+  --trace specifications/fixtures/checkpoint-recovery-ar0007-v1.json \
+  --expected-revision 5
+```
+
+The checker rejects stale revisions, duplicate or changed operations, replayed
+events, cross-worker recovery, unverified checkpoint replay, invalid lifecycle
+transitions, unknown fields, and private evidence. It validates supplied
+observations only; it does not perform durable I/O, detect a real crash, or
+claim Coordinator, provider, host, remote, or runtime success.

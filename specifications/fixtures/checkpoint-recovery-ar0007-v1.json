@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-checkpoint-recovery", "version": "1.0.0"},
+  "task": {"id": "AR-0007", "revision": 5},
+  "project": {"key": "agent-workflow-runtime"},
+  "worktree": {"key": "agent-workflow-runtime-0007", "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+  "session": {"id": "SES-AR0007-RECOVERY"},
+  "worker": {"id": "WRK-AR0007-A", "lease": "LSE-AR0007-A"},
+  "actions": [
+    {"event_id": "EV-AR0007-1", "sequence": 1, "operation": "checkpoint", "worker": "WRK-AR0007-A", "lease": "LSE-AR0007-A", "state": "active", "disposition": "accepted", "payload": {"checkpoint_id": "CHK-AR0007-1", "operation_id": "OP-AR0007-1", "sequence": 1, "state_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "input_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "result_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "durable_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"}},
+    {"event_id": "EV-AR0007-2", "sequence": 2, "operation": "retry", "worker": "WRK-AR0007-A", "lease": "LSE-AR0007-A", "state": "active", "disposition": "idempotent", "payload": {"operation_id": "OP-AR0007-1", "sequence": 2, "state_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "input_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "result_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "durable_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"}},
+    {"event_id": "EV-AR0007-3", "sequence": 3, "operation": "host_failed", "worker": "WRK-AR0007-A", "lease": "LSE-AR0007-A", "state": "active", "disposition": "interrupted", "payload": {}},
+    {"event_id": "EV-AR0007-4", "sequence": 4, "operation": "recover", "worker": "WRK-AR0007-A", "lease": "LSE-AR0007-A", "state": "interrupted", "disposition": "accepted", "payload": {"new_worker": "WRK-AR0007-B", "new_lease": "LSE-AR0007-B"}},
+    {"event_id": "EV-AR0007-5", "sequence": 5, "operation": "replay", "worker": "WRK-AR0007-B", "lease": "LSE-AR0007-B", "state": "recovering", "disposition": "accepted", "payload": {"checkpoint_id": "CHK-AR0007-1"}},
+    {"event_id": "EV-AR0007-6", "sequence": 6, "operation": "resume", "worker": "WRK-AR0007-B", "lease": "LSE-AR0007-B", "state": "replayed", "disposition": "accepted", "payload": {}},
+    {"event_id": "EV-AR0007-7", "sequence": 7, "operation": "complete", "worker": "WRK-AR0007-B", "lease": "LSE-AR0007-B", "state": "active", "disposition": "accepted", "payload": {}}
+  ],
+  "lifecycle": {"initial": "active", "final": "completed"},
+  "evidence": {"task_revision": 5, "specification_digest": "sha256:1073d8fa9283d2a094b7ca33cb62b226126cc1a40fe9d56ea264b988a3094c18", "checker": "awr-checkpoint-checker/1.0.0", "safe_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"}
+}

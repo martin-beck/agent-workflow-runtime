@@ -92,3 +92,12 @@ observed. Cancellation is accepted only after acknowledgement. The checker
 recomputes the result from the supplied deterministic observations and rejects
 tampering, privacy-bearing fields, stale revisions, and unknown fields. It does
 not claim actual host enforcement.
+
+AR-0007 adds the checkpoint/recovery boundary. A checkpoint binds the exact
+task revision, session, worktree, worker, lease, operation, and state/input/
+result digests. An exact operation retry is idempotent; changed or ambiguous
+results fail closed. Interruption must be acknowledged, and host/agent failure
+can resume only after a newer fenced worker/lease replays a verified checkpoint.
+The offline model and checker are `scripts/checkpoint_recovery.py` and
+`scripts/check_checkpoint_recovery.py`. They validate observations only and do
+not implement durable storage, process supervision, or real crash recovery.
