@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-awg-live-oracle", "version": "1.0.0"},
+  "task": {"id": "AR-0038", "revision": 3},
+  "project": {"key": "agent-workflow-runtime", "revision": "0123456789abcdef0123456789abcdef01234567"},
+  "worktree": {"key": "agent-workflow-runtime-0038", "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+  "session": {"id": "SES-AR0038-OFFLINE"},
+  "request": {"id": "REQ-AR0038-ORACLE", "attempt": 1, "input_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+  "tool_versions": [
+    {"id": "OP-AR0038-CHECKER", "version": "1.0.0"},
+    {"id": "OP-AR0038-HARNESS", "version": "1.0.0"}
+  ],
+  "observations": [
+    {"id": "EVID-AR0038-UNCERTAINTY", "sequence": 1, "result": "blocked", "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"},
+    {"id": "EVID-AR0038-BOUNDARY", "sequence": 2, "result": "passed", "evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"}
+  ],
+  "uncertainty": {"level": "high", "context_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"},
+  "transport": {
+    "operation_id": "OP-AR0038-ORACLE",
+    "state": "interrupted",
+    "network": "not_performed",
+    "auth_state": "not_supplied",
+    "approval": "not_granted",
+    "events": [
+      {"id": "EVT-AR0038-PREPARE", "sequence": 1, "kind": "prepare"},
+      {"id": "CHK-AR0038-ORACLE", "sequence": 2, "kind": "checkpoint"},
+      {"id": "EVT-AR0038-INTERRUPT", "sequence": 3, "kind": "interrupt"}
+    ]
+  },
+  "response": {
+    "id": "DEC-AR0038-ORACLE",
+    "attempt": 1,
+    "request_id": "REQ-AR0038-ORACLE",
+    "status": "not_received",
+    "decision_status": "not_decided",
+    "decision_digest": null,
+    "guidance_digest": null,
+    "binding_digest": "sha256:862d2a4dd26982c8f5f414412226634080a3bdb651a988c4b265adc1b6a3cd85",
+    "source": "awg_external_observation"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-awg-live-oracle",
+  "version": "1.0.0",
+  "title": "AWG live oracle transport and revision-bound decision binding",
+  "normative": true,
+  "task": "AR-0038 at Coordinator revision 3 exactly",
+  "authority": {
+    "coordinator": ["task identity", "revision", "project", "worktree", "session"],
+    "guidance": ["uncertainty classification", "oracle response", "decision", "reusable guidance"],
+    "runtime": ["bounded transport translation", "cancellation", "digest preservation"],
+    "ui": ["human-facing rendering", "validated human input"]
+  },
+  "transport": {
+    "states": ["prepared", "checkpointed", "interrupted", "resumed"],
+    "offline_fixture_state": "interrupted",
+    "network": "not_performed",
+    "auth_state": "not_supplied",
+    "approval": "not_granted",
+    "rule": "Every operation is bounded, cancellable, replay-resistant, and cannot imply a live AWG call."
+  },
+  "decision_binding": {
+    "request": "One attempt and one digest-only uncertainty context bound to task, project, worktree, session, and request.",
+    "response": "Only an externally attributed AWG observation may carry a future decision or guidance digest; the offline fixture carries neither.",
+    "offline_status": "not_received",
+    "offline_decision_status": "not_decided",
+    "binding_digest": "SHA-256 over the canonical task/project/worktree/session/request binding"
+  },
+  "privacy": {
+    "allowed": "Opaque identifiers, enumerations, bounded integers, revisions, and SHA-256 digests only",
+    "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "decision injection", "unknown fields"]
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "replay", "malformed input", "interrupted without checkpoint", "cross-binding response", "unauthorized source", "digest mismatch"],
+    "side_effects": "The harness and checker perform no network, provider, LLM, AWG, UI, Coordinator, Git, or durable-state operation."
+  },
+  "limitations": [
+    "A passing record is deterministic structural qualification only.",
+    "No AWG transport, credential exchange, human approval, decision, or guidance was performed.",
+    "A future live implementation must be admitted by its owning authorities and must not reuse offline evidence as live success."
+  ]
+}
