@@ -85,3 +85,14 @@ The offline reference model accepts only complete normalized observations and
 rejects any exceeded budget, incomplete process-tree observation, timeout, or
 unacknowledged cancellation. It is evidence evaluation, not host enforcement;
 OS-specific containment and live measurement remain a later integration scope.
+
+## AR-0016 provider-neutral OpenCode-style mapping
+
+The AR-0016 adapter is an offline translation boundary, not an OpenCode
+client. Its versioned mapping converts bounded native event kinds into the
+normalized session vocabulary while preserving the exact Coordinator revision,
+session, worktree, and adapter identity. Native content is represented only by
+digests and bounded metadata. The replay checker fails closed on unknown kinds
+or fields, stale or crossed bindings, privacy-bearing values, changed
+normalized output, and duplicate native events. A passing replay is structural
+evidence only.

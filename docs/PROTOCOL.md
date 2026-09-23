@@ -101,3 +101,12 @@ can resume only after a newer fenced worker/lease replays a verified checkpoint.
 The offline model and checker are `scripts/checkpoint_recovery.py` and
 `scripts/check_checkpoint_recovery.py`. They validate observations only and do
 not implement durable storage, process supervision, or real crash recovery.
+
+AR-0016 adds the provider-neutral OpenCode-style adapter mapping. Native
+envelopes are accepted only as bounded fixture records with a kind, sequence,
+the exact AR-0016 revision-5 binding, a session/worktree binding, and a payload
+digest. The mapping produces deterministic normalized events for session start,
+plan part, tool call, file change, failure, and completion. It never accepts or
+publishes prompts, transcripts, paths, credentials, or raw output. Replay
+validation is offline and synthetic; it does not launch OpenCode or any other
+provider and does not prove runtime behavior.
