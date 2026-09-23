@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-normalized-session-events",
+  "version": "1.0.0",
+  "title": "Versioned normalized session-event protocol",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "task revision", "worktree identity"],
+    "quality": ["requirements", "quality gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing discussion rendering and input"],
+    "runtime": ["event normalization", "ordering enforcement", "session supervision"]
+  },
+  "envelope": {
+    "required": ["schema_version", "protocol", "event_id", "event_digest", "sequence", "event_type", "task", "session", "adapter", "correlation", "disposition", "evidence_digest"],
+    "protocol": {"id": "awr-normalized-session-events", "version": "1.0.0"},
+    "ids": {
+      "event_id": "^EV-[A-Z0-9-]{1,63}$",
+      "task_id": "^AR-[0-9]{4}$",
+      "session_id": "^SES-[A-Z0-9-]{1,63}$",
+      "worktree_key": "^[a-z0-9][a-z0-9._-]{0,63}$",
+      "adapter_id": "^[a-z][a-z0-9-]{1,31}$",
+      "adapter_version": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "digest": "^sha256:[0-9a-f]{64}$"
+    },
+    "canonicalization": "UTF-8 JSON, sorted keys, compact separators, no trailing newline",
+    "event_digest_input": "The envelope with event_digest removed",
+    "evidence_digest_input": "A bounded privacy-safe evidence projection, external to this protocol"
+  },
+  "ordering_and_correlation": {
+    "sequence": "Positive integers start at 1 and increase by exactly 1 per session trace",
+    "first": "session_started at sequence 1 with correlation.parent_event_id null",
+    "parent": "Every later event names the immediately preceding event as correlation.parent_event_id",
+    "session": "All events in a trace use one session.id",
+    "terminal": ["completed", "failed", "interrupted"],
+    "terminal_rule": "A terminal event is last; no event may follow it",
+    "allowed_events": ["session_started", "plan_proposed", "specification_proposed", "oracle_required", "oracle_answered", "tool_call", "file_change", "test_result", "formal_result", "quality_result", "commit_created", "pull_request", "ci_update", "checkpointed", "interrupted", "failed", "completed"],
+    "dispositions": ["started", "accepted", "rejected", "blocked", "passed", "failed", "cancelled", "completed"]
+  },
+  "binding": {
+    "task_revision": "Every event has the exact current Coordinator revision supplied to the checker",
+    "worktree": "Every event has the same session.worktree_key and worktree_digest",
+    "session": "session.id and correlation.session_id are constant for the trace",
+    "adapter": "adapter.id and adapter.version are constant for the trace"
+  },
+  "compatibility": {
+    "accepted": [{"schema_version": 1, "protocol_id": "awr-normalized-session-events", "major": 1}],
+    "minor": "Additional protocol versions within major 1 require a separately documented compatible specification and checker update; this checker accepts only 1.0.0",
+    "major": "A new protocol id or major version is incompatible and must be rejected until explicitly supported",
+    "unknown_fields": "Rejected to prevent ambiguous interpretation"
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["malformed envelope", "invalid identifier", "stale task revision", "cross-session or worktree mismatch", "duplicate event id or digest", "invalid ordering", "privacy violation", "unsupported compatibility"],
+    "side_effects": "The checker performs no network, provider, process, Git, Coordinator, AWQ, AWG, or UI operation"
+  },
+  "privacy": {
+    "forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "personal_data", "raw_output"],
+    "forbidden_value_patterns": ["absolute private paths", "private key material", "credential-like assignments"],
+    "projection": "Events contain identifiers, dispositions, and digests only; provider payloads and unbounded output are out of scope"
+  },
+  "invariants": [
+    "A trace is valid only for one exact task revision, worktree binding, session, and adapter.",
+    "Event IDs, event digests, and evidence digests are single-use within a trace.",
+    "A terminal event fences the trace and cannot be followed.",
+    "Unknown or unsupported input is rejected rather than interpreted."
+  ],
+  "limitations": [
+    "The checker proves the supplied trace is structurally consistent; it does not prove Coordinator state, evidence truth, implementation refinement, process isolation, or provider behavior.",
+    "A digest binds canonical bytes but does not authenticate the producer; signing and durable persistence remain external contracts.",
+    "This protocol does not define provider-specific policy, tool arguments, transcripts, or downstream execution behavior."
+  ],
+  "follow_up": ["Implement adapter and supervisor transitions against this boundary under separate ARs.", "Integrate durable Coordinator revision and worktree observations through their authoritative contract."]
+}

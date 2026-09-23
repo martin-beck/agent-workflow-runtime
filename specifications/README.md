@@ -35,3 +35,24 @@ data in the envelope. It does not verify Coordinator or AWQ state, prove
 implementation refinement, enforce process isolation, or establish hosted
 CI, provider, GitHub, or remote runtime success. Those authorities remain
 external to this repository and must be evidenced separately.
+
+## AR-0002 normalized session-event protocol
+
+`session-event-protocol-v1.json` defines the provider-neutral envelope and
+fail-closed trace rules. `scripts/check_session_events.py` checks the exact
+Coordinator task revision, canonical event digests, event/evidence uniqueness,
+parent-linked ordering, session/worktree/adapter binding, terminal fencing,
+compatibility, and privacy-safe shape. The deterministic trace fixture is
+`fixtures/session-trace-ar0002-v1.json`.
+
+Run it offline from the repository root:
+
+```text
+python3 scripts/check_session_events.py \
+  --trace specifications/fixtures/session-trace-ar0002-v1.json \
+  --expected-revision 5
+```
+
+This checker validates supplied trace consistency only. It does not consult or
+prove Coordinator state, AWQ/AWG/UI decisions, evidence truth, signing,
+process isolation, provider behavior, hosted CI, or remote runtime success.

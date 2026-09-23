@@ -1,20 +1,26 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/martin-beck/agent-workflow-runtime/blob/main/protocols/agent-session-v1.schema.json",
-  "title": "Agent Workflow Runtime session event",
+  "title": "Agent Workflow Runtime normalized session event v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "event_id", "event_type", "task_id", "task_revision", "session_id", "adapter", "disposition", "evidence_digest"],
+  "required": ["schema_version", "protocol", "event_id", "event_digest", "sequence", "event_type", "task", "session", "adapter", "correlation", "disposition", "evidence_digest"],
   "properties": {
     "schema_version": {"const": 1},
+    "protocol": {"$ref": "#/$defs/protocol"},
     "event_id": {"type": "string", "pattern": "^EV-[A-Z0-9-]{1,63}$"},
+    "event_digest": {"$ref": "#/$defs/digest"},
+    "sequence": {"type": "integer", "minimum": 1},
     "event_type": {"type": "string", "enum": ["session_started", "plan_proposed", "specification_proposed", "oracle_required", "oracle_answered", "tool_call", "file_change", "test_result", "formal_result", "quality_result", "commit_created", "pull_request", "ci_update", "checkpointed", "interrupted", "failed", "completed"]},
-    "task_id": {"type": "string", "pattern": "^AR-[0-9]{4}$"},
-    "task_revision": {"type": "integer", "minimum": 1},
-    "session_id": {"type": "string", "pattern": "^SES-[A-Z0-9-]{1,63}$"},
-    "adapter": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}@[^ ]{1,32}$"},
+    "task": {"type": "object", "additionalProperties": false, "required": ["id", "revision"], "properties": {"id": {"type": "string", "pattern": "^AR-[0-9]{4}$"}, "revision": {"type": "integer", "minimum": 1}}},
+    "session": {"type": "object", "additionalProperties": false, "required": ["id", "worktree_key", "worktree_digest"], "properties": {"id": {"type": "string", "pattern": "^SES-[A-Z0-9-]{1,63}$"}, "worktree_key": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"}, "worktree_digest": {"$ref": "#/$defs/digest"}}},
+    "adapter": {"type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": {"id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}$"}, "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"}}},
+    "correlation": {"type": "object", "additionalProperties": false, "required": ["session_id", "parent_event_id"], "properties": {"session_id": {"type": "string", "pattern": "^SES-[A-Z0-9-]{1,63}$"}, "parent_event_id": {"anyOf": [{"type": "null"}, {"type": "string", "pattern": "^EV-[A-Z0-9-]{1,63}$"}]}}},
     "disposition": {"type": "string", "enum": ["started", "accepted", "rejected", "blocked", "passed", "failed", "cancelled", "completed"]},
-    "evidence_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+    "evidence_digest": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "protocol": {"type": "object", "additionalProperties": false, "required": ["id", "version"], "properties": {"id": {"const": "awr-normalized-session-events"}, "version": {"const": "1.0.0"}}}
   }
 }
-

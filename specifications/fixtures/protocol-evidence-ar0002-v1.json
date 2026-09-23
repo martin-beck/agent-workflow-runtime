@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task": {"id": "AR-0002", "revision": 5},
+  "specification": {
+    "id": "awr-normalized-session-events",
+    "version": "1.0.0",
+    "sha256": "sha256:a129a7fc852330686886a871690f2bbe6f11026c900f22f9e6d4cc7e529a473d"
+  },
+  "trace": {
+    "fixture": "session-trace-ar0002-v1.json",
+    "event_count": 3,
+    "first_event_id": "EV-AR0002-START",
+    "terminal_event_id": "EV-AR0002-DONE",
+    "terminal_event_type": "completed",
+    "trace_digest": "sha256:5d69b941b710c94203ee1e3acfa0c0c1704b3e4714dc620b933100db9c274ad5"
+  },
+  "evidence": {
+    "id": "EV-AR0002-CHECK",
+    "digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+  },
+  "decision": "validated-offline"
+}
