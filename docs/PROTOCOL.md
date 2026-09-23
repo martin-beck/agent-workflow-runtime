@@ -84,3 +84,11 @@ actions, early heartbeats, invalid transitions, and privacy-bearing records are
 rejected. `handoff` and `stale_recover` fence the prior lease and require a new
 worker/lease before `resume`. See `specifications/supervisor-lifecycle-v1.json`
 and run `python3 scripts/check_supervisor.py` for the offline trace check.
+
+AR-0006 adds the resource and termination boundary. A resource result is
+accepted only when every bounded counter and termination observation is present,
+within its declared budget, and process-tree completeness is positively
+observed. Cancellation is accepted only after acknowledgement. The checker
+recomputes the result from the supplied deterministic observations and rejects
+tampering, privacy-bearing fields, stale revisions, and unknown fields. It does
+not claim actual host enforcement.

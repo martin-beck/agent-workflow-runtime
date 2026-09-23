@@ -124,3 +124,25 @@ The model observes integer times only. It does not launch or stop workers,
 renew a real Coordinator lease, persist state, or prove provider, filesystem,
 hosted-CI, remote, or runtime success. Handoff and recovery replace the worker
 and lease before resume; old worker actions are rejected.
+
+## AR-0006 resource and termination boundary
+
+`resource-boundary-v1.json` defines positive integer budgets for CPU, memory,
+disk, network, process-tree size/depth, and wall-clock timeout. It also requires
+a complete process-tree observation and an acknowledged cancellation whenever
+cancellation is requested. `scripts/resource_boundary.py` evaluates only
+normalized deterministic observations; `scripts/check_resource_boundary.py`
+validates the closed, revision-bound evidence envelope and recomputes the
+result. Missing or unknown fields, invalid types, budget excess, timeout,
+incomplete process-tree evidence, and unacknowledged cancellation fail closed.
+
+```text
+python3 scripts/check_resource_boundary.py \
+  --spec specifications/resource-boundary-v1.json \
+  --trace specifications/fixtures/resource-trace-ar0006-v1.json \
+  --expected-revision 5
+```
+
+This is an offline standard-library model. It does not set OS limits, inspect
+or stop processes, measure a host, send network traffic, or establish provider,
+remote, hosted-CI, or real runtime enforcement.

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-resource-boundary", "version": "1.0.0"},
+  "task": {"id": "AR-0006", "revision": 5},
+  "project": {"key": "agent-workflow-runtime", "revision": "0123456789abcdef0123456789abcdef01234567"},
+  "worktree": {"key": "agent-workflow-runtime-0006", "base_revision": "89abcdef0123456789abcdef0123456789abcdef", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "session": {"id": "SES-AR0006-OFFLINE"},
+  "budget": {"cpu_ms": 1000, "memory_bytes": 1048576, "disk_bytes": 4096, "network_bytes": 2048, "process_count": 4, "process_depth": 2, "timeout_ms": 5000},
+  "observation": {"cpu_ms": 700, "memory_bytes": 900000, "disk_bytes": 1024, "network_bytes": 100, "process_count": 2, "process_depth": 1, "elapsed_ms": 2500, "process_tree_complete": true, "cancel_requested": false, "cancel_acknowledged": false},
+  "result": {"accepted": true, "disposition": "accepted", "violations": []},
+  "evidence": {"task_revision": 5, "specification_digest": "sha256:39953c06acc744557d546f288447de1f74a76e59ad32ca196a958045f442506b", "checker": "awr-resource-boundary-checker/1.0.0", "safe_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}
+}
