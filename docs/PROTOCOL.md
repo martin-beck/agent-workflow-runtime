@@ -114,6 +114,19 @@ The checker validates supplied structure and digests only. It does not submit
 evidence, consult AWQ, or establish Coordinator, provider, hosted-CI, remote,
 or runtime success.
 
+AR-0017 defines the provider-neutral OpenDesk-style adapter envelope. Its
+capability report is versioned and digest-bound; requests carry only a
+bounded digest reference. A known capability absent from the report is not
+silently ignored or treated as success: the adapter returns
+`unsupported_capability`, sets `execute` to false, and leaves its lifecycle
+state unchanged. Unknown capabilities, stale task revision 5 bindings,
+privacy-bearing fields, and terminal follow-up requests fail closed.
+
+The offline model and checker are `scripts/opendesk_adapter.py` and
+`scripts/check_opendesk_adapter.py`. This trace validates contract
+observations only; it does not launch OpenDesk or any provider and does not
+establish network, credential, LLM, remote, runtime, or hosted-CI success.
+
 AR-0016 adds the provider-neutral OpenCode-style adapter mapping. Native
 envelopes are accepted only as bounded fixture records with a kind, sequence,
 the exact AR-0016 revision-5 binding, a session/worktree binding, and a payload

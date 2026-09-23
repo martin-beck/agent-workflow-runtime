@@ -1,0 +1,57 @@
+[
+  {
+    "sequence": 1,
+    "operation": "discover",
+    "state_before": "undiscovered",
+    "state_after": "ready",
+    "disposition": "discovered",
+    "task": {"id": "AR-0017", "revision": 5},
+    "session": {"id": "SES-AR0017-OFFLINE", "worktree_key": "agent-workflow-runtime-0017", "worktree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+    "adapter": {"id": "opendesk-style", "version": "1.0.0"}
+  },
+  {
+    "sequence": 2,
+    "operation": "start",
+    "state_before": "ready",
+    "state_after": "active",
+    "disposition": "started",
+    "task": {"id": "AR-0017", "revision": 5},
+    "session": {"id": "SES-AR0017-OFFLINE", "worktree_key": "agent-workflow-runtime-0017", "worktree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+    "adapter": {"id": "opendesk-style", "version": "1.0.0"}
+  },
+  {
+    "sequence": 3,
+    "operation": "request",
+    "state_before": "active",
+    "state_after": "active",
+    "disposition": "unsupported_capability",
+    "capability": "tool_use",
+    "execute": false,
+    "task": {"id": "AR-0017", "revision": 5},
+    "session": {"id": "SES-AR0017-OFFLINE", "worktree_key": "agent-workflow-runtime-0017", "worktree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+    "adapter": {"id": "opendesk-style", "version": "1.0.0"}
+  },
+  {
+    "sequence": 4,
+    "operation": "request",
+    "state_before": "active",
+    "state_after": "active",
+    "disposition": "accepted",
+    "capability": "conversation",
+    "request_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+    "execute": false,
+    "task": {"id": "AR-0017", "revision": 5},
+    "session": {"id": "SES-AR0017-OFFLINE", "worktree_key": "agent-workflow-runtime-0017", "worktree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+    "adapter": {"id": "opendesk-style", "version": "1.0.0"}
+  },
+  {
+    "sequence": 5,
+    "operation": "terminate",
+    "state_before": "active",
+    "state_after": "terminated",
+    "disposition": "completed",
+    "task": {"id": "AR-0017", "revision": 5},
+    "session": {"id": "SES-AR0017-OFFLINE", "worktree_key": "agent-workflow-runtime-0017", "worktree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+    "adapter": {"id": "opendesk-style", "version": "1.0.0"}
+  }
+]
