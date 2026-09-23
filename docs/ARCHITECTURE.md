@@ -175,3 +175,14 @@ unsigned evidence fail closed. Merge and publication must remain
 `not_performed`, so this AR performs no provider, Git, review-system, merge, or
 remote publication operation. The model and checker validate supplied evidence
 only and do not verify cryptographic signatures or DCO trailers themselves.
+
+## AR-0014 formal runtime model
+
+The AR-0014 model is the cohesive offline reference boundary for runtime
+state, rather than a second authority. It preserves Coordinator revision and
+worktree binding, partitions lifecycle/oracle/recovery/publication actions by
+authority, fences recovery with a new worker and lease, requires
+reconciliation before completion, and rejects publication side-effect claims.
+The positive trace and hostile corpus exercise stale, replay, authority,
+privacy, oracle, recovery, publication, and terminal violations. It validates
+deterministic supplied traces only and makes no external call.

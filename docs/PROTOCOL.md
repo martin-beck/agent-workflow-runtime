@@ -217,3 +217,11 @@ python3 scripts/check_codex_adapter.py \\
 
 It does not launch Codex or any provider and does not connect to a network,
 process, LLM, Coordinator, AWQ, AWG, or UI.
+
+AR-0014 adds the revision-1 formal runtime model. Its one checker accepts a
+complete positive trace only when lifecycle transitions, exact task/worktree
+binding, single-use events, authority ownership, external oracle decision,
+fenced recovery, publication `not_performed`, reconciliation, terminal
+finality, and privacy-safe digests all hold. Hostile traces cover stale,
+replayed, authority-confused, privacy-bearing, oracle, recovery, publication,
+and terminal inputs. This is offline structural evidence only.

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-runtime-model",
+  "version": "1.0.0",
+  "title": "Agent Workflow Runtime formal lifecycle and hostile-trace model",
+  "normative": true,
+  "revision": 1,
+  "authority": {
+    "coordinator": ["admit", "claim", "recover", "reconcile", "complete"],
+    "awg": ["oracle_required", "oracle_answer"],
+    "awq": ["quality_observation"],
+    "runtime": ["start", "execute", "checkpoint", "interrupt", "resume", "publish", "fail"]
+  },
+  "lifecycle": ["new", "admitted", "claimed", "started", "executing", "oracle_pending", "interrupted", "recovering", "publishing", "reconciled", "completed", "failed"],
+  "oracle": {"admission": "not_decided", "runtime_decision": "never_manufactured", "required_binding": "revision-session-worktree"},
+  "recovery": {"checkpoint": "immutable-digest", "retry": "exact-only", "fencing": "new-worker-and-lease-before-resume"},
+  "publication": {"head": "exact-observation", "merge": "not_performed", "publication": "not_performed", "reconciliation": "required-before-complete"},
+  "invariants": ["exact_revision_and_worktree_binding", "single_use_event_ids", "authority_partition", "terminal_finality", "privacy_safe_evidence", "oracle_decision_is_external", "recovery_is_fenced", "publication_has_no_side_effect_claim"],
+  "privacy": {"forbidden": ["credentials", "prompts", "transcripts", "private_paths", "host_identifiers", "raw_output"], "evidence": "digest-only"},
+  "limitations": ["The model evaluates supplied deterministic traces only.", "It does not contact Coordinator, AWG, AWQ, UI, Git, providers, networks, hosts, or LLMs.", "Passing structural checks is not proof of execution, authority state, cryptographic truth, or remote publication."],
+  "follow_up": ["Refine the model against authoritative Coordinator, AWG, AWQ, and publication contracts before runtime integration.", "Add hosted and live evidence only under their owning authorities."]
+}

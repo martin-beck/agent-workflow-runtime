@@ -67,6 +67,14 @@ observations, preserves valid signature and signed-DCO evidence by digest, and
 requires merge/publication to remain `not_performed`. Its offline checker has
 no Git, provider, network, or remote publication side effects.
 
+AR-0014 adds `specifications/runtime-model-v1.json`, a revision-1-bound
+formal runtime model covering lifecycle, oracle admission/decision boundaries,
+fenced checkpoint recovery, publication observation, reconciliation, and
+authority ownership. `scripts/runtime_model.py` and
+`scripts/check_runtime_model.py` are one offline model/checker boundary; the
+positive and hostile trace corpus is under `specifications/fixtures/` and the
+focused tests are in `tests/test_runtime_model.py`.
+
 ## License
 
 MIT, with the Huawei copyright notice in `LICENSE`.
