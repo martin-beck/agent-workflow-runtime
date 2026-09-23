@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-live-adapter-harness",
+  "version": "1.0.0",
+  "title": "Bounded live adapter transport and deterministic event harness",
+  "normative": true,
+  "task": {"id": "AR-0032", "revision": 3},
+  "authority": {
+    "coordinator": ["task identity", "revisions", "claims", "leases", "durable state"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["uncertainty", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing rendering", "validated human input"],
+    "runtime": ["translation", "bounded execution supervision", "capability admission", "normalized events"]
+  },
+  "transport": {"mode": "bounded_process", "argv": "digest_only", "limits": {"duration_ms": 30000, "output_bytes": 4096, "processes": 1, "cancel_grace_ms": 1000}, "network": "denied_by_default", "cancellation": "interrupt_then_bounded_close"},
+  "capability_admission": {"required": ["start", "send", "interrupt", "resume", "close"], "grant": "digest_bound_to_task_and_adapter", "unsupported": "reject_without_execution_or_state_change"},
+  "trace": {"states": ["admitted", "started", "active", "interrupted", "resumed", "completed"], "operations": ["start", "send", "interrupt", "resume", "close"], "max_records": 64, "digest": "sha256(canonical event without event_digest)"},
+  "privacy": {"forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "personal_data", "raw_output", "argv", "command"], "projection": "bindings, capability names, limits, states, dispositions, and digests only"},
+  "compatibility": {"canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline", "major_change": "new specification_id or schema_version", "minor_change": "documented backward-compatible contract only"},
+  "failure_semantics": {"mode": "fail_closed", "invalid_input": "reject_without_partial_output", "stale_or_crossed_binding": "reject_without_state_change", "interruption": "require_acknowledged_interrupted_state_and_fenced_resume", "live_gate_closed": "execute_false_and_remote_unverified"},
+  "limitations": [
+    "The model validates synthetic observations and never launches a process, provider, network, LLM, or tool.",
+    "Capability admission is not provider authorization; credential, network, human approval, and Coordinator lease validity remain external gates.",
+    "A completed offline trace is not live execution, hosted CI, remote consumption, AWQ acceptance, AWG decision, UI approval, or durable-state completion."
+  ],
+  "follow_up": ["AWQ must independently qualify evidence before any live integration.", "AWG must decide material adapter alternatives; UI decisions require a private revision-bound session.", "A later integration AR must provide Coordinator-approved lease and host enforcement evidence."]
+}
