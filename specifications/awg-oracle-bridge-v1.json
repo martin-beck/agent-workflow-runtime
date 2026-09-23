@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-awg-oracle-bridge",
+  "version": "1.0.0",
+  "title": "Provider-neutral AWG oracle discussion admission bridge",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "task revision", "project and worktree identity", "session binding"],
+    "guidance": ["oracle discussion admission", "decisions", "reusable guidance"],
+    "runtime": ["bounded observation projection", "canonical digest preservation"]
+  },
+  "binding": {
+    "task": "AR-0010 at Coordinator revision 3 exactly",
+    "project_revision": "40 lowercase hexadecimal characters",
+    "worktree_digest": "sha256: followed by 64 lowercase hexadecimal characters",
+    "session": "stable opaque session identifier"
+  },
+  "observations": {
+    "categories": ["lifecycle", "test", "resource", "failure", "provenance"],
+    "results": ["passed", "failed", "blocked", "skipped", "not_run"],
+    "maximum": 32,
+    "rule": "Sequences, observation identifiers, and evidence digests are single-use and ordered."
+  },
+  "discussion_context": {
+    "uncertainty": "One enumerated level and one to four unique enumerated factors",
+    "alternatives": "One to four opaque ALT identifiers with unique evidence digests and confidence scores from 0 through 100",
+    "confidence": "One enumerated level and an integer score from 0 through 100",
+    "rule": "These fields describe bounded context only; they do not select, rank, accept, reject, or resolve an alternative."
+  },
+  "projection": {
+    "protocol": "awr-awg-oracle-admission@1.0.0",
+    "kind": "discussion_admission",
+    "admission_status": "not_decided",
+    "rule": "AWG alone decides whether a discussion is admitted and what guidance or decision follows."
+  },
+  "privacy": {
+    "allowed": "Opaque identifiers, enumerations, bounded integers, revisions, and SHA-256 digests only",
+    "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "unknown fields", "decision-bearing fields"]
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "cross-project/worktree/session binding", "replayed digest", "unknown field", "privacy-bearing value", "decision injection", "digest mismatch"],
+    "side_effects": "The model and checker perform no network, provider, process, LLM, Coordinator, AWG, UI, Git, or durable-state operation."
+  },
+  "limitations": [
+    "A valid envelope proves only deterministic structural consistency of supplied observations.",
+    "Confidence, uncertainty, and alternatives are not an oracle decision or evidence truth.",
+    "The checker does not submit an admission request or consult AWG."
+  ]
+}

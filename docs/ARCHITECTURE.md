@@ -130,3 +130,12 @@ revision, project revision, worktree, and session. Its `quality_status` is
 always `not_decided`: observation results are inputs for AWQ review, never AWQ
 acceptance. The standard-library model and checker are
 `scripts/awq_evidence_bridge.py` and `scripts/check_awq_evidence_bridge.py`.
+
+## AR-0010 AWG oracle bridge
+
+The OracleBridge projects bounded, digest-referenced observations into a
+revision-3-bound AWG discussion admission envelope. It preserves exact task,
+project, worktree, and session identity and carries only bounded uncertainty,
+alternative evidence digests, and confidence metadata. The projection is
+always `not_decided`; AWG remains authoritative for admission and decisions.
+The offline model and checker do not contact AWG or any provider.

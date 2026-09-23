@@ -1,0 +1,29 @@
+{
+  "checker": "awr-awg-oracle-bridge-checker/1.0.0",
+  "record_digest": "sha256:e50a062b48752c63672ea0d700717b872cca8cbb1cecebb833952759172a3471",
+  "projection": {
+    "admission_status": "not_decided",
+    "alternatives": [
+      {"confidence": 40, "evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "id": "ALT-AR0010-A"},
+      {"confidence": 35, "evidence_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555", "id": "ALT-AR0010-B"}
+    ],
+    "confidence": {"level": "low", "score": 35},
+    "kind": "discussion_admission",
+    "observations": [
+      {"category": "lifecycle", "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "id": "OBS-AR0010-LIFECYCLE", "result": "passed", "sequence": 1},
+      {"category": "test", "evidence_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "id": "OBS-AR0010-TEST", "result": "passed", "sequence": 2},
+      {"category": "provenance", "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "id": "OBS-AR0010-UNCERTAINTY", "result": "blocked", "sequence": 3}
+    ],
+    "project": {"key": "agent-workflow-runtime", "revision": "a001000000000000000000000000000000000000"},
+    "projection_digest": "sha256:5e8d03c5c2bea12cabfb4c06c30b55e97568f11e6185bfdfd2a037295404197d",
+    "protocol": "awr-awg-oracle-admission@1.0.0",
+    "session": {"id": "SES-AR0010-REFERENCE"},
+    "specification_digest": "sha256:8e1202ef2defb82a605d314e2a9d632000942953a6e11515e570fd706234be66",
+    "task": {"id": "AR-0010", "revision": 3},
+    "uncertainty": {"factors": ["incomplete_observation", "conflicting_observation"], "level": "medium"},
+    "worktree": {"digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "key": "agent-workflow-runtime-0010"}
+  },
+  "safe_digest": "sha256:8a13c0ed31ad4dfce23d32c63a2ab585385d51341e4fb31a2d7ae56e08ff9d73",
+  "specification_digest": "sha256:8e1202ef2defb82a605d314e2a9d632000942953a6e11515e570fd706234be66",
+  "task_revision": 3
+}
