@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-security-policy-gate",
+  "version": "1.0.0",
+  "title": "Offline live-path security, privacy, and supply-chain policy gate",
+  "normative": true,
+  "task": "AR-0042 at Coordinator revision 3",
+  "authority": {
+    "coordinator": ["task identity", "claims", "revisions", "leases", "durable state"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "decisions", "reusable guidance"],
+    "ui": ["human-facing rendering", "validated input"],
+    "runtime": ["translation", "policy enforcement", "supervision", "isolation"]
+  },
+  "observations": {
+    "required": ["policy_gate", "provenance", "sbom", "signature", "privacy", "security_evidence", "evidence"],
+    "policy": "Offline operations are limited to bounded read/edit/test actions; network, credentials, provider, LLM, publication, and durable-state mutation are denied.",
+    "supply_chain": "Exact dependency versions, manifest/lockfile digests, SPDX SBOM digest, integrity/license digests, signature, and DCO observations are required.",
+    "privacy": "Only bounded identifiers, enums, booleans, versions, and SHA-256 digests enter public evidence.",
+    "evidence": "Every component and the exact task/project/worktree/session binding has one canonical digest reference."
+  },
+  "privacy": {"allowed_values": ["identifiers", "enums", "booleans", "versions", "digests"], "reject": ["credentials", "secrets", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "unknown fields"]},
+  "failure_semantics": {"mode": "fail_closed", "side_effects": "No scanner, package manager, signature verifier, network, provider, LLM, Coordinator, AWQ, AWG, UI, Git, or durable-state operation is performed."},
+  "limitations": ["The checker validates supplied observations and does not cryptographically verify signatures, inspect the host, enumerate dependencies, or prove live enforcement.", "Local qualification is not hosted-CI, provider, remote, Coordinator, AWQ, AWG, or UI success."]
+}
