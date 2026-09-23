@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-coordinator-transport",
+  "version": "1.0.0",
+  "title": "Versioned Coordinator transport boundary",
+  "normative": true,
+  "task": {"id": "AR-0046", "revision": 5},
+  "authority": {
+    "coordinator": ["task identity", "revision reads", "state events", "claims and leases"],
+    "runtime": ["bounded transport", "binding enforcement", "retry classification", "privacy projection"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "decisions", "reusable guidance"]
+  },
+  "binding": {
+    "task_id": "AR-0046",
+    "project_key": "agent-workflow-runtime",
+    "project_revision": "sha256:64 lowercase hexadecimal characters",
+    "worktree_key": "agent-workflow-runtime-0046",
+    "worktree_digest": "sha256:64 lowercase hexadecimal characters",
+    "session_id": "^SES-[A-Z0-9-]{1,63}$",
+    "owner_id": "^WRK-[A-Z0-9-]{1,63}$",
+    "lease_id": "^LSE-[A-Z0-9-]{1,63}$",
+    "operation_id": "^OP-[A-Z0-9-]{1,63}$",
+    "auth_reference": "^AUTH-[A-Z0-9-]{1,63}$"
+  },
+  "request": {
+    "operations": ["read_revision", "write_event"],
+    "timeout_ms": {"minimum": 1, "maximum": 30000},
+    "attempt": {"minimum": 1, "maximum": 3},
+    "payload": "digest-only event data; no credentials, prompts, transcripts, paths, or raw output"
+  },
+  "retry": {
+    "maximum_attempts": 3,
+    "retryable": ["unavailable", "deadline_exceeded"],
+    "never_retry_as_success": ["stale_revision", "unauthorized", "ambiguous_outcome"],
+    "idempotence": "same operation_id and identical request fingerprint returns the original result; changed replay fails"
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale or crossed binding", "invalid auth reference", "credential payload", "malformed certificate", "changed replay", "unknown outcome"],
+    "ambiguous_outcome": "client returns unknown_outcome and never guesses whether a write committed",
+    "external_effects": "none: no network, live Coordinator, provider, LLM, hosted CI, or durable state mutation"
+  },
+  "evidence_boundary": {
+    "offline": "deterministic client/server transcript and hostile checker only",
+    "live_verification": "unverified",
+    "network": "disabled"
+  }
+}
