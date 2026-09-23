@@ -249,3 +249,11 @@ merge-observation, recovery, reconciliation, and terminal boundaries without
 taking authority from Coordinator, AWQ, or AWG. It is a bounded revision-1
 trace model; remote verification remains unverified and no external operation
 is performed.
+
+## AR-0026 performance and reliability qualification
+
+The qualification boundary models bounded supplied observations for latency,
+throughput, recovery, resource use, and failure behavior. It keeps
+`live_measurement: not_performed` and cannot turn supplied values into live
+provider or host qualification. The model and checker are deterministic and
+offline only.

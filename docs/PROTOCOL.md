@@ -321,3 +321,11 @@ observation through terminal reconciliation. Each event has an owning
 authority, exact session/worktree/worker/lease binding, and digest-only
 payload. The checker rejects stale, replayed, out-of-order, authority-confused,
 privacy-bearing, recovery, durable-state, and remote-success claims.
+
+## AR-0026 performance and reliability qualification
+
+`performance-reliability-qualification-v1.json` binds five bounded supplied
+qualification dimensions to revision 1. The checker preserves
+`source: supplied_qualification` and `live_measurement: not_performed`, and
+performs no benchmark, provider, network, LLM, host, or durable-authority
+operation.
