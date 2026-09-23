@@ -303,3 +303,11 @@ and CI observations to one exact head. Signature and signed-DCO statuses are
 positive supplied observations; CI remains `verification: unverified`, and
 merge handoff remains non-executing. The checker performs no Git, CI, remote,
 provider, network, or publication operation.
+
+## AR-0023 end-to-end autonomous workflow
+
+`autonomous-workflow-v1.json` defines a revision-1-bound trace from plan
+observation through terminal reconciliation. Each event has an owning
+authority, exact session/worktree/worker/lease binding, and digest-only
+payload. The checker rejects stale, replayed, out-of-order, authority-confused,
+privacy-bearing, recovery, durable-state, and remote-success claims.

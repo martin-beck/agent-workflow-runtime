@@ -230,3 +230,11 @@ observations never become hosted-CI, remote, or release success. The model and
 checker are `scripts/publication_ci_bridge.py` and
 `scripts/check_publication_ci_bridge.py`. They perform no Git, CI, provider,
 network, merge, publication, or durable-state operation.
+
+## AR-0023 end-to-end autonomous workflow
+
+The workflow model composes planning, execution, quality, oracle, review,
+merge-observation, recovery, reconciliation, and terminal boundaries without
+taking authority from Coordinator, AWQ, or AWG. It is a bounded revision-1
+trace model; remote verification remains unverified and no external operation
+is performed.
