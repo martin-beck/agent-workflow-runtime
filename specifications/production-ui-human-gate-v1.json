@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-production-ui-human-gate",
+  "version": "1.0.0",
+  "title": "Private revision-bound UI human-gate session and validated final event",
+  "normative": true,
+  "task": {"id": "AR-0054", "revision": 5},
+  "authority": {
+    "coordinator": ["task identity", "revision", "session replacement", "durable persistence"],
+    "ui": ["human rendering", "human presence", "validated input", "final-event intent"],
+    "runtime": ["session envelope", "binding checks", "timeout/cancellation classification", "idempotent persistence preparation"]
+  },
+  "rules": [
+    "A session file is private, mode 0600, revision-bound, bounded, and contains no prompt or transcript.",
+    "Rendering is an input projection and never constitutes approval.",
+    "Approve, reject, clarify, timeout, and cancellation require one validated final event and human presence for human choices.",
+    "The final event is single-use and bound to the exact request, input event, session, and task revision.",
+    "Coordinator persistence is idempotent and is not claimed by an offline checker."
+  ],
+  "decisions": ["approve", "reject", "clarify", "timeout", "cancel"],
+  "limits": {"maximum_options": 8, "maximum_events": 4, "session_file_mode": "0600"},
+  "privacy": {"allowed": ["opaque identifiers", "enums", "bounded integers", "SHA-256 digests"], "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output"]},
+  "failure_semantics": {"mode": "fail_closed", "stale_or_tampered": "reject", "duplicate_final": "reject", "persistence": "one idempotency key; not performed offline"},
+  "limitations": ["The fixture is synthetic structural evidence only.", "No live UI, Coordinator, network, provider, or durable state operation is performed.", "A validated event is not task completion or authority approval until Coordinator consumes it."]
+}

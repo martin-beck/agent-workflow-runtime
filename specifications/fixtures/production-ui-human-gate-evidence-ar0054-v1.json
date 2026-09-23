@@ -1,0 +1,9 @@
+{
+  "checker": "awr-production-ui-human-gate-checker/1.0.0",
+  "live_verification": "unverified",
+  "persistence": {"decision": "approve", "event_digest": "sha256:8a3ae86f21f9cca47554ffdc4f95f1631008aaf55c2cc1581ffd41969d78c8b8", "idempotency_key": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "operation_id": "OP-AR0054", "status": "not_performed"},
+  "record_digest": "sha256:19f47b16b060326091798363b849fb989bd14260a9c407e99f06719897bca1b4",
+  "result": {"decision": "approve", "final_event": "validated", "live_coordinator": "not_performed", "live_ui": "not_performed", "network": "not_performed", "persistence": "not_performed", "protocol": "awr-production-ui-human-gate@1.0.0", "session_id": "SES-AR0054", "task_revision": 5},
+  "specification_digest": "sha256:be79414215ffc02293e040e899bed05ea1f3a78547ddcb8acafd4d2c3e09e06f",
+  "task_revision": 5
+}

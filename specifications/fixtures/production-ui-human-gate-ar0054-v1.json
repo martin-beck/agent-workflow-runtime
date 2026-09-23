@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-production-ui-human-gate", "version": "1.0.0"},
+  "task": {"id": "AR-0054", "revision": 5},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+  "worktree": {"key": "agent-workflow-runtime-0054", "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+  "session": {"id": "SES-AR0054", "generation": 1, "replacement_of": null},
+  "private_session": {"visibility": "private_revision_bound", "file_mode": "0600", "storage": "caller_supplied_file", "expires_at": 120, "state": "final_validated", "binding_digest": "sha256:72b19cd2be08ed52d5ba12c74c485a9a51d8ed61db510eac26723d7dab533f5f"},
+  "request": {"id": "REQ-AR0054", "attempt": 1, "context_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "options": [{"id": "GATE-APPROVE", "evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"}, {"id": "GATE-CLARIFY", "evidence_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"}]},
+  "render": {"event_id": "EVT-AR0054-RENDER", "request_id": "REQ-AR0054", "input_digest": "sha256:92ac293f7164dcc913519cd01d43567e4a58264c6c5e37f24c9dc8911d0003ee", "rendered_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666", "status": "rendered"},
+  "events": [
+    {"event_id": "EVT-AR0054-CREATE", "sequence": 1, "event_type": "session_created", "disposition": "created", "evidence_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"},
+    {"event_id": "EVT-AR0054-RENDER", "sequence": 2, "event_type": "gate_rendered", "disposition": "rendered", "evidence_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888"},
+    {"event_id": "EVT-AR0054-INPUT", "sequence": 3, "event_type": "input_validated", "disposition": "validated", "evidence_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999", "request_id": "REQ-AR0054", "decision": "approve", "input_event_id": "EVT-AR0054-INPUT", "human_present": true, "validation": "ui_validated"},
+    {"event_id": "EVT-AR0054-CHECKPOINT", "sequence": 4, "event_type": "ui_checkpointed", "disposition": "checkpointed", "evidence_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+  ],
+  "final_event": {"event_id": "EVT-AR0054-FINAL", "sequence": 5, "event_type": "validated_final", "decision": "approve", "reason": "human_selected", "request_id": "REQ-AR0054", "input_event_id": "EVT-AR0054-INPUT", "evidence_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+  "persistence": {"operation_id": "OP-AR0054", "idempotency_key": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "status": "not_performed", "event_digest": "sha256:8a3ae86f21f9cca47554ffdc4f95f1631008aaf55c2cc1581ffd41969d78c8b8", "network": "not_performed", "durable_state": "not_performed"}
+}
