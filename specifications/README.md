@@ -169,3 +169,24 @@ events, cross-worker recovery, unverified checkpoint replay, invalid lifecycle
 transitions, unknown fields, and private evidence. It validates supplied
 observations only; it does not perform durable I/O, detect a real crash, or
 claim Coordinator, provider, host, remote, or runtime success.
+
+## AR-0008 privacy-safe journal and provenance
+
+`privacy-safe-journal-v1.json` defines the versioned redacted journal,
+canonical record digests, hash-chain predecessor, idempotent operation replay,
+bounded retention anchor, interruption fence, and payload-free public evidence
+projection. `scripts/privacy_safe_journal.py` is the offline standard-library
+reference model; `scripts/check_privacy_safe_journal.py` validates the exact
+revision-5 fixture and its specification/journal digests:
+
+```text
+python3 scripts/check_privacy_safe_journal.py \
+  --spec specifications/privacy-safe-journal-v1.json \
+  --journal specifications/fixtures/journal-ar0008-v1.json \
+  --evidence specifications/fixtures/journal-evidence-ar0008-v1.json \
+  --expected-revision 5
+```
+
+The model does not provide fsync, locking, signatures, crash durability, or
+general personal-data classification. It performs no network, provider,
+Coordinator, AWQ, AWG, UI, Git, or LLM operation.

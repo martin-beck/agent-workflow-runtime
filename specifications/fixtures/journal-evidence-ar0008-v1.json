@@ -1,0 +1,7 @@
+{
+  "checker": "awr-journal-checker/1.0.0",
+  "journal_digest": "sha256:58e37eef8c4f33fa960c4474515ad15ab036a6954183df6d89f64a793cc621d0",
+  "safe_digest": "sha256:011c8fe7a78bdea2a4fb1f81fb6077f5153011370b40cc42353ace5fca923f1d",
+  "specification_digest": "sha256:f5fbd50ce3c2d51388dcbd134fa77b5800282995869f8e3425bd405040f4c77f",
+  "task_revision": 5
+}

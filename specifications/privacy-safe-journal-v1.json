@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-privacy-safe-event-journal",
+  "version": "1.0.0",
+  "title": "Privacy-safe event journal and provenance chain",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "task revision", "durable state"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["oracle decisions", "reusable guidance"],
+    "runtime": ["journal normalization", "retention", "projection"]
+  },
+  "record": {
+    "required": ["schema_version", "protocol", "record_id", "sequence", "task", "session_id", "operation_id", "event_type", "disposition", "payload", "previous_record_digest", "record_digest"],
+    "protocol": {"id": "awr-privacy-safe-event-journal", "version": "1.0.0"},
+    "canonicalization": "UTF-8 JSON, sorted keys, compact separators, no trailing newline",
+    "digest_input": "record with record_digest removed",
+    "genesis": "sha256: followed by 64 zeroes",
+    "ids": {"record_id": "JR-[A-Z0-9-]{1,63}", "task_id": "AR-[0-9]{4}", "session_id": "SES-[A-Z0-9-]{1,63}", "operation_id": "OP-[A-Z0-9-]{1,63}", "digest": "sha256: followed by 64 lowercase hexadecimal characters"}
+  },
+  "state_machine": {
+    "first": "session_started with sequence 1 and genesis predecessor",
+    "terminal": ["completed", "failed", "interrupted"],
+    "terminal_rule": "No record follows a terminal disposition",
+    "replay": "An operation_id may be retried only with byte-identical normalized input; return the original record",
+    "interruption": "interrupted is terminal in this journal; resumption requires a new session and chain"
+  },
+  "retention": {
+    "max_records": "Positive bounded integer supplied by the caller",
+    "eviction": "Oldest records are evicted after append; the first retained record keeps its predecessor digest as an anchor",
+    "projection": "A retained journal may expose only bounded counts, sequences, identifiers, dispositions, and digests"
+  },
+  "privacy": {
+    "redaction": "Before persistence, recursively remove forbidden keys and replace credential-like or private-path string values with [REDACTED]",
+    "forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "personal_data", "raw_output"],
+    "forbidden_values": ["absolute private paths", "private key material", "credential-like assignments"],
+    "public_projection": "Never includes payload; it includes only safe identifiers, bounded integers, dispositions, and digests"
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["unknown fields", "malformed input", "stale task revision", "tampered chain", "replayed or changed operation", "invalid ordering", "privacy-bearing public evidence", "invalid retention limit"],
+    "side_effects": "The checker performs no network, provider, process, Git, Coordinator, AWQ, AWG, UI, or LLM operation"
+  },
+  "evidence": {"binding": "exact Coordinator task revision and canonical specification digest", "checker": "awr-journal-checker/1.0.0"},
+  "limitations": [
+    "The standard-library model is an in-memory reference and does not provide fsync, locking, signing, or crash durability.",
+    "A digest binds canonical bytes but does not authenticate their producer or prove Coordinator truth.",
+    "Redaction is a bounded contract filter, not a general personal-data classifier; callers must not supply raw private material."
+  ],
+  "follow_up": ["AR-0018 may integrate durable supervision and Coordinator state.", "AWQ remains authoritative for accepting projected evidence."]
+}
