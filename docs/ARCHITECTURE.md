@@ -142,6 +142,18 @@ The offline model and checker do not contact AWG or any provider.
 
 ## AR-0012 provider-neutral Git/publication bridge
 
+## AR-0011 provider-neutral UI session bridge
+
+The UI session bridge preserves the exact AR-0011 revision-1 task, project,
+worktree, session, and lease binding. Bounded UI events carry only opaque
+identifiers, enumerations, sequence numbers, and evidence digests. A safe
+exit or acknowledged interruption is resumable only from a referenced UI
+checkpoint and matching prior-trace and binding digests. A final event is a
+lifecycle observation, not Coordinator completion, AWQ acceptance, an AWG
+decision, or a provider result. The offline model and checker are
+`scripts/ui_session_bridge.py` and `scripts/check_ui_session_bridge.py`; they
+perform no UI, provider, network, or durable-state operation.
+
 The publication bridge accepts a bounded observation envelope for one branch,
 commit, review, merge, and publication state. It binds the exact branch head
 through every stage and requires positive valid-signature and signed-DCO

@@ -1,0 +1,8 @@
+{
+  "checker": "awr-ui-session-bridge-checker/1.0.0",
+  "task_revision": 1,
+  "specification_digest": "sha256:45006eb9ce06e41495dc924201dda246143248e29056e1cddac94f4fd0a34d4e",
+  "record_digest": "sha256:ecc966261c2a79ff0cfc49adfb42fadb4a5cee9c4ed8d0aa0355680e2666b8aa",
+  "result": {"events": 4, "final": "safe_exit", "protocol": "awr-ui-session-bridge@1.0.0", "resumable": true, "session_id": "SES-AR0011-REFERENCE", "task_revision": 1},
+  "safe_digest": "sha256:a872c0d851b6b6fded0ed8d102048dc3d723cdeaabfdafb3544e183e3afc3a86"
+}

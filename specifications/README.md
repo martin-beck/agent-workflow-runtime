@@ -277,6 +277,24 @@ are `scripts/awg_oracle_bridge.py` and `scripts/check_awg_oracle_bridge.py`.
 They reject stale, replayed, unknown, private, cross-boundary, and
 decision-bearing input and perform no external operation.
 
+## AR-0011 provider-neutral UI session bridge
+
+`ui-session-bridge-v1.json` defines the revision-1-bound UI bridge. The
+fixture is a bounded safe-exit trace with an exact task/project/worktree/
+session/lease binding, a checkpoint, and a resumable interruption boundary.
+The checker recomputes the prior trace and binding digests and rejects stale,
+replayed, unknown, private, crossed, and invalid-final-event input. It does
+not render a UI, accept input, acquire a lease, persist state, contact a
+provider or network, or establish task completion.
+
+```text
+python3 scripts/check_ui_session_bridge.py \
+  --spec specifications/ui-session-bridge-v1.json \
+  --record specifications/fixtures/ui-session-trace-ar0011-v1.json \
+  --evidence specifications/fixtures/ui-session-evidence-ar0011-v1.json \
+  --expected-revision 1
+```
+
 ## AR-0012 provider-neutral Git/publication evidence
 
 `publication-bridge-v1.json` defines a revision-3-bound envelope for branch,
