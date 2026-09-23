@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-agent-capability-preflight",
+  "version": "1.0.0",
+  "title": "Deterministic agent capability discovery and preflight",
+  "normative": true,
+  "task": {"id": "AR-0051", "revision": 5},
+  "states": ["declared", "catalog_accepted", "configured", "preflighted", "eligible", "not_eligible", "unknown"],
+  "statuses": {
+    "catalog_acceptance": ["accepted", "rejected", "unknown"],
+    "setup_acceptance": ["accepted", "rejected", "unknown"],
+    "credential_readiness": ["ready", "missing", "partial", "invalid", "not_required"],
+    "host_gate": ["pass", "mismatch", "unknown"],
+    "network_gate": ["pass", "mismatch", "unknown"],
+    "capability_support": ["supported", "unsupported", "unknown"],
+    "benchmark_compatibility": ["compatible", "incompatible", "unknown"],
+    "adapter_execution": ["not_performed", "unverified"],
+    "live_support": ["unverified", "unsupported", "unknown"]
+  },
+  "rules": {
+    "catalog": "Catalog acceptance validates a declared adapter/profile only; it is not provider support.",
+    "setup": "Setup acceptance validates bounded configuration and credential-reference readiness; values never enter the record.",
+    "eligibility": "Eligible means an offline attempt is structurally permitted. It does not mean the adapter ran or the provider is live.",
+    "unknown": "Unknown is used for incomplete or unverifiable observations; it cannot be promoted to eligible or successful.",
+    "execution": "Adapter execution is always not_performed in this offline contract.",
+    "live": "Live provider support is always unverified in this offline contract."
+  },
+  "required_gates": ["catalog_acceptance", "setup_acceptance", "credential_readiness", "host_gate", "network_gate", "capability_support", "benchmark_compatibility"],
+  "privacy": {"allowed": ["bounded identifiers", "enums", "booleans", "versions", "digests", "bounded capabilities"], "reject": ["credential values", "prompts", "transcripts", "private paths", "host identifiers", "network addresses", "raw output", "unknown fields"]},
+  "offline_boundary": {"provider": "not_performed", "adapter_execution": "not_performed", "network": "disabled", "llm": "not_performed", "credentials": "references_only", "live_support": "unverified", "durable_state": "not_performed"},
+  "hostile_qualification": ["missing_credential", "partial_credential", "unsupported_capability", "host_mismatch", "network_mismatch", "provider_unverified"],
+  "limitations": ["The model checks supplied declarations and synthetic observations only.", "It does not inspect a catalog, inject credentials, run an adapter or benchmark, contact a host or provider, or establish live support.", "An eligible result is offline planning evidence, not execution, provider success, or benchmark measurement."]
+}
