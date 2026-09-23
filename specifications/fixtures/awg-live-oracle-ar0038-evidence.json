@@ -1,0 +1,45 @@
+{
+  "checker": "awr-awg-live-oracle-checker/1.0.0",
+  "task_revision": 3,
+  "specification_digest": "sha256:65ec34f32c4e45e0e532a931642d158f07ad6cd3394fe10890aced890b09077c",
+  "record_digest": "sha256:cae95a60da1e77c10bf4c7a29fe00131258054083f0ac07ffa81ce1930729cd6",
+  "projection": {
+    "kind": "oracle_transport_observation",
+    "project": {
+      "key": "agent-workflow-runtime",
+      "revision": "0123456789abcdef0123456789abcdef01234567"
+    },
+    "projection_digest": "sha256:fed9cfaf22bb3697538dea9e796eb60198c76ebca1000827abf5d051b4a5abce",
+    "protocol": "awr-awg-live-oracle@1.0.0",
+    "request": {
+      "attempt": 1,
+      "id": "REQ-AR0038-ORACLE",
+      "input_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "response": {
+      "decision_status": "not_decided",
+      "id": "DEC-AR0038-ORACLE",
+      "source": "awg_external_observation",
+      "status": "not_received"
+    },
+    "session": {
+      "id": "SES-AR0038-OFFLINE"
+    },
+    "specification_digest": "sha256:65ec34f32c4e45e0e532a931642d158f07ad6cd3394fe10890aced890b09077c",
+    "task": {
+      "id": "AR-0038",
+      "revision": 3
+    },
+    "transport": {
+      "network": "not_performed",
+      "operation_id": "OP-AR0038-ORACLE",
+      "state": "interrupted"
+    },
+    "worktree": {
+      "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "key": "agent-workflow-runtime-0038"
+    }
+  },
+  "live_verification": "unverified",
+  "safe_digest": "sha256:240c927ae0e167786cf0e0f5fa435d485a3d3f994f1037e2cf6f24ac7a1d7bdf"
+}
