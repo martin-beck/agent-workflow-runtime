@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-ui-live-human-gate",
+  "version": "1.0.0",
+  "title": "Offline revision-bound UI live session and human-gate projection",
+  "normative": true,
+  "task": "AR-0039 at Coordinator revision 3 exactly",
+  "authority": {
+    "coordinator": ["task identity", "revision", "project", "worktree", "session", "lease", "durable state"],
+    "quality": ["requirements", "quality gates", "evidence acceptance"],
+    "guidance": ["uncertainty classification", "oracle escalation", "decisions", "reusable guidance"],
+    "ui": ["private rendering", "validated human input", "final intent"],
+    "runtime": ["bounded event validation", "binding enforcement", "offline projection", "safe resume"]
+  },
+  "lifecycle": ["prepared", "rendered", "validated_input", "checkpointed", "safe_exit", "resumable"],
+  "binding": {
+    "required": ["task", "project revision", "worktree key and digest", "session", "lease", "request", "input event"],
+    "rule": "Every event and validated input repeats the exact AR-0039 revision-3 binding; a changed binding is rejected."
+  },
+  "human_gate": {
+    "input": "The UI may validate one bounded opaque selection for one request attempt.",
+    "runtime_result": "validated_input_pending_authority",
+    "authority_rule": "Validated UI input is not an AWG decision, AWQ acceptance, Coordinator transition, or runtime approval."
+  },
+  "projection": {
+    "visibility": "private_revision_bound",
+    "allowed": ["opaque identifiers", "enumerations", "positive sequences", "revisions", "SHA-256 digests"],
+    "excluded": ["UI text", "prompts", "transcripts", "credentials", "private paths", "host identifiers", "raw output", "provider or network values"]
+  },
+  "resume": {
+    "safe_exit": "Requires a prior UI checkpoint, exact prior-trace digest, and exact binding digest.",
+    "decision": "A validated input may be resumed only as the same request attempt and must not be replayed or re-bound."
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "crossed binding", "replay", "malformed input", "unknown fields", "privacy-bearing values", "missing checkpoint", "unvalidated decision", "authority injection"],
+    "side_effects": "The harness and checker perform no UI, network, provider, LLM, Coordinator, AWQ, AWG, Git, process, or durable-state operation."
+  },
+  "compatibility": "Unknown schema or protocol versions are rejected; future versions require an explicit adapter and cannot reuse this evidence as live success.",
+  "limitations": [
+    "A passing record is deterministic structural qualification only.",
+    "Live UI rendering, human presence, lease validity, authority decisions, and durable persistence remain unverified.",
+    "The private projection is a privacy boundary, not evidence that a real private UI session exists."
+  ]
+}
