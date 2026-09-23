@@ -8,6 +8,22 @@ oracle selection. Each specification must have an autonomous positive and
 negative checker, an explicit limitation section, and a result bound to the
 exact task revision and specification digest.
 
+## AR-0022 cross-adapter conformance
+
+`adapter-conformance-v1.json` and its fixture define shared normalized
+event/capability assertions for the Codex-style, OpenCode-style, and
+OpenDesk-style contracts. Run the offline checker with:
+
+```text
+python3 scripts/check_adapter_conformance.py \
+  --spec specifications/adapter-conformance-v1.json \
+  --record specifications/fixtures/adapter-conformance-ar0022-v1.json \
+  --expected-revision 1
+```
+
+It rejects stale, private, unknown, crossed, duplicate, or tampered records
+and reports capability mismatches without execution or state change.
+
 Specifications are contract evidence, not implementation-refinement proofs.
 They must not contain credentials, private paths, prompts, transcripts, host
 identifiers, or unbounded command output.

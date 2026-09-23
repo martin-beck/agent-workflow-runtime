@@ -101,4 +101,11 @@ AR-0021 adds `specifications/publication-ci-bridge-v1.json`, a revision-1-bound 
 
 ## License
 
+AR-0022 adds `specifications/adapter-conformance-v1.json`, a revision-1-bound
+cross-adapter harness for the Codex-style, OpenCode-style, and OpenDesk-style
+contracts. It asserts one normalized event and capability-report shape,
+recomputes event/report digests, checks deterministic replay, and returns an
+explicit non-executing capability mismatch report. The model and checker are
+offline only.
+
 MIT, with the Huawei copyright notice in `LICENSE`.

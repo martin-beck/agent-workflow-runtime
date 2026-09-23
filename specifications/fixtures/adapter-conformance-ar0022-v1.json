@@ -1,0 +1,24 @@
+{
+  "task": {"id": "AR-0022", "revision": 1},
+  "capabilities": {
+    "codex-style": {"adapter": {"id": "codex-style", "version": "1.0.0"}, "capabilities": ["discover", "start", "turn", "interrupt", "close", "fail"], "limits": {"max_events": 64, "max_capabilities": 16}, "digest": "sha256:6998cf95b1dca50787a779471cfca0c14fd6b98b1181e2681a40048e6234dbf2"},
+    "opencode-style": {"adapter": {"id": "opencode-style", "version": "1.0.0"}, "capabilities": ["discover", "normalize", "replay", "tool_use"], "limits": {"max_events": 64, "max_capabilities": 16}, "digest": "sha256:7390b56a6d9a36c29cb89d1c65e460441fa86c04cc09e03bd3c6bc923b2d3835"},
+    "opendesk-style": {"adapter": {"id": "opendesk-style", "version": "1.0.0"}, "capabilities": ["discover", "normalize", "replay", "conversation"], "limits": {"max_events": 64, "max_capabilities": 16}, "digest": "sha256:67a779c9e2a1d464ab12c352625eb5537578651e53248d3448437e8b2ea536cf"}
+  },
+  "replays": {
+    "codex-style": [
+      {"sequence": 1, "event_type": "session_started", "disposition": "accepted", "task": {"id": "AR-0022", "revision": 1}, "session": {"id": "SES-AR0022-CODEXSTYLE", "worktree_key": "agent-workflow-runtime-0022", "worktree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}, "adapter": {"id": "codex-style", "version": "1.0.0"}, "evidence_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "event_digest": "sha256:1256a261dc112bedde7444e1fc8a90aa8fb258ffc37b9bd1555051be38de0310"},
+      {"sequence": 2, "event_type": "completed", "disposition": "completed", "task": {"id": "AR-0022", "revision": 1}, "session": {"id": "SES-AR0022-CODEXSTYLE", "worktree_key": "agent-workflow-runtime-0022", "worktree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}, "adapter": {"id": "codex-style", "version": "1.0.0"}, "evidence_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "event_digest": "sha256:17bcf3b5f6b90bcc58c09f16bc249eb62cfd34f8100e30d96e066e245d9b3cee"}
+    ],
+    "opencode-style": [
+      {"sequence": 1, "event_type": "session_started", "disposition": "accepted", "task": {"id": "AR-0022", "revision": 1}, "session": {"id": "SES-AR0022-OPENCODESTYLE", "worktree_key": "agent-workflow-runtime-0022", "worktree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}, "adapter": {"id": "opencode-style", "version": "1.0.0"}, "evidence_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "event_digest": "sha256:c76f9e1fa352f28dae2fc134c73a4a09bb2db4aacf907a40803c75470af9abeb"},
+      {"sequence": 2, "event_type": "completed", "disposition": "completed", "task": {"id": "AR-0022", "revision": 1}, "session": {"id": "SES-AR0022-OPENCODESTYLE", "worktree_key": "agent-workflow-runtime-0022", "worktree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}, "adapter": {"id": "opencode-style", "version": "1.0.0"}, "evidence_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "event_digest": "sha256:0149a154b014fec1b6ed01a1ebef6a3baa0e3c8748322177baff65dc31edcb1b"}
+    ],
+    "opendesk-style": [
+      {"sequence": 1, "event_type": "session_started", "disposition": "accepted", "task": {"id": "AR-0022", "revision": 1}, "session": {"id": "SES-AR0022-OPENDESKSTYLE", "worktree_key": "agent-workflow-runtime-0022", "worktree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}, "adapter": {"id": "opendesk-style", "version": "1.0.0"}, "evidence_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "event_digest": "sha256:c25608ad1dcb592eff62d04a73a25315764d791d8c775489637033232754508e"},
+      {"sequence": 2, "event_type": "completed", "disposition": "completed", "task": {"id": "AR-0022", "revision": 1}, "session": {"id": "SES-AR0022-OPENDESKSTYLE", "worktree_key": "agent-workflow-runtime-0022", "worktree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}, "adapter": {"id": "opendesk-style", "version": "1.0.0"}, "evidence_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "event_digest": "sha256:d9818adfb7c6b7cdb2c03066401172126a4da74e890e22d725ecba3d2f9c6329"}
+    ]
+  },
+  "required_capabilities": ["tool_use", "conversation"],
+  "mismatch_report": {"disposition": "capability_mismatch", "execute": false, "missing": {"conversation": ["codex-style", "opencode-style"], "tool_use": ["codex-style", "opendesk-style"]}}
+}

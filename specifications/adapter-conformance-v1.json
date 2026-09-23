@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-adapter-conformance",
+  "version": "1.0.0",
+  "title": "Cross-adapter conformance and deterministic replay harness",
+  "normative": true,
+  "task": {"id": "AR-0022", "revision": 1},
+  "adapters": ["codex-style", "opencode-style", "opendesk-style"],
+  "normalized_event": {
+    "required": ["sequence", "event_type", "disposition", "task", "session", "adapter", "evidence_digest", "event_digest"],
+    "event_types": ["session_started", "plan_proposed", "tool_call", "file_change", "test_result", "failed", "interrupted", "completed"],
+    "digest": "sha256(canonical event without event_digest)"
+  },
+  "capability_report": {"required": ["adapter", "capabilities", "limits", "digest"], "limits": {"max_events": 64, "max_capabilities": 16}},
+  "replay": {"max_events": 64, "terminal_events": ["completed", "failed", "interrupted"], "determinism": "byte-identical canonical normalized output"},
+  "mismatch": {"disposition": "capability_mismatch", "execute": false, "state_change": false, "missing": "adapter IDs grouped by missing capability"},
+  "invariants": [
+    "All adapters expose one bounded normalized event and capability assertion shape.",
+    "Every event is bound to AR-0022 revision 1, one session/worktree, and its adapter identity.",
+    "Replaying the same normalized records produces byte-identical records and digests.",
+    "Capability mismatch is explicit, non-executing, and non-mutating; it is never treated as success.",
+    "Unknown fields, stale revisions, duplicate events, privacy-bearing values, and cross-adapter bindings fail closed."
+  ],
+  "privacy": {"forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "personal_data", "raw_output", "command", "executable"], "projection": "identities, bounded states, capability names, counts, and digests only"},
+  "limitations": [
+    "The harness validates supplied synthetic observations only; it does not launch Codex, OpenCode, OpenDesk, a provider, process, network, LLM, or tool.",
+    "Conformance and replay do not prove provider availability, authorization, model behavior, filesystem isolation, hosted CI, Coordinator truth, or runtime success.",
+    "Provider-specific contracts remain authoritative for native mapping and lifecycle semantics."
+  ],
+  "failure_semantics": {"mode": "fail_closed", "invalid_input": "reject_without_partial_output", "mismatch": "return_explicit_nonexecuting_report"}
+}

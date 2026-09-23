@@ -255,6 +255,26 @@ fences the prior worker. `scripts/supervisor_runtime.py` and
 `scripts/check_supervisor_runtime.py` are offline models only and do not launch
 or inspect a worker or mutate Coordinator state.
 
+## AR-0022 cross-adapter conformance and replay
+
+The AR-0022 envelope binds Codex-style, OpenCode-style, and OpenDesk-style
+projections to Coordinator revision 1. Each adapter supplies the same
+normalized event and digest-bound capability shape. Replay accepts only
+contiguous, single-bound terminal traces and recomputes every event digest.
+Missing capabilities are reported by adapter ID with
+`disposition: capability_mismatch` and `execute: false`; this is not fallback
+or an execution attempt.
+
+```text
+python3 scripts/check_adapter_conformance.py \
+  --spec specifications/adapter-conformance-v1.json \
+  --record specifications/fixtures/adapter-conformance-ar0022-v1.json \
+  --expected-revision 1
+```
+
+The checker is deterministic and offline; it does not launch a provider,
+process, network, LLM, or tool and does not prove runtime success.
+
 ## AR-0019 capability broker and worktree enforcement
 
 `capability-broker-v1.json` binds a revision-1 capability grant to the exact
