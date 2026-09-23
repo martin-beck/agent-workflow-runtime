@@ -86,6 +86,14 @@ rejects any exceeded budget, incomplete process-tree observation, timeout, or
 unacknowledged cancellation. It is evidence evaluation, not host enforcement;
 OS-specific containment and live measurement remain a later integration scope.
 
+## AR-0015 provider-neutral Codex-style adapter
+
+AR-0015 adds a turn-oriented adapter contract for Codex-style interaction
+without embedding a Codex or provider implementation. Capability discovery is
+bounded metadata; turns carry digest references only. The reference model and
+replay checker are offline state machines and cannot establish provider,
+process, network, Coordinator, or runtime success.
+
 ## AR-0009 AWQ evidence bridge
 
 The EvidenceBridge projects bounded, digest-referenced runtime observations

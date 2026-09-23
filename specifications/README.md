@@ -191,6 +191,26 @@ The model does not provide fsync, locking, signatures, crash durability, or
 general personal-data classification. It performs no network, provider,
 Coordinator, AWQ, AWG, UI, Git, or LLM operation.
 
+## AR-0015 provider-neutral Codex-style adapter
+
+`codex-style-adapter-v1.json` defines the revision-5-bound, turn-oriented
+adapter contract. It uses capability discovery and digest-only turn
+references; provider commands, prompts, transcripts, credentials, and raw
+output are outside the contract. The offline model is
+`scripts/codex_adapter.py`, and its fail-closed replay checker is
+`scripts/check_codex_adapter.py`:
+
+```text
+python3 scripts/check_codex_adapter.py \\
+  --spec specifications/codex-style-adapter-v1.json \\
+  --trace specifications/fixtures/codex-replay-ar0015-v1.json \\
+  --expected-revision 5
+```
+
+The evidence fixture binds the canonical specification and trace digests.
+These files do not launch Codex, any provider, a process, network, or LLM,
+and do not prove provider availability or runtime success.
+
 ## AR-0009 AWQ evidence bridge
 
 `awq-evidence-bridge-v1.json` defines the smallest versioned projection from

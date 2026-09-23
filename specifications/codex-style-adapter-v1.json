@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-codex-style-adapter",
+  "version": "1.0.0",
+  "title": "Provider-neutral Codex-style turn adapter",
+  "normative": true,
+  "task": {"id": "AR-0015", "revision": 5},
+  "authority": {
+    "coordinator": ["task identity", "task revision", "worktree identity"],
+    "quality": ["requirements", "quality gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing discussion rendering and input"],
+    "runtime": ["provider-neutral turn normalization", "capability discovery", "offline replay"]
+  },
+  "capabilities": ["discover", "start", "turn", "interrupt", "close", "fail"],
+  "lifecycle": {
+    "states": ["undiscovered", "discovered", "active", "interrupted", "closed", "failed"],
+    "transitions": [
+      {"operation": "discover", "from": "undiscovered", "to": "discovered"},
+      {"operation": "capabilities", "from": ["discovered", "active"], "to": "same"},
+      {"operation": "start", "from": "discovered", "to": "active"},
+      {"operation": "turn", "from": "active", "to": "active"},
+      {"operation": "interrupt", "from": "active", "to": "interrupted"},
+      {"operation": "close", "from": "active", "to": "closed"},
+      {"operation": "fail", "from": "active", "to": "failed"}
+    ],
+    "terminal": ["interrupted", "closed", "failed"],
+    "binding": ["task.id", "task.revision", "session.id", "session.worktree_key", "session.worktree_digest", "adapter.id", "adapter.version"]
+  },
+  "capability_report": {"digest": "sha256:<64 lowercase hexadecimal characters>", "limits": {"max_turns": 64, "max_reference_bytes": 256, "max_trace_records": 128}},
+  "request": {"turn": "one bounded sha256 reference; no payload", "interrupt": "no arguments", "close": "no arguments", "fail": "one bounded error code"},
+  "invariants": [
+    "Discovery is local metadata only and does not establish provider availability or authorization.",
+    "Every lifecycle result is bound to exactly AR-0015 revision 5, one session/worktree, and this adapter identity.",
+    "A turn carries only a digest reference; prompts, transcripts, provider commands, credentials, and raw output are outside the contract.",
+    "Unknown fields, capabilities, states, revisions, and post-terminal operations are rejected.",
+    "Interruption and failure are terminal observations and cannot be reported as successful completion."
+  ],
+  "failure_semantics": {"mode": "fail_closed", "invalid_input": "reject_without_state_change", "unsupported_capability": "reject_without_state_change"},
+  "compatibility": {"major_change": "new specification_id or incompatible schema_version", "minor_change": "backward-compatible documented fields only", "canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline"},
+  "privacy": {"forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "personal_data", "raw_output", "command", "executable"], "projection": "safe identifiers, states, dispositions, bounded codes, and digests only"},
+  "limitations": [
+    "The model, checker, and fixtures are offline deterministic state machines; they do not launch Codex, any provider, a process, network, Git, Coordinator, AWQ, AWG, UI, or LLM.",
+    "Capability discovery is not proof of provider availability, authentication, model behavior, filesystem isolation, or runtime success.",
+    "Real provider adapters, supervision, durable persistence, signing, and remote execution remain separate contracts."
+  ]
+}
