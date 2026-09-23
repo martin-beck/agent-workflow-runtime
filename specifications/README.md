@@ -457,3 +457,18 @@ python3 scripts/check_publication_ci_bridge.py \\
 
 The checker validates supplied observations only and has no Git, CI, remote,
 provider, network, merge, publication, or durable-state side effects.
+
+## AR-0023 end-to-end autonomous workflow
+
+`autonomous-workflow-v1.json` and its positive fixture define the bounded
+revision-1 workflow trace. Run the offline checker with:
+
+```text
+python3 scripts/check_autonomous_workflow.py \\
+  --spec specifications/autonomous-workflow-v1.json \\
+  --fixture specifications/fixtures/autonomous-workflow-ar0023-v1.json \\
+  --expected-revision 1
+```
+
+The model preserves authority ownership and recovery fencing while making no
+provider, network, remote, or durable-state call.

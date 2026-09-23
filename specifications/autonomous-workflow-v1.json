@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-autonomous-workflow",
+  "version": "1.0.0",
+  "title": "Provider-neutral end-to-end autonomous development workflow",
+  "normative": true,
+  "task": {"id": "AR-0023", "revision": 1},
+  "stages": ["planning", "execution", "quality", "oracle_discussion", "recovery", "review", "merge_observation", "durable_reconciliation"],
+  "authorities": {
+    "coordinator": ["plan_observed", "recover", "review_observed", "merge_observed", "durable_observation", "reconcile", "terminal_observation"],
+    "runtime": ["execution_started", "checkpoint", "interrupt", "resume"],
+    "awq": ["quality_submitted"],
+    "awg": ["oracle_discussion", "oracle_decision"]
+  },
+  "invariants": [
+    "Every observation is bound to Coordinator task AR-0023 revision 1, one project, worktree, session, worker, and lease.",
+    "The ordered trace covers planning, execution, quality submission, oracle discussion and decision, review, merge observation, recovery, and durable reconciliation.",
+    "Recovery requires the exact checkpoint and replaces both worker and lease before resume; the old worker remains fenced.",
+    "AWQ and AWG results are attributed observations and cannot be manufactured by runtime events.",
+    "Merge and terminal observations retain merge_status not_performed and remote_verification unverified.",
+    "Durable-state and remote observations are supplied evidence only; the checker performs no mutation, network, provider, LLM, Git, CI, or review operation."
+  ],
+  "privacy": {"forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "personal_data", "raw_output", "command", "executable"], "projection": "bounded states, identities, statuses, and SHA-256 evidence digests only"},
+  "limitations": [
+    "A passing trace proves contract ordering and supplied evidence shape, not autonomous execution or agent quality.",
+    "Review, merge, hosted CI, provider execution, remote consumption, and Coordinator truth remain unverified until authoritative systems report them.",
+    "Authority lists describe accepted attribution; they do not replace Coordinator, AWQ, AWG, or UI authority."
+  ],
+  "failure_semantics": {"mode": "fail_closed", "invalid_input": "reject_without_partial_output", "stale_or_replayed": "reject_without_state_change", "remote": "never_claim_success"}
+}
