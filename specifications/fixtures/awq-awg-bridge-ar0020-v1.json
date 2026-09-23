@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-awq-awg-bridge", "version": "1.0.0"},
+  "task": {"id": "AR-0020", "revision": 1},
+  "project": {"key": "agent-workflow-runtime", "revision": "a002000000000000000000000000000000000000"},
+  "worktree": {"key": "agent-workflow-runtime-0020", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "session": {"id": "SES-AR0020-REFERENCE"},
+  "evidence_references": [
+    {"id": "EVID-AR0020-TEST", "sequence": 1, "category": "test", "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "submission_status": "offered_for_awq_review"},
+    {"id": "EVID-AR0020-PRIVACY", "sequence": 2, "category": "privacy", "evidence_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "submission_status": "offered_for_awq_review"}
+  ],
+  "oracle_batches": [
+    {
+      "id": "BATCH-AR0020-1",
+      "sequence": 1,
+      "discussion": {"id": "DISC-AR0020-1", "kind": "discussion", "authority": "runtime", "status": "requested", "context_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "evidence_ids": ["EVID-AR0020-TEST", "EVID-AR0020-PRIVACY"]},
+      "decision": {"id": "DEC-AR0020-1", "kind": "decision", "authority": "awg", "status": "received", "payload_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"},
+      "guidance": {"id": "GUID-AR0020-1", "kind": "guidance", "authority": "awg", "status": "received", "payload_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"}
+    }
+  ]
+}

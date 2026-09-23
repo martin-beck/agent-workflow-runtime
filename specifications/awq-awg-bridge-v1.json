@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-awq-awg-bridge",
+  "version": "1.0.0",
+  "title": "Provider-neutral AWQ evidence submission and AWG batched oracle bridge",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "task revision", "project and worktree identity", "session binding"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["oracle admission", "decisions", "reusable guidance"],
+    "runtime": ["bounded references", "canonical digest preservation", "batch correlation"]
+  },
+  "binding": {
+    "task": "AR-0020 at Coordinator revision 1 exactly",
+    "project_revision": "40 lowercase hexadecimal characters",
+    "worktree_digest": "sha256: followed by 64 lowercase hexadecimal characters",
+    "identifiers": "AR-, EVID-, BATCH-, DISC-, DEC-, GUID-, and SES- opaque identifiers"
+  },
+  "evidence_submission": {
+    "reference": "id, sequence, category, evidence_digest, submission_status",
+    "categories": ["test", "formal", "privacy", "provenance", "lifecycle"],
+    "submission_status": "offered_for_awq_review",
+    "maximum": 64,
+    "rule": "A reference identifies evidence for AWQ; it is not evidence acceptance."
+  },
+  "oracle_batch": {
+    "maximum": 8,
+    "envelopes": ["discussion", "decision", "guidance"],
+    "discussion": "runtime_request with requested status and digest-only bounded context",
+    "decision_guidance": "awg_external with received status and digest-only payload",
+    "rule": "Only AWG may author decisions or reusable guidance; the runtime preserves supplied envelopes and does not manufacture them."
+  },
+  "projection": {
+    "protocol": "awr-awq-awg-bridge@1.0.0",
+    "quality_status": "not_decided",
+    "oracle_status": "not_decided",
+    "rule": "The projection contains references and externally attributed observations only; it never claims AWQ acceptance or an AWG decision."
+  },
+  "privacy": {
+    "allowed": "opaque identifiers, enumerations, bounded integers, revisions, and SHA-256 digests only",
+    "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "unknown fields"]
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "replay", "cross-binding identity", "unknown fields", "digest mismatch", "runtime-authored decision or guidance", "acceptance claim"],
+    "side_effects": "The model and checker perform no AWQ, AWG, Coordinator, provider, network, process, UI, LLM, Git, or durable-state operation."
+  },
+  "limitations": [
+    "A passing check proves only structural consistency of supplied references and envelopes.",
+    "A digest does not prove evidence truth, AWQ acceptance, AWG admission, decision, or guidance validity.",
+    "Transport and authoritative submission remain future integrations owned by AWQ and AWG."
+  ]
+}

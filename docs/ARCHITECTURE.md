@@ -152,6 +152,16 @@ alternative evidence digests, and confidence metadata. The projection is
 always `not_decided`; AWG remains authoritative for admission and decisions.
 The offline model and checker do not contact AWG or any provider.
 
+## AR-0020 AWQ submission and AWG batch bridge
+
+The AR-0020 bridge carries bounded evidence references offered for AWQ review
+and correlates batched discussion, decision, and guidance envelopes. A
+discussion is a runtime request; decision and guidance envelopes are accepted
+only as externally attributed AWG observations. The projection always reports
+`quality_status: not_decided` and `oracle_status: not_decided`; it cannot
+manufacture either authority's result. The model and checker are offline
+standard-library checks only.
+
 ## AR-0012 provider-neutral Git/publication bridge
 
 ## AR-0011 provider-neutral UI session bridge

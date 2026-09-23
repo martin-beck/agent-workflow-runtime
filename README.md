@@ -82,6 +82,13 @@ cancellation acknowledgement, stale recovery, and digest-only lifecycle
 evidence. Its checker is offline and does not launch workers, contact
 Coordinator, or claim provider, network, remote, or durable-state success.
 
+AR-0020 adds `specifications/awq-awg-bridge-v1.json`, a revision-1-bound,
+provider-neutral bridge for digest-only AWQ evidence submission references and
+batched AWG discussion/decision/guidance envelopes. The offline model and
+checker preserve exact bindings and external AWG attribution while keeping
+`quality_status` and `oracle_status` at `not_decided`. They perform no AWQ,
+AWG, provider, network, LLM, or durable-state operation.
+
 ## License
 
 MIT, with the Huawei copyright notice in `LICENSE`.
