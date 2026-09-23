@@ -44,6 +44,11 @@ quality result, or task completion.
    reconciliation, and live-doctor evidence.
 7. `ReplayHarness`: deterministic positive and hostile session traces.
 
+AR-0022 provides the shared replay boundary for the three provider-neutral
+adapter contracts. It validates common normalized events, capability reports,
+exact revision-1 binding, canonical digests, and terminal replay. Capability
+mismatch is an explicit non-executing observation and cannot change state.
+
 All components must preserve the task ID, task revision, worktree identity,
 session ID, adapter identity, and evidence digests across boundaries.
 
