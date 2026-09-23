@@ -303,3 +303,23 @@ and CI observations to one exact head. Signature and signed-DCO statuses are
 positive supplied observations; CI remains `verification: unverified`, and
 merge handoff remains non-executing. The checker performs no Git, CI, remote,
 provider, network, or publication operation.
+
+## AR-0025 security, privacy, and supply-chain assurance
+
+`security-privacy-supply-chain-v1.json` binds six bounded observation areas to
+Coordinator revision 1: secret handling, least privilege, dependency
+provenance, redaction, public evidence, and hostile boundaries. Dependency
+observations require exact versions plus source, integrity, and license
+digests. Public evidence contains no raw payload and publication is
+`not_performed`.
+
+```text
+python3 scripts/check_security_privacy_supply_chain.py \\
+  --spec specifications/security-privacy-supply-chain-v1.json \\
+  --record specifications/fixtures/security-privacy-supply-chain-ar0025-v1.json \\
+  --expected-revision 1
+```
+
+The checker rejects stale, replayed, crossed, credential-bearing, private,
+unknown, floating-dependency, and digest-tampered inputs. It performs no
+scanner, network, provider, package-manager, LLM, or durable-state operation.

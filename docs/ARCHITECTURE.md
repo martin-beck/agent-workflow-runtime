@@ -230,3 +230,15 @@ observations never become hosted-CI, remote, or release success. The model and
 checker are `scripts/publication_ci_bridge.py` and
 `scripts/check_publication_ci_bridge.py`. They perform no Git, CI, provider,
 network, merge, publication, or durable-state operation.
+
+## AR-0025 security, privacy, and supply-chain assurance
+
+The assurance boundary is a provider-neutral, revision-1-bound observation
+contract. It requires bounded observations for secret handling, granted and
+denied capabilities, exact dependency versions with source/integrity/license
+digests, redaction, payload-free public evidence, and hostile-input rejection.
+Evidence is canonical and digest-referenced; publication is explicitly
+`not_performed`. The model and checker do not scan, resolve packages, inspect
+the host, contact a provider or network, execute an LLM, or mutate durable
+state. A passing record is structural evidence only, not proof of live secret
+absence, OS enforcement, license validity, or runtime success.

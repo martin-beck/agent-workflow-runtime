@@ -24,6 +24,15 @@ python3 scripts/check_adapter_conformance.py \
 It rejects stale, private, unknown, crossed, duplicate, or tampered records
 and reports capability mismatches without execution or state change.
 
+## AR-0025 security, privacy, and supply-chain assurance
+
+`security-privacy-supply-chain-v1.json` and its fixture bind bounded
+secret-handling, least-privilege, dependency-provenance, redaction,
+public-evidence, and hostile-boundary observations to AR-0025 revision 1.
+The checker requires exact dependency versions and digest references, rejects
+private or credential-bearing content, and performs no scanner, network,
+provider, package-manager, Git, or durable-state operation.
+
 Specifications are contract evidence, not implementation-refinement proofs.
 They must not contain credentials, private paths, prompts, transcripts, host
 identifiers, or unbounded command output.
