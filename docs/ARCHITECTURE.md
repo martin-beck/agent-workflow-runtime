@@ -47,3 +47,17 @@ quality result, or task completion.
 All components must preserve the task ID, task revision, worktree identity,
 session ID, adapter identity, and evidence digests across boundaries.
 
+## AR-0004 execution boundary
+
+Before a session is active, the runtime boundary must carry the exact
+Coordinator task revision, project revision, and exclusive worktree key and
+digest. Its capability grant is limited to versioned `read`, `edit`, and
+`test` tools. Network, provider, credential, publication, merge, durable-state
+mutation, and authority-decision operations are denied by default.
+
+Coordinator, AWQ, AWG, and UI values are observations or inputs to enforcement;
+they are not runtime approvals. A runtime session may start, interrupt, resume
+with the identical binding, or close, but cannot manufacture a claim, quality
+acceptance, oracle decision, merge, publication, or completion. The AR-0004
+offline checker validates this projection only; it does not prove filesystem
+isolation or execute tools.
