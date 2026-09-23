@@ -225,3 +225,13 @@ fenced recovery, publication `not_performed`, reconciliation, terminal
 finality, and privacy-safe digests all hold. Hostile traces cover stale,
 replayed, authority-confused, privacy-bearing, oracle, recovery, publication,
 and terminal inputs. This is offline structural evidence only.
+
+## AR-0018 supervisor runtime
+
+`supervisor-runtime-v1.json` binds admission and every lifecycle action to the
+exact revision, project, worktree, session, worker, and lease. Start, cancel,
+acknowledge, handoff, stale recovery, resume, complete, and fail transitions
+are checked fail-closed; cancellation requires acknowledgement and recovery
+fences the prior worker. `scripts/supervisor_runtime.py` and
+`scripts/check_supervisor_runtime.py` are offline models only and do not launch
+or inspect a worker or mutate Coordinator state.

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-supervisor-runtime",
+  "version": "1.0.0",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "revision", "claim", "lease", "durable lifecycle"],
+    "runtime": ["admission enforcement", "worker supervision", "cancellation observation", "recovery fencing"],
+    "awq": ["evidence acceptance"],
+    "awg": ["oracle decisions"],
+    "ui": ["human cancellation input"]
+  },
+  "admission": {
+    "binding": ["task", "project", "worktree", "session", "worker", "lease"],
+    "revision": "positive Coordinator revision, carried unchanged through every action",
+    "worktree": "exclusive key and digest are immutable for the session"
+  },
+  "lease": {
+    "clock": "monotonic integer observation time",
+    "heartbeat": "current worker only; time and expiry both strictly advance",
+    "fencing": "handoff and stale recovery replace worker and lease before resume",
+    "expiry": "expired leases cannot act or renew"
+  },
+  "lifecycle": {
+    "states": ["admitted", "active", "cancelling", "handed_off", "recovered", "closed", "failed"],
+    "terminal": ["closed", "failed"],
+    "cancellation": "cancel is not terminal until cancel_ack is observed",
+    "recovery": "stale recovery is permitted only at or after expiry and requires a future replacement lease"
+  },
+  "evidence": {
+    "projection": "bounded identifiers, integer times, dispositions, counts, and SHA-256 digests only",
+    "binding": "task revision and specification digest are exact",
+    "checker": "offline supplied-trace validation; no process, provider, network, or durable-state operation"
+  },
+  "limitations": [
+    "The reference implementation does not launch, stop, or inspect a worker.",
+    "A passing trace does not prove Coordinator-issued leases, process termination, or recovery of a real process.",
+    "The model evaluates deterministic observations only; Coordinator, AWQ, AWG, and UI remain authoritative."
+  ]
+}

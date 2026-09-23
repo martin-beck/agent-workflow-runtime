@@ -338,6 +338,24 @@ publication. It is offline evidence validation only: it does not inspect Git,
 verify cryptography, contact a provider or review system, merge, publish, or
 mutate durable state.
 
+## AR-0018 supervisor runtime
+
+`supervisor-runtime-v1.json` defines the revision-1-bound supervisor admission
+and lifecycle contract. The reference model and checker are
+`scripts/supervisor_runtime.py` and `scripts/check_supervisor_runtime.py`:
+
+```text
+python3 scripts/check_supervisor_runtime.py \\
+  --spec specifications/supervisor-runtime-v1.json \\
+  --trace specifications/fixtures/supervisor-runtime-ar0018-v1.json \\
+  --expected-revision 1
+```
+
+The checker validates lease ownership, lifecycle transitions, cancellation
+acknowledgement, fenced recovery, terminal finality, exact binding, and
+privacy-safe evidence. It performs no process, provider, network, or durable
+state operation.
+
 ## AR-0013 CI and external-observation adapter
 
 `ci-observation-adapter-v1.json` defines a revision-1-bound envelope for a
