@@ -1,0 +1,20 @@
+{
+  "checker": "awr-publication-checker/1.0.0",
+  "evidence_digest": "sha256:dc550bc7887e649ac17192347dea109f3707e7b7788ad4efaa9782a070aac30a",
+  "projection": {
+    "branch": {"head": "0123456789abcdef0123456789abcdef01234567", "name": "feature/ar-0012"},
+    "commit": {"dco": {"status": "signed", "trailer_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"}, "exact_head": true, "id": "0123456789abcdef0123456789abcdef01234567", "signature": {"algorithm": "ssh", "key_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "status": "valid"}, "tree": "89abcdef0123456789abcdef0123456789abcdef"},
+    "merge": {"evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "status": "not_performed", "target_head": "0123456789abcdef0123456789abcdef01234567"},
+    "project": {"key": "agent-workflow-runtime", "revision": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    "projection_digest": "sha256:b16c9de4893800249e664b7b7b66543cd5b74a4280d3ef49b91b48a4999bddfb",
+    "protocol": "awr-publication-evidence@1.0.0",
+    "publication": {"evidence_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555", "status": "not_performed", "target_head": "0123456789abcdef0123456789abcdef01234567"},
+    "review": {"evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "id": "RV-AR0012-01", "status": "approved", "target_head": "0123456789abcdef0123456789abcdef01234567"},
+    "specification_digest": "sha256:8c772cea23724b4143c3c2d01d024386b211bf771e61e0eb25d23f102a96db88",
+    "task": {"id": "AR-0012", "revision": 3},
+    "worktree": {"digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "key": "agent-workflow-runtime-0012"}
+  },
+  "record_digest": "sha256:e1021065951563df0196fe99e6561abb2b8c63aab41569b7e63666f5f935a3e5",
+  "specification_digest": "sha256:8c772cea23724b4143c3c2d01d024386b211bf771e61e0eb25d23f102a96db88",
+  "task_revision": 3
+}

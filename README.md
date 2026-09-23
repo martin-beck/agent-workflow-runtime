@@ -52,6 +52,13 @@ in `scripts/check_admission.py` and `tests/test_admission.py`; run
 does not replace Coordinator, AWQ, AWG, or UI authority and cannot establish
 remote, hosted-CI, provider, or runtime success.
 
+AR-0012 adds `specifications/publication-bridge-v1.json`, a provider-neutral
+Git/publication evidence envelope bound to Coordinator revision 3. It carries
+one exact head through branch, commit, review, merge, and publication
+observations, preserves valid signature and signed-DCO evidence by digest, and
+requires merge/publication to remain `not_performed`. Its offline checker has
+no Git, provider, network, or remote publication side effects.
+
 ## License
 
 MIT, with the Huawei copyright notice in `LICENSE`.

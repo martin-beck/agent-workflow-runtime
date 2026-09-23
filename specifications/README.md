@@ -265,3 +265,28 @@ bindings, replayed digests, privacy-bearing fields, unknown fields, and any
 attempt to encode a quality decision. `quality_status` is deliberately
 `not_decided`; AWQ must independently apply its requirements and acceptance
 policy. No AWQ, Coordinator, provider, network, or runtime connection is made.
+
+## AR-0012 provider-neutral Git/publication evidence
+
+`publication-bridge-v1.json` defines a revision-3-bound envelope for branch,
+commit, review, merge, and publication observations. The exact branch head is
+carried through all five observations. The commit requires valid signature and
+signed-DCO statuses, while component evidence and the complete envelope use
+canonical SHA-256 digests. Merge and publication are non-executing
+`not_performed` observations.
+
+Run the deterministic checker with:
+
+```text
+python3 scripts/check_publication_bridge.py \
+  --spec specifications/publication-bridge-v1.json \
+  --record specifications/fixtures/publication-bridge-ar0012-v1.json \
+  --evidence specifications/fixtures/publication-evidence-ar0012-v1.json \
+  --expected-revision 3
+```
+
+The checker includes hostile coverage for stale revision, replay, unknown and
+private fields, wrong head, unsigned signature/DCO, and attempted merge or
+publication. It is offline evidence validation only: it does not inspect Git,
+verify cryptography, contact a provider or review system, merge, publish, or
+mutate durable state.

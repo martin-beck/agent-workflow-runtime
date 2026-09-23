@@ -130,3 +130,15 @@ revision, project revision, worktree, and session. Its `quality_status` is
 always `not_decided`: observation results are inputs for AWQ review, never AWQ
 acceptance. The standard-library model and checker are
 `scripts/awq_evidence_bridge.py` and `scripts/check_awq_evidence_bridge.py`.
+
+## AR-0012 provider-neutral Git/publication bridge
+
+The publication bridge accepts a bounded observation envelope for one branch,
+commit, review, merge, and publication state. It binds the exact branch head
+through every stage and requires positive valid-signature and signed-DCO
+observations. Evidence is canonical JSON with SHA-256 digests; unknown fields,
+stale revision-3 bindings, replay, privacy-bearing values, wrong heads, and
+unsigned evidence fail closed. Merge and publication must remain
+`not_performed`, so this AR performs no provider, Git, review-system, merge, or
+remote publication operation. The model and checker validate supplied evidence
+only and do not verify cryptographic signatures or DCO trailers themselves.

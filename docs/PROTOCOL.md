@@ -54,6 +54,28 @@ python3 scripts/check_session_events.py \
   --expected-revision 5
 ```
 
+AR-0012 adds the provider-neutral Git/publication evidence boundary. The
+record is bound to `AR-0012` Coordinator revision `3` and contains exactly one
+branch, commit, review, merge, and publication observation. The branch head,
+commit ID, review target, merge target, and publication target must be the
+same exact Git object ID. The commit requires `signature.status: valid` and
+`dco.status: signed`, with digest references for the signing key and DCO
+trailer. Component evidence and the complete envelope use canonical SHA-256
+digests.
+
+```text
+python3 scripts/check_publication_bridge.py \
+  --spec specifications/publication-bridge-v1.json \
+  --record specifications/fixtures/publication-bridge-ar0012-v1.json \
+  --evidence specifications/fixtures/publication-evidence-ar0012-v1.json \
+  --expected-revision 3
+```
+
+The checker rejects stale, replayed, unknown, private, wrong-head, or
+unsigned-DCO evidence. It performs no Git inspection, network/provider call,
+review lookup, merge, publication, or durable-state mutation; a passing result
+is structural evidence only.
+
 AR-0003 adds the adapter boundary behind this event protocol. Adapters must
 report only bounded capabilities and identity, bind every lifecycle result to
 the exact task revision and worktree, and accept interaction by digest
