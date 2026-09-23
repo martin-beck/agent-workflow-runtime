@@ -114,6 +114,16 @@ The checker validates supplied structure and digests only. It does not submit
 evidence, consult AWQ, or establish Coordinator, provider, hosted-CI, remote,
 or runtime success.
 
+AR-0010 adds the provider-neutral AWG oracle bridge. Runtime observations are
+projected into a canonical, digest-bound `discussion_admission` envelope at
+exact Coordinator task revision 3, preserving exact project, worktree, and
+session bindings. Uncertainty, alternatives, and confidence are bounded
+context and never an oracle decision; `admission_status` is always
+`not_decided`. The offline checker rejects stale, replayed, unknown, private,
+cross-binding, and decision-bearing input. It does not submit an AWG
+discussion or establish Coordinator, provider, LLM, network, UI, or runtime
+success.
+
 AR-0017 defines the provider-neutral OpenDesk-style adapter envelope. Its
 capability report is versioned and digest-bound; requests carry only a
 bounded digest reference. A known capability absent from the report is not

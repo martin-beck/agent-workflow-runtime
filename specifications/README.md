@@ -265,3 +265,14 @@ bindings, replayed digests, privacy-bearing fields, unknown fields, and any
 attempt to encode a quality decision. `quality_status` is deliberately
 `not_decided`; AWQ must independently apply its requirements and acceptance
 policy. No AWQ, Coordinator, provider, network, or runtime connection is made.
+
+## AR-0010 provider-neutral AWG oracle bridge
+
+`awg-oracle-bridge-v1.json` defines a revision-3-bound projection from bounded
+runtime observations into an AWG discussion admission envelope. Exact task,
+project, worktree, and session bindings are preserved. Uncertainty,
+alternative evidence digests, and confidence are bounded context only; the
+projection is always `admission_status: not_decided`. The model and checker
+are `scripts/awg_oracle_bridge.py` and `scripts/check_awg_oracle_bridge.py`.
+They reject stale, replayed, unknown, private, cross-boundary, and
+decision-bearing input and perform no external operation.

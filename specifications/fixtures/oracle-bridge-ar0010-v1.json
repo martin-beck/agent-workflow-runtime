@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-awg-oracle-bridge", "version": "1.0.0"},
+  "task": {"id": "AR-0010", "revision": 3},
+  "project": {"key": "agent-workflow-runtime", "revision": "a001000000000000000000000000000000000000"},
+  "worktree": {"key": "agent-workflow-runtime-0010", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "session": {"id": "SES-AR0010-REFERENCE"},
+  "observations": [
+    {"id": "OBS-AR0010-LIFECYCLE", "sequence": 1, "category": "lifecycle", "result": "passed", "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+    {"id": "OBS-AR0010-TEST", "sequence": 2, "category": "test", "result": "passed", "evidence_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+    {"id": "OBS-AR0010-UNCERTAINTY", "sequence": 3, "category": "provenance", "result": "blocked", "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"}
+  ],
+  "uncertainty": {"level": "medium", "factors": ["incomplete_observation", "conflicting_observation"]},
+  "alternatives": [
+    {"id": "ALT-AR0010-A", "evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "confidence": 40},
+    {"id": "ALT-AR0010-B", "evidence_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555", "confidence": 35}
+  ],
+  "confidence": {"level": "low", "score": 35}
+}
