@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-runtime-charter",
+  "version": "1.0.0",
+  "title": "Agent Workflow Runtime charter, authority matrix, and admission rule",
+  "normative": true,
+  "charter": {
+    "runtime_owns": [
+      "provider-neutral agent sessions",
+      "worker supervision and recovery",
+      "capability and worktree boundaries",
+      "normalized session events",
+      "evidence and publication bridges",
+      "adapter conformance and deterministic replay"
+    ],
+    "runtime_must_not_own": [
+      "task identity",
+      "claims",
+      "dependencies",
+      "revisions",
+      "leases",
+      "durable state",
+      "requirements",
+      "quality gates",
+      "evidence acceptance",
+      "oracle escalation",
+      "oracle decisions",
+      "reusable guidance",
+      "human-facing discussion input"
+    ]
+  },
+  "authority_matrix": [
+    {"authority": "coordinator", "domains": ["task identity", "claims", "dependencies", "revisions", "leases", "durable state"]},
+    {"authority": "quality", "domains": ["requirements", "quality gates", "evidence acceptance"]},
+    {"authority": "guidance", "domains": ["oracle escalation", "oracle decisions", "reusable guidance"]},
+    {"authority": "ui", "domains": ["human-facing discussion rendering", "human-facing discussion input"]},
+    {"authority": "runtime", "domains": ["provider-neutral agent sessions", "worker supervision and recovery", "capability and worktree boundaries", "normalized session events", "evidence and publication bridges", "adapter conformance and deterministic replay"]}
+  ],
+  "admission_rule": {
+    "id": "specification-before-implementation",
+    "decision": "admit",
+    "requires": ["valid_specification", "current_task_revision", "matching_specification_digest", "unique_evidence", "privacy_safe_projection"],
+    "rejects": ["malformed_specification", "missing_authority", "unsupported_authority_overlap", "stale_task_revision", "stale_specification_digest", "replayed_evidence", "duplicate_evidence", "prohibited_private_data"],
+    "binding": {"task_id_pattern": "^AR-[0-9]{4}$", "revision_minimum": 1, "digest": "sha256:64 lowercase hexadecimal characters"}
+  },
+  "invariants": [
+    "The runtime translates and enforces family contracts; it cannot manufacture authority-owned decisions.",
+    "An admission result is valid only for its exact task revision and canonical specification digest.",
+    "Evidence identifiers and digests are single-use within an admission record.",
+    "Public projections contain no credentials, private paths, prompts, transcripts, host identifiers, or personal data."
+  ],
+  "failure_semantics": {"mode": "fail_closed", "unknown_or_invalid_input": "reject", "remote_state": "not_consulted"},
+  "compatibility": {"major_change": "new specification_id or incompatible schema_version", "minor_change": "backward-compatible additional documented fields", "canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline"},
+  "limitations": [
+    "This checker validates contract shape, bindings, uniqueness, and privacy-safe projections; it does not prove implementation refinement or process isolation.",
+    "A digest proves bytes were bound, not that the referenced task or evidence is truthful; Coordinator and AWQ remain authoritative.",
+    "The checker has no network, provider, GitHub, hosted-CI, credential, or runtime connection and cannot establish remote success."
+  ],
+  "follow_up": ["Implement adapters and supervisor transitions under separate ARs with positive and hostile tests.", "Integrate Coordinator, AWQ, AWG, and UI clients only through their authoritative contracts."]
+}
