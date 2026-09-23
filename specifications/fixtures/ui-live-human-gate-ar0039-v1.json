@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-ui-live-human-gate", "version": "1.0.0"},
+  "task": {"id": "AR-0039", "revision": 3},
+  "project": {"key": "agent-workflow-runtime", "revision": "0123456789abcdef0123456789abcdef01234567"},
+  "worktree": {"key": "agent-workflow-runtime-0039", "digest": "sha256:09dafbea64ecf81f2e3035728bc9417df3ea87f4950e81c27e8a7c70166b284b"},
+  "session": {"id": "SES-AR0039-X"},
+  "lease": {"id": "LSE-AR0039-A", "worker_id": "WRK-AR0039-A", "digest": "sha256:d1c895c3185dcb36568d7d358723fbc3f56d372501ca912d1fa00de20e5ac389"},
+  "tool_versions": [{"id": "UI-AR0039", "version": "1.0.0"}],
+  "request": {"id": "REQ-AR0039-GATE", "attempt": 1, "context_digest": "sha256:c15784400b69210d793f2854c67bd29dec65205cf3f60c7182ee778f2be6c3d0"},
+  "human_gate": {
+    "request_id": "REQ-AR0039-GATE", "attempt": 1, "input_event_id": "EVT-AR0039-INPUT", "selection_id": "ALT-AR0039-ONE",
+    "status": "validated_input_pending_authority", "authority": "ui", "quality_status": "not_decided", "guidance_status": "not_decided",
+    "binding_digest": "sha256:1cfc2d816741ccef7d600227d092b8ed3617e632538adcce875108f805523806",
+    "input_digest": "sha256:ca687a65bd2559a072ad257d2788cd6a249c9cea5f1c60283536ea3904f49b43"
+  },
+  "events": [
+    {"event_id": "EVT-AR0039-OPEN", "sequence": 1, "event_type": "session_opened", "disposition": "prepared", "evidence_digest": "sha256:4da785d117c2cfce6bdb06cbc79af5053fea06956e62c9cc5b0039b54b62a922"},
+    {"event_id": "EVT-AR0039-RENDER", "sequence": 2, "event_type": "gate_rendered", "disposition": "rendered", "evidence_digest": "sha256:80fca69213657cf2c1f59f22c2c09171e9f4320ae4e9297abd5be78c2b72262b"},
+    {"event_id": "EVT-AR0039-INPUT", "sequence": 3, "event_type": "input_validated", "disposition": "validated_input", "evidence_digest": "sha256:dfa616dbb1121a35c47ff2227a40ef4c4073de006a70009a5ea4ab6d5a99bc77", "request_id": "REQ-AR0039-GATE", "selection_id": "ALT-AR0039-ONE", "validation": "ui_validated"},
+    {"event_id": "EVT-AR0039-CHECKPOINT", "sequence": 4, "event_type": "ui_checkpointed", "disposition": "checkpointed", "evidence_digest": "sha256:6e56c06ce6d91a169cdd58fa1ff02411ffc53494fea5da07c38dea3d6a6d7927"}
+  ],
+  "final_event": {"event_id": "EVT-AR0039-EXIT", "sequence": 5, "event_type": "safe_exit", "disposition": "safe_exit", "reason": "user_requested", "evidence_digest": "sha256:13abaa8e8ad88fc8b5a55a917f6b337dc04e1651f71e3f1b9e1e6b29db1358dd"},
+  "resume": {"status": "resumable", "checkpoint_event_id": "EVT-AR0039-CHECKPOINT", "prior_trace_digest": "sha256:755e0fea9a45b3706d1af4d034074bff25f19f5f179b441aba977edbc807258c", "binding_digest": "sha256:1cfc2d816741ccef7d600227d092b8ed3617e632538adcce875108f805523806"}
+}

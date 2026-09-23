@@ -1,0 +1,29 @@
+{
+  "checker": "awr-ui-live-human-gate-checker/1.0.0",
+  "task_revision": 3,
+  "specification_digest": "sha256:abb5a3bff5f7787ab04879e36477f48a0059bafadb57c46202942ac7030eb112",
+  "record_digest": "sha256:40cc5e51a5896ddc511b99e7395103abb6a5a8e62ea3288981c03fee947ffb59",
+  "projection": {
+    "protocol": "awr-ui-live-human-gate@1.0.0",
+    "visibility": "private_revision_bound",
+    "task": {"id": "AR-0039", "revision": 3},
+    "project": {"key": "agent-workflow-runtime", "revision": "0123456789abcdef0123456789abcdef01234567"},
+    "worktree": {"key": "agent-workflow-runtime-0039", "digest": "sha256:09dafbea64ecf81f2e3035728bc9417df3ea87f4950e81c27e8a7c70166b284b"},
+    "session": {"id": "SES-AR0039-X"},
+    "lease": {"id": "LSE-AR0039-A", "worker_id": "WRK-AR0039-A", "digest": "sha256:d1c895c3185dcb36568d7d358723fbc3f56d372501ca912d1fa00de20e5ac389"},
+    "request": {"id": "REQ-AR0039-GATE", "attempt": 1, "context_digest": "sha256:c15784400b69210d793f2854c67bd29dec65205cf3f60c7182ee778f2be6c3d0"},
+    "events": [
+      {"event_id": "EVT-AR0039-OPEN", "sequence": 1, "event_type": "session_opened", "evidence_digest": "sha256:4da785d117c2cfce6bdb06cbc79af5053fea06956e62c9cc5b0039b54b62a922"},
+      {"event_id": "EVT-AR0039-RENDER", "sequence": 2, "event_type": "gate_rendered", "evidence_digest": "sha256:80fca69213657cf2c1f59f22c2c09171e9f4320ae4e9297abd5be78c2b72262b"},
+      {"event_id": "EVT-AR0039-INPUT", "sequence": 3, "event_type": "input_validated", "evidence_digest": "sha256:dfa616dbb1121a35c47ff2227a40ef4c4073de006a70009a5ea4ab6d5a99bc77"},
+      {"event_id": "EVT-AR0039-CHECKPOINT", "sequence": 4, "event_type": "ui_checkpointed", "evidence_digest": "sha256:6e56c06ce6d91a169cdd58fa1ff02411ffc53494fea5da07c38dea3d6a6d7927"}
+    ],
+    "human_gate": {"request_id": "REQ-AR0039-GATE", "input_event_id": "EVT-AR0039-INPUT", "input_digest": "sha256:ca687a65bd2559a072ad257d2788cd6a249c9cea5f1c60283536ea3904f49b43", "status": "validated_input_pending_authority", "quality_status": "not_decided", "guidance_status": "not_decided"},
+    "safe_exit": "resumable",
+    "live_verification": "unverified",
+    "specification_digest": "sha256:abb5a3bff5f7787ab04879e36477f48a0059bafadb57c46202942ac7030eb112",
+    "projection_digest": "sha256:c9917c02400b3c40119a33e7b8eae8922d2d47053f6c8911b0c77582de8162e4"
+  },
+  "live_verification": "unverified",
+  "evidence_digest": "sha256:0e31732b45ed561e5caf209ece858402ece9259c223bf8dc65672a12f0f44580"
+}
