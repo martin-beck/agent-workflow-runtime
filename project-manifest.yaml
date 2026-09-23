@@ -1,0 +1,31 @@
+# Copyright (C) Huawei Technologies Co., Ltd. 2026. All rights reserved.
+schema: 1
+project:
+  name: agent-workflow-runtime
+  title: Agent Workflow Runtime
+  kind: execution-runtime
+  organization: martin-beck
+  state_repository: martin-beck/agent-workflow-runtime-state
+  excluded_examples:
+    - agent-systems-benchmark
+    - agent-relay
+authorities:
+  coordinator:
+    repository: martin-beck/agent-workflow-coordinator
+    owns: [task identity, claims, dependencies, revisions, leases, durable state]
+  quality:
+    repository: martin-beck/agent-workflow-quality
+    owns: [requirements, gates, adapters, evidence contracts]
+  guidance:
+    repository: martin-beck/agent-workflow-guidance
+    owns: [oracle escalation, decisions, reusable guidance]
+  ui:
+    repository: martin-beck/agent-workflow-ui
+    owns: [human-facing discussion rendering and input]
+runtime_owns:
+  - provider-neutral agent sessions
+  - worker supervision and recovery
+  - capability and worktree boundaries
+  - evidence and publication bridges
+  - adapter conformance and replay
+
