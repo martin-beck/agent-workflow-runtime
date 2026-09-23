@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-opencode-live-adapter",
+  "version": "1.0.0",
+  "title": "Bounded OpenCode-compatible live provider adapter contract",
+  "normative": true,
+  "task": {"id": "AR-0034", "revision": 3},
+  "authority": {"coordinator": ["task identity", "revision", "claim", "lease", "durable state"], "quality": ["requirements", "gates", "evidence acceptance"], "guidance": ["uncertainty", "oracle decisions", "reusable guidance"], "ui": ["human-facing rendering", "validated human input"], "runtime": ["translation", "bounded execution", "normalized lifecycle"]},
+  "lifecycle": {"states": ["admitted", "requested", "responding", "interrupted", "resumed", "completed"], "transitions": [["admitted", "request", "requested"], ["requested", "response", "responding"], ["responding", "interrupt", "interrupted"], ["interrupted", "resume", "resumed"], ["resumed", "close", "completed"]], "max_events": 5},
+  "request_response": {"request": "one bounded operation, opaque input digest, unique request id", "response": "one correlated status and opaque output digest", "correlation": "request id and exact request/response digests", "replay": "reject duplicate request, response, or lifecycle sequence"},
+  "gates": {"credential": "reference_only", "network": "denied", "provider": "not_selected", "human_approval": "not_granted", "execute": false},
+  "privacy": {"allow": ["opaque identifiers", "enumerations", "bounded sequence numbers", "SHA-256 digests"], "forbid": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "unbounded argv or commands"]},
+  "compatibility": {"canonical_json": "UTF-8, sorted keys, compact separators", "major_change": "new specification_id or schema_version", "minor_change": "documented compatible version only"},
+  "failure_semantics": {"mode": "fail_closed", "invalid_input": "reject without partial output", "stale_or_crossed_binding": "reject without state change", "interruption": "require acknowledged interruption and fenced resume", "live_unavailable": "local qualification with remote verification unverified"},
+  "limitations": ["The harness validates synthetic observations only and never starts OpenCode, a process, provider, network, LLM, or tool.", "Capability admission is not provider authorization and does not validate a Coordinator lease.", "A passing fixture is not live execution, hosted CI, AWQ acceptance, AWG decision, UI approval, or durable-state completion."],
+  "follow_up": ["AWQ must independently qualify any evidence before live integration.", "AWG must decide material provider and recovery alternatives; UI decisions require a private revision-bound session.", "A later integration change must provide Coordinator lease, host enforcement, credential, network, and provider evidence separately."]
+}
