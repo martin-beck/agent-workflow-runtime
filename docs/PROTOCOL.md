@@ -76,3 +76,11 @@ python3 scripts/check_boundary.py \
 It is an offline structural check. It records no private path or tool output,
 and a passing result is not proof that a worktree is physically isolated or
 that a provider, remote host, Coordinator, AWQ, AWG, or UI was reached.
+
+AR-0005 adds the supervisor lifecycle protocol. A valid admission starts in
+`admitted`; only the current worker/lease may start, heartbeat, cancel, hand
+off, complete, or fail. Lease expiry, stale revisions, replay, cross-worker
+actions, early heartbeats, invalid transitions, and privacy-bearing records are
+rejected. `handoff` and `stale_recover` fence the prior lease and require a new
+worker/lease before `resume`. See `specifications/supervisor-lifecycle-v1.json`
+and run `python3 scripts/check_supervisor.py` for the offline trace check.

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-supervisor-lifecycle", "version": "1.0.0"},
+  "task": {"id": "AR-0005", "revision": 5},
+  "project": {"key": "agent-workflow-runtime", "revision": "b36db37faa60d31b58d1e86e56cdcc7f5826fcd5"},
+  "worktree": {"key": "agent-workflow-runtime-0005", "base_revision": "b36db37faa60d31b58d1e86e56cdcc7f5826fcd5", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "session": {"id": "SES-AR0005-LIFECYCLE"},
+  "worker": {"id": "WRK-AR0005-A"},
+  "lease": {"id": "LSE-AR0005-A", "expires": 110},
+  "lifecycle": {"initial": "admitted", "final": "closed"},
+  "actions": [
+    {"id": "ACT-START", "sequence": 1, "state": "admitted", "operation": "start", "worker": "WRK-AR0005-A", "lease": "LSE-AR0005-A", "time": 1, "disposition": "accepted", "lease_expires": 110, "new_worker": null, "new_lease": null, "new_expiry": null},
+    {"id": "ACT-HEARTBEAT", "sequence": 2, "state": "active", "operation": "heartbeat", "worker": "WRK-AR0005-A", "lease": "LSE-AR0005-A", "time": 10, "disposition": "accepted", "lease_expires": 120, "new_worker": null, "new_lease": null, "new_expiry": 120},
+    {"id": "ACT-HANDOFF", "sequence": 3, "state": "active", "operation": "handoff", "worker": "WRK-AR0005-A", "lease": "LSE-AR0005-A", "time": 20, "disposition": "accepted", "lease_expires": 130, "new_worker": "WRK-AR0005-B", "new_lease": "LSE-AR0005-B", "new_expiry": 130},
+    {"id": "ACT-RESUME", "sequence": 4, "state": "handed_off", "operation": "resume", "worker": "WRK-AR0005-B", "lease": "LSE-AR0005-B", "time": 21, "disposition": "accepted", "lease_expires": 130, "new_worker": null, "new_lease": null, "new_expiry": null},
+    {"id": "ACT-CANCEL", "sequence": 5, "state": "active", "operation": "cancel", "worker": "WRK-AR0005-B", "lease": "LSE-AR0005-B", "time": 30, "disposition": "interrupted", "lease_expires": 130, "new_worker": null, "new_lease": null, "new_expiry": null},
+    {"id": "ACT-CANCEL-ACK", "sequence": 6, "state": "cancelling", "operation": "cancel_ack", "worker": "WRK-AR0005-B", "lease": "LSE-AR0005-B", "time": 31, "disposition": "accepted", "lease_expires": 130, "new_worker": null, "new_lease": null, "new_expiry": null}
+  ],
+  "evidence": {"task_revision": 5, "specification_digest": "sha256:eba1d3c84929f9025f4da87b7ebc2c607f1d6e1b0f2875c1a0b094b71e9dcb45", "checker": "awr-supervisor-checker/1.0.0", "safe_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}
+}
