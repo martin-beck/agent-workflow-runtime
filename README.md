@@ -152,3 +152,13 @@ publication remains `not_performed` and remote verification remains
 --spec specifications/fresh-clone-release-lock-v1.json --record
 specifications/fixtures/fresh-clone-release-ar0027-v1.json
 --expected-revision 3`.
+
+AR-0028 adds `specifications/umbrella-maintenance-v1.json`, a revision-3-bound
+offline registration and maintenance workflow for Coordinator, runtime, AWQ,
+AWG, UI, release, and self-evolution phases. It preserves authority ownership
+and proposal-only self-evolution; release is `not_performed` and remote
+verification is `unverified`. Validate with `python3
+scripts/check_umbrella_maintenance.py --spec
+specifications/umbrella-maintenance-v1.json --record
+specifications/fixtures/umbrella-maintenance-ar0028-v1.json
+--expected-revision 3`.

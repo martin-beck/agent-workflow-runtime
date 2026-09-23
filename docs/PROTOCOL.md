@@ -347,3 +347,11 @@ and rollback observations to AR-0027 revision 3. The checker requires exact
 bounded versions and digests, explicit supplied signature/DCO observations,
 and an exact rollback target. Installation, publication, remote verification,
 and rollback execution remain `not_performed` or `unverified`.
+
+## AR-0028 umbrella registration and maintenance
+
+`umbrella-maintenance-v1.json` binds the seven ordered maintenance phases to
+AR-0028 revision 3. The checker preserves the authority membership and
+requires self-evolution to remain proposal-only. Registration is supplied
+evidence; no umbrella update, Coordinator/AWQ/AWG/UI operation, release,
+publication, provider, network, LLM, or durable-state action is performed.

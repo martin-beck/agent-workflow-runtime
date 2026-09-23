@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-umbrella-maintenance",
+  "version": "1.0.0",
+  "title": "Agent Workflow umbrella registration and maintenance workflow",
+  "normative": true,
+  "task": {"id": "AR-0028", "revision": 3},
+  "authority": {
+    "coordinator": ["task identity", "dependencies", "claims", "revisions", "leases", "durable state"],
+    "runtime": ["execution", "supervision", "isolation", "normalized events", "bridges"],
+    "quality": ["requirements", "quality gates", "adapters", "evidence acceptance"],
+    "guidance": ["uncertainty classification", "oracle escalation", "decisions", "reusable guidance"],
+    "ui": ["human-facing discussion rendering", "human input", "validated final events"],
+    "release": ["release evidence observation", "exact-head correlation"]
+  },
+  "registration": {
+    "family": "agent-workflow",
+    "runtime_key": "agent-workflow-runtime",
+    "role": "provider-neutral execution-and-integration-layer",
+    "members": ["coordinator", "runtime", "quality", "guidance", "ui"],
+    "authority_transfer": "none"
+  },
+  "states": ["unregistered", "registered", "maintenance_ready", "blocked"],
+  "phases": ["coordinator", "runtime", "quality", "guidance", "ui", "release", "self_evolution"],
+  "maintenance": {
+    "cycle_identity": "task revision plus project revision plus worktree digest",
+    "ordering": "coordinator, runtime, quality, guidance, ui, release, self_evolution",
+    "compatibility": "exact specification and protocol digests are required",
+    "self_evolution": "propose follow-up ARs; never self-approve authority or completion"
+  },
+  "compatibility": {
+    "mode": "exact",
+    "required_contracts": [
+      "awr-runtime-charter@1.0.0",
+      "awr-autonomous-workflow@1.0.0",
+      "awr-fresh-clone-release-lock@1.0.0"
+    ],
+    "unknown_contracts": "reject",
+    "changed_contract_digest": "reject"
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "invalid_input": "reject_without_partial_output",
+    "stale_or_replayed": "reject_without_state_change",
+    "interrupted": "retain_blocked_state_and_require_requalification",
+    "unauthorized_transition": "reject_without_state_change",
+    "side_effects": "No Coordinator, AWQ, AWG, UI, Git, provider, network, LLM, publication, release, or durable-state operation is performed."
+  },
+  "privacy": {
+    "allowed_values": "bounded identifiers, phase/status enumerations, booleans, versions, and SHA-256 digests",
+    "reject": ["credentials", "private paths", "prompts", "transcripts", "host identifiers", "emails", "personal data", "raw command output"]
+  },
+  "limitations": [
+    "A passing record registers and evaluates supplied observations; it does not update the family umbrella or any authoritative repository.",
+    "Coordinator, AWQ, AWG, and UI decisions remain external observations and are not manufactured by this runtime contract.",
+    "Release and remote observations remain unperformed or unverified; exact-head evidence is supplied, not independently verified.",
+    "Self-evolution records follow-up proposals only; it cannot rewrite this specification or approve its own changes."
+  ],
+  "follow_up": [
+    "Independent AWQ qualification and review are required before publication or durable-state completion.",
+    "Future ARs may bind concrete hosted integrations only after their authority and privacy contracts are approved."
+  ]
+}
