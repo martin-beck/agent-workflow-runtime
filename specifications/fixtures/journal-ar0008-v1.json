@@ -1,0 +1,44 @@
+[
+  {
+    "disposition": "started",
+    "event_type": "session_started",
+    "operation_id": "OP-AR0008-START",
+    "payload": {"component": "journal", "mode": "offline"},
+    "previous_record_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "protocol": {"id": "awr-privacy-safe-event-journal", "version": "1.0.0"},
+    "record_digest": "sha256:c43b3747b20ee41566cb845fe9b44522909fee96b9debe0b84ec5d15f5843bed",
+    "record_id": "JR-AR0008-START",
+    "schema_version": 1,
+    "sequence": 1,
+    "session_id": "SES-AR0008-REFERENCE",
+    "task": {"id": "AR-0008", "revision": 5}
+  },
+  {
+    "disposition": "passed",
+    "event_type": "test_result",
+    "operation_id": "OP-AR0008-TEST",
+    "payload": {"check": "hostile-cases", "count": 5},
+    "previous_record_digest": "sha256:c43b3747b20ee41566cb845fe9b44522909fee96b9debe0b84ec5d15f5843bed",
+    "protocol": {"id": "awr-privacy-safe-event-journal", "version": "1.0.0"},
+    "record_digest": "sha256:9002e7cfc65ae4da99e8ec7092e43fa504f076078b5f9f9c25d9f0b87bbdba3b",
+    "record_id": "JR-AR0008-TEST",
+    "schema_version": 1,
+    "sequence": 2,
+    "session_id": "SES-AR0008-REFERENCE",
+    "task": {"id": "AR-0008", "revision": 5}
+  },
+  {
+    "disposition": "completed",
+    "event_type": "completed",
+    "operation_id": "OP-AR0008-DONE",
+    "payload": {"result": "accepted"},
+    "previous_record_digest": "sha256:9002e7cfc65ae4da99e8ec7092e43fa504f076078b5f9f9c25d9f0b87bbdba3b",
+    "protocol": {"id": "awr-privacy-safe-event-journal", "version": "1.0.0"},
+    "record_digest": "sha256:a4bea7885c14a9626794c81b5ec328ef380a9ddf51fe7b9af0f2fb4c76e6575c",
+    "record_id": "JR-AR0008-DONE",
+    "schema_version": 1,
+    "sequence": 3,
+    "session_id": "SES-AR0008-REFERENCE",
+    "task": {"id": "AR-0008", "revision": 5}
+  }
+]
