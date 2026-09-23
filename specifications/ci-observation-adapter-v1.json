@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-ci-observation-adapter",
+  "version": "1.0.0",
+  "title": "Provider-neutral hosted-check and external-observation adapter",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "task revision", "worktree identity"],
+    "quality": ["local qualification policy", "evidence acceptance"],
+    "runtime": ["bounded request and observation correlation", "offline verification of supplied evidence"]
+  },
+  "binding": {
+    "task": "AR-0013 at Coordinator revision 1",
+    "project_revision": "sha256 digest",
+    "worktree": "stable key plus sha256 digest",
+    "correlation": "request ID, target digest, and correlation digest"
+  },
+  "states": {
+    "request": "prepared",
+    "local_qualification": "qualified",
+    "remote_observation": "success with verification unverified",
+    "disposition": "local_qualified_remote_unverified"
+  },
+  "rules": [
+    "The adapter prepares a bounded request but never sends it.",
+    "Local qualification is separate from any hosted or remote observation.",
+    "A remote success is accepted only with verification unverified and exact request/target correlation.",
+    "No record may claim remote verification, provider success, runtime success, or quality acceptance.",
+    "Every component has one unique evidence reference whose digest is its canonical SHA-256 digest."
+  ],
+  "privacy": {
+    "allowed_values": "bounded identifiers, enumerations, booleans, integer revision, and SHA-256 digests",
+    "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "emails", "raw output", "unknown fields"]
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "replayed evidence", "unknown fields", "private values", "wrong correlation", "verified remote success", "network or provider side effects"],
+    "side_effects": "The model and checker perform no network, provider, CI, remote, Git, Coordinator, AWQ, AWG, UI, or durable-state operation."
+  },
+  "limitations": [
+    "A valid envelope proves only that supplied observations are structurally and digest-consistent.",
+    "Local qualification is not hosted-check success, and an unverified remote success is not verified execution or quality acceptance.",
+    "The checker does not contact a provider, inspect hosted CI, verify a remote host, run a check, or cryptographically verify external evidence."
+  ],
+  "follow_up": [
+    "Coordinator remains authoritative for task revision, claims, leases, and durable state.",
+    "AWQ remains authoritative for requirements, gates, and acceptance of this evidence.",
+    "A future integration may consume this envelope only through approved Coordinator and AWQ contracts."
+  ]
+}
