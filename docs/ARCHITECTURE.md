@@ -85,3 +85,12 @@ The offline reference model accepts only complete normalized observations and
 rejects any exceeded budget, incomplete process-tree observation, timeout, or
 unacknowledged cancellation. It is evidence evaluation, not host enforcement;
 OS-specific containment and live measurement remain a later integration scope.
+
+## AR-0009 AWQ evidence bridge
+
+The EvidenceBridge projects bounded, digest-referenced runtime observations
+into an AWQ-shaped envelope while preserving the exact Coordinator task
+revision, project revision, worktree, and session. Its `quality_status` is
+always `not_decided`: observation results are inputs for AWQ review, never AWQ
+acceptance. The standard-library model and checker are
+`scripts/awq_evidence_bridge.py` and `scripts/check_awq_evidence_bridge.py`.

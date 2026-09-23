@@ -101,3 +101,15 @@ can resume only after a newer fenced worker/lease replays a verified checkpoint.
 The offline model and checker are `scripts/checkpoint_recovery.py` and
 `scripts/check_checkpoint_recovery.py`. They validate observations only and do
 not implement durable storage, process supervision, or real crash recovery.
+
+AR-0009 adds the AWQ evidence bridge. Its projection preserves the exact task
+revision and execution binding and sets `quality_status` to `not_decided`; AWQ
+remains the only authority that can accept evidence. Check it with:
+
+```text
+python3 scripts/check_awq_evidence_bridge.py --spec specifications/awq-evidence-bridge-v1.json --record specifications/fixtures/evidence-bridge-ar0009-v1.json --evidence specifications/fixtures/evidence-bridge-evidence-ar0009-v1.json --expected-revision 5
+```
+
+The checker validates supplied structure and digests only. It does not submit
+evidence, consult AWQ, or establish Coordinator, provider, hosted-CI, remote,
+or runtime success.

@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-awq-evidence-bridge",
+  "version": "1.0.0",
+  "title": "AWQ evidence bridge",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "task revision", "worktree identity"],
+    "quality": ["requirements", "quality gates", "evidence acceptance"],
+    "runtime": ["bounded observation projection", "digest preservation"]
+  },
+  "binding": {
+    "task_revision": "positive integer supplied by Coordinator",
+    "identifiers": "AR-0000, BR-... or OBS-... stable opaque identifiers",
+    "digest": "sha256: followed by 64 lowercase hexadecimal characters"
+  },
+  "observation": {
+    "required": ["id", "sequence", "category", "result", "evidence_digest"],
+    "categories": ["test", "formal", "resource", "privacy", "provenance", "lifecycle"],
+    "results": ["passed", "failed", "blocked", "skipped", "not_run"],
+    "ordering": "Sequences start at 1 and increase by one; IDs and evidence digests are single-use.",
+    "maximum": 64
+  },
+  "projection": {
+    "protocol": "awr-awq-evidence@1.0.0",
+    "preserves": ["task", "project", "worktree", "session", "observation identifiers", "observation results", "evidence digests"],
+    "quality_status": "not_decided",
+    "rule": "The bridge reports observations for AWQ review and never emits accepted, rejected, or quality-passed decisions."
+  },
+  "privacy": {
+    "allowed_values": "Stable identifiers, bounded integers, enumerated categories/results, revisions, and SHA-256 digests only.",
+    "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "unknown fields"]
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["malformed input", "stale task revision", "cross-binding identity", "replayed observation", "digest mismatch", "quality decision", "privacy-bearing value"],
+    "side_effects": "The model and checker perform no network, provider, process, Git, Coordinator, AWQ, AWG, UI, or LLM operation."
+  },
+  "limitations": [
+    "A valid projection proves only structural consistency of supplied observations.",
+    "An observation result is not an AWQ quality decision and a digest does not prove evidence truth.",
+    "The standard-library model does not submit evidence, consult AWQ, or enforce Coordinator state."
+  ],
+  "follow_up": ["AWQ must independently apply its authoritative requirements and acceptance policy.", "A later integration task may transport this projection through an authoritative AWQ contract."]
+}

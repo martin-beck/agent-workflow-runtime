@@ -190,3 +190,13 @@ python3 scripts/check_privacy_safe_journal.py \
 The model does not provide fsync, locking, signatures, crash durability, or
 general personal-data classification. It performs no network, provider,
 Coordinator, AWQ, AWG, UI, Git, or LLM operation.
+
+## AR-0009 AWQ evidence bridge
+
+`awq-evidence-bridge-v1.json` defines the smallest versioned projection from
+runtime observations to AWQ evidence. The offline model is
+`scripts/awq_evidence_bridge.py`; its checker rejects stale or cross-worktree
+bindings, replayed digests, privacy-bearing fields, unknown fields, and any
+attempt to encode a quality decision. `quality_status` is deliberately
+`not_decided`; AWQ must independently apply its requirements and acceptance
+policy. No AWQ, Coordinator, provider, network, or runtime connection is made.
