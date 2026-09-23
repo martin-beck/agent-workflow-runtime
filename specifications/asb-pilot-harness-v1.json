@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-asb-offline-pilot-harness",
+  "version": "1.0.0",
+  "title": "Offline ASB end-to-end pilot harness",
+  "normative": true,
+  "task": {"id": "AR-0044", "revision": 3},
+  "composition": {
+    "orchestrator": "awr-full-workflow-orchestrator@1.0.0",
+    "workflow": ["admission", "supervisor", "adapter", "journal", "awq", "awg", "ui", "publication", "security"],
+    "asb_stages": ["setup", "selection", "configuration", "run", "record", "replay", "comparison"]
+  },
+  "asb_observations": {
+    "setup": "benchmark inputs and deterministic case identity are observed; no benchmark is launched",
+    "selection": "agent identity and bounded capability selection are observed without provider discovery",
+    "configuration": "agent configuration is represented by digests and finite limits only",
+    "run": "not_performed is mandatory; no provider, LLM, process, host, or network is contacted",
+    "record": "supplied bounded observations are recorded by digest",
+    "replay": "the supplied record is deterministically replayed and must be idempotent",
+    "comparison": "supplied observations are compared by digest and bounded result, not live performance"
+  },
+  "privacy": {"allowed": ["identifiers", "enums", "booleans", "versions", "digests", "bounded counts", "bounded integers"], "reject": ["credentials", "secrets", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "network values"]},
+  "failure_semantics": {"mode": "fail_closed", "side_effects": "No ASB run, provider, network, LLM, hosted CI, Coordinator, durable-state, Git, publication, or authority operation is performed."},
+  "limitations": ["The harness validates supplied observations only.", "A passing pilot is structural offline evidence, not an ASB result, provider qualification, benchmark measurement, or live workflow success."]
+}
