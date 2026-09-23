@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-lease-claim-fencing",
+  "version": "1.0.0",
+  "title": "Versioned Coordinator lease and claim fencing state machine",
+  "normative": true,
+  "task": {"id": "AR-0047", "revision": 5},
+  "authority": {
+    "coordinator": ["task identity", "claims", "revisions", "leases", "durable state"],
+    "runtime": ["bounded translation", "fencing enforcement", "offline replay"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "decisions", "reusable guidance"],
+    "ui": ["human-facing rendering", "validated input"]
+  },
+  "binding": {"project": "agent-workflow-runtime", "worktree": "agent-workflow-runtime-0047"},
+  "operations": {
+    "claim": "CAS current revision; open task and no owner only; create one lease and advance revision",
+    "heartbeat": "CAS current revision; current owner, lease, and fence only; strictly advance monotonic time and expiry",
+    "handoff": "CAS current revision; current unexpired owner atomically replaced by one new owner and fence",
+    "recover_expired": "CAS current revision; only an expired owner is replaced, atomically and with a new fence",
+    "release": "CAS current revision; current owner and fence only; clear the owner and advance revision"
+  },
+  "invariants": [
+    "At most one active owner exists at every committed revision.",
+    "Every ownership replacement strictly increases the fencing token.",
+    "Every mutating operation compares the exact current CAS revision.",
+    "An old owner, lease, or fence cannot act after handoff or expiry recovery.",
+    "Operation IDs are single-use; identical replay returns the original response and changed replay rejects.",
+    "An ambiguous commit is never guessed; retry by operation ID is the only resolution."
+  ],
+  "durability": {
+    "journal": "canonical append-only digest-linked records",
+    "commit": "state and operation result commit atomically before success is observable",
+    "crash_windows": ["before_commit", "after_commit_before_response"],
+    "recovery": "ambiguous outcome remains unknown until the same operation ID is replayed"
+  },
+  "time": {"kind": "bounded integer observation", "rule": "heartbeats and lease expiry are strictly monotonic"},
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale CAS revision", "second active owner", "wrong owner or lease", "stale fence", "expired heartbeat", "early recovery", "replayed changed operation", "unknown fields", "privacy-bearing values"],
+    "external_effects": "none: no network, Coordinator repository, provider, Git, or durable-state mutation"
+  },
+  "limitations": [
+    "This is a deterministic local model and does not prove a distributed transport or filesystem atomicity.",
+    "Live Coordinator, hosted CI, remote execution, and production crash qualification remain unverified."
+  ],
+  "follow_up": ["Use the project-bound Coordinator transport for live qualification only after independent approval and security gates."]
+}
