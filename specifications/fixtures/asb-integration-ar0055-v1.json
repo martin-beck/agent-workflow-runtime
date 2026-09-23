@@ -1,0 +1,397 @@
+{
+  "schema_version": 1,
+  "protocol": {
+    "id": "awr-asb-integration",
+    "version": "1.0.0"
+  },
+  "task": {
+    "id": "AR-0055",
+    "revision": 5
+  },
+  "project": {
+    "key": "agent-workflow-runtime",
+    "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "worktree": {
+    "key": "agent-workflow-runtime-0055",
+    "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "session": {
+    "id": "SES-AR0055-OFFLINE"
+  },
+  "trace": [
+    {
+      "sequence": 1,
+      "operation_id": "OP-AR0055-SETUP",
+      "stage": "setup_init",
+      "state_before": "new",
+      "state_after": "initialized",
+      "status": "observed",
+      "binding_digest": "sha256:25f6e58dcb4388b62e8be763b61863becccd7aa839d47db6a11cdc955d463331",
+      "input_digest": "sha256:523cf1787a1cb284570139dfad66f7f13d7308cbb95b7d555f5e17606a39208a",
+      "evidence_digest": "sha256:9157a6fe6fcc6de7cd2094f7f322d63a98ff21584464bf8e1fe2241f9ef24df9",
+      "claims": {
+        "execute": false,
+        "benchmark": "not_performed",
+        "provider": "not_performed",
+        "network": "disabled",
+        "llm": "not_performed",
+        "durable_state": "not_performed",
+        "remote_verification": "unverified"
+      },
+      "bounds": {
+        "max_events": 16,
+        "max_agents": 8,
+        "max_bytes": 4096,
+        "max_retries": 1
+      },
+      "cancellation": {
+        "requested": false,
+        "acknowledged": false
+      },
+      "details": {
+        "setup": "accepted",
+        "control_protocol": "asb-control-v1",
+        "ui_projection": "runner_authoritative"
+      }
+    },
+    {
+      "sequence": 2,
+      "operation_id": "OP-AR0055-AGENT1",
+      "stage": "add_first_agent",
+      "state_before": "initialized",
+      "state_after": "agent_added",
+      "status": "observed",
+      "binding_digest": "sha256:25f6e58dcb4388b62e8be763b61863becccd7aa839d47db6a11cdc955d463331",
+      "input_digest": "sha256:ec5e974a28e84b6e81988ba8f17f1fa8411055796a5972fdc57f3fd9f72a4934",
+      "evidence_digest": "sha256:82d154d1abf3c7704665508c6ff76dfe53d4b8a87710fc39a491adc57c786860",
+      "claims": {
+        "execute": false,
+        "benchmark": "not_performed",
+        "provider": "not_performed",
+        "network": "disabled",
+        "llm": "not_performed",
+        "durable_state": "not_performed",
+        "remote_verification": "unverified"
+      },
+      "bounds": {
+        "max_events": 16,
+        "max_agents": 8,
+        "max_bytes": 4096,
+        "max_retries": 1
+      },
+      "cancellation": {
+        "requested": false,
+        "acknowledged": false
+      },
+      "details": {
+        "agent_id": "AG-CODEX",
+        "agent_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "configuration_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "agent_count": 1
+      }
+    },
+    {
+      "sequence": 3,
+      "operation_id": "OP-AR0055-CONNECT",
+      "stage": "agent_connection",
+      "state_before": "agent_added",
+      "state_after": "connected",
+      "status": "observed",
+      "binding_digest": "sha256:25f6e58dcb4388b62e8be763b61863becccd7aa839d47db6a11cdc955d463331",
+      "input_digest": "sha256:0a10f5ebdab24374f6639b9ed9bcf95dd6d8dbaab12eecf5ac48eca7d396c75e",
+      "evidence_digest": "sha256:25eeb946fbdd824a4475abf01f828a52a0aafbbe3511d63702ea43ebd7d8bbd5",
+      "claims": {
+        "execute": false,
+        "benchmark": "not_performed",
+        "provider": "not_performed",
+        "network": "disabled",
+        "llm": "not_performed",
+        "durable_state": "not_performed",
+        "remote_verification": "unverified"
+      },
+      "bounds": {
+        "max_events": 16,
+        "max_agents": 8,
+        "max_bytes": 4096,
+        "max_retries": 1
+      },
+      "cancellation": {
+        "requested": false,
+        "acknowledged": false
+      },
+      "details": {
+        "agent_id": "AG-CODEX",
+        "connection": "accepted",
+        "connection_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "transport": "offline_fake"
+      }
+    },
+    {
+      "sequence": 4,
+      "operation_id": "OP-AR0055-PREFLIGHT",
+      "stage": "preflight_eligibility",
+      "state_before": "connected",
+      "state_after": "eligible",
+      "status": "observed",
+      "binding_digest": "sha256:25f6e58dcb4388b62e8be763b61863becccd7aa839d47db6a11cdc955d463331",
+      "input_digest": "sha256:75b51d1c0d13c6da608187c3102e95bcc88bd9e6e4c8431a6403bf7105bb5b82",
+      "evidence_digest": "sha256:a198df25b4a46684e51af48eee230a0f12e12a28b51560d5925e5e45c7c86532",
+      "claims": {
+        "execute": false,
+        "benchmark": "not_performed",
+        "provider": "not_performed",
+        "network": "disabled",
+        "llm": "not_performed",
+        "durable_state": "not_performed",
+        "remote_verification": "unverified"
+      },
+      "bounds": {
+        "max_events": 16,
+        "max_agents": 8,
+        "max_bytes": 4096,
+        "max_retries": 1
+      },
+      "cancellation": {
+        "requested": false,
+        "acknowledged": false
+      },
+      "details": {
+        "agent_id": "AG-CODEX",
+        "catalog": "accepted",
+        "setup": "accepted",
+        "credentials": "reference_only",
+        "host": "pass",
+        "network": "pass",
+        "capabilities": "supported",
+        "benchmark_eligibility": "eligible",
+        "preflight_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      }
+    },
+    {
+      "sequence": 5,
+      "operation_id": "OP-AR0055-RUN",
+      "stage": "benchmark_run",
+      "state_before": "eligible",
+      "state_after": "run_not_performed",
+      "status": "observed",
+      "binding_digest": "sha256:25f6e58dcb4388b62e8be763b61863becccd7aa839d47db6a11cdc955d463331",
+      "input_digest": "sha256:207872e8446dbdff085a8b95ae9192f4ee7c374f511ab699cd36408cfb3270bf",
+      "evidence_digest": "sha256:5b25cde7bc03dde7d788ad31f2d151bd502b52d241a557d5e5cd2bfa15ade7b3",
+      "claims": {
+        "execute": false,
+        "benchmark": "not_performed",
+        "provider": "not_performed",
+        "network": "disabled",
+        "llm": "not_performed",
+        "durable_state": "not_performed",
+        "remote_verification": "unverified"
+      },
+      "bounds": {
+        "max_events": 16,
+        "max_agents": 8,
+        "max_bytes": 4096,
+        "max_retries": 1
+      },
+      "cancellation": {
+        "requested": false,
+        "acknowledged": false
+      },
+      "details": {
+        "benchmark_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "run_status": "not_performed",
+        "measurement": "not_performed",
+        "reason": "offline_boundary"
+      }
+    },
+    {
+      "sequence": 6,
+      "operation_id": "OP-AR0055-AGENT2",
+      "stage": "extend_identical_configuration",
+      "state_before": "run_not_performed",
+      "state_after": "extended",
+      "status": "observed",
+      "binding_digest": "sha256:25f6e58dcb4388b62e8be763b61863becccd7aa839d47db6a11cdc955d463331",
+      "input_digest": "sha256:c523ffe23972801553a971838c7aee5e4ea25fe6114de2aacbb73c8c28f100ba",
+      "evidence_digest": "sha256:849445bd56260337ceebfcb0c3631a0b28e7d20a4a7b42d14ee8712eb3b806e2",
+      "claims": {
+        "execute": false,
+        "benchmark": "not_performed",
+        "provider": "not_performed",
+        "network": "disabled",
+        "llm": "not_performed",
+        "durable_state": "not_performed",
+        "remote_verification": "unverified"
+      },
+      "bounds": {
+        "max_events": 16,
+        "max_agents": 8,
+        "max_bytes": 4096,
+        "max_retries": 1
+      },
+      "cancellation": {
+        "requested": false,
+        "acknowledged": false
+      },
+      "details": {
+        "agent_id": "AG-OPENDESK",
+        "existing_agent_id": "AG-CODEX",
+        "agent_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "configuration_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "identical_configuration": true,
+        "agent_count": 2
+      }
+    },
+    {
+      "sequence": 7,
+      "operation_id": "OP-AR0055-REPLAY",
+      "stage": "llm_record_replay",
+      "state_before": "extended",
+      "state_after": "replayed",
+      "status": "observed",
+      "binding_digest": "sha256:25f6e58dcb4388b62e8be763b61863becccd7aa839d47db6a11cdc955d463331",
+      "input_digest": "sha256:6f0ab0ad62f2cb4b0e1f8a011fb6dec9cdfd51da8c2dd739dda81a61e573e917",
+      "evidence_digest": "sha256:024fe8085653022c278152e4a6ecd0c1dd2820a6889d5577c9e3333b743b0424",
+      "claims": {
+        "execute": false,
+        "benchmark": "not_performed",
+        "provider": "not_performed",
+        "network": "disabled",
+        "llm": "not_performed",
+        "durable_state": "not_performed",
+        "remote_verification": "unverified"
+      },
+      "bounds": {
+        "max_events": 16,
+        "max_agents": 8,
+        "max_bytes": 4096,
+        "max_retries": 1
+      },
+      "cancellation": {
+        "requested": false,
+        "acknowledged": false
+      },
+      "details": {
+        "mode": "record_then_replay",
+        "request_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "response_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "cassette_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "network": "disabled",
+        "match": true
+      }
+    },
+    {
+      "sequence": 8,
+      "operation_id": "OP-AR0055-RECOVER",
+      "stage": "interrupt_recovery",
+      "state_before": "replayed",
+      "state_after": "recovered",
+      "status": "observed",
+      "binding_digest": "sha256:25f6e58dcb4388b62e8be763b61863becccd7aa839d47db6a11cdc955d463331",
+      "input_digest": "sha256:7f9f6d618142cc137cd9fb31a96233b834ff43e89f680390561e638aecfc4837",
+      "evidence_digest": "sha256:e0de7831a269d899f88f702ff73fdabebcc3d0a10320ac01e29e1738355b8186",
+      "claims": {
+        "execute": false,
+        "benchmark": "not_performed",
+        "provider": "not_performed",
+        "network": "disabled",
+        "llm": "not_performed",
+        "durable_state": "not_performed",
+        "remote_verification": "unverified"
+      },
+      "bounds": {
+        "max_events": 16,
+        "max_agents": 8,
+        "max_bytes": 4096,
+        "max_retries": 1
+      },
+      "cancellation": {
+        "requested": true,
+        "acknowledged": true
+      },
+      "details": {
+        "checkpoint_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+        "interrupted": true,
+        "recovered": true,
+        "recovery_fence": "new_attempt_same_configuration"
+      }
+    },
+    {
+      "sequence": 9,
+      "operation_id": "OP-AR0055-COMPARE",
+      "stage": "comparison",
+      "state_before": "recovered",
+      "state_after": "compared",
+      "status": "observed",
+      "binding_digest": "sha256:25f6e58dcb4388b62e8be763b61863becccd7aa839d47db6a11cdc955d463331",
+      "input_digest": "sha256:917f0643cb8203fdbee009f76d3d725a7cb5eed4e0b51e245b6c8da819115de5",
+      "evidence_digest": "sha256:3e4802ba52836a2df09c99de232d81c9b2b6142d31232b070bc2c69a35b2d543",
+      "claims": {
+        "execute": false,
+        "benchmark": "not_performed",
+        "provider": "not_performed",
+        "network": "disabled",
+        "llm": "not_performed",
+        "durable_state": "not_performed",
+        "remote_verification": "unverified"
+      },
+      "bounds": {
+        "max_events": 16,
+        "max_agents": 8,
+        "max_bytes": 4096,
+        "max_retries": 1
+      },
+      "cancellation": {
+        "requested": false,
+        "acknowledged": false
+      },
+      "details": {
+        "benchmark_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "configuration_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "agent_ids": [
+          "AG-CODEX",
+          "AG-OPENDESK"
+        ],
+        "comparison": "structurally_comparable",
+        "measurement": "not_performed",
+        "result_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+      }
+    }
+  ],
+  "terminal": {
+    "status": "qualified_offline",
+    "execute": false,
+    "benchmark_run": "not_performed",
+    "comparison": "structurally_comparable",
+    "provider": "not_performed",
+    "llm": "not_performed",
+    "network": "disabled",
+    "durable_state": "not_performed",
+    "remote_verification": "unverified"
+  },
+  "evidence": {
+    "checker": "awr-asb-integration-checker/1.0.0",
+    "record_digest": "sha256:53dda768e9ef2a74ee0109426a26777d306c3cd0290220019df3cd69ba9780ed",
+    "hostile_cases": [
+      "stale_revision",
+      "crossed_binding",
+      "replayed_operation",
+      "unsupported_agent",
+      "non_identical_configuration",
+      "unacknowledged_cancellation",
+      "provider_execution",
+      "raw_llm_payload",
+      "confounded_comparison"
+    ],
+    "offline_boundary": {
+      "provider": "not_performed",
+      "network": "disabled",
+      "llm": "not_performed",
+      "benchmark": "not_performed",
+      "credentials": "references_only",
+      "durable_state": "not_performed",
+      "remote_verification": "unverified"
+    }
+  }
+}
+
