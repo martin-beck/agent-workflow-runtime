@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-ui-session-bridge", "version": "1.0.0"},
+  "task": {"id": "AR-0011", "revision": 1},
+  "project": {"key": "agent-workflow-runtime", "revision": "a001100000000000000000000000000000000000"},
+  "worktree": {"key": "agent-workflow-runtime-0011", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "session": {"id": "SES-AR0011-REFERENCE"},
+  "lease": {"id": "LSE-AR0011-REFERENCE", "worker_id": "WRK-AR0011-REFERENCE", "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+  "events": [
+    {"event_id": "UI-AR0011-START", "sequence": 1, "event_type": "session_started", "disposition": "started", "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+    {"event_id": "UI-AR0011-RENDER", "sequence": 2, "event_type": "ui_rendered", "disposition": "observed", "evidence_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+    {"event_id": "UI-AR0011-CHECKPOINT", "sequence": 3, "event_type": "ui_checkpointed", "disposition": "accepted", "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"}
+  ],
+  "final_event": {"event_id": "UI-AR0011-SAFE-EXIT", "sequence": 4, "event_type": "safe_exit", "disposition": "safe_exit", "reason": "user_requested", "evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"},
+  "resume": {"status": "resumable", "checkpoint_event_id": "UI-AR0011-CHECKPOINT", "prior_trace_digest": "sha256:67420295a96a035a2608ecdb6f1e0eaa84904598a8712d5e35c17003f0640c99", "binding_digest": "sha256:cbed07f4d9a113138a213de451bae436ba943a72ab2448adbd60cc78101b9cff"}
+}

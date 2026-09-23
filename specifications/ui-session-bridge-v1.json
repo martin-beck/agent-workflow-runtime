@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-ui-session-bridge",
+  "version": "1.0.0",
+  "title": "Provider-neutral bounded UI session bridge and safe resume",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "revision", "project", "worktree", "session and lease identity"],
+    "quality": ["requirements", "quality gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "oracle decisions", "reusable guidance"],
+    "ui": ["human-facing rendering", "human input", "final-event intent"],
+    "runtime": ["bounded event validation", "binding enforcement", "safe resume projection"]
+  },
+  "binding": {
+    "task": "AR-0011 at Coordinator revision 1 exactly",
+    "project_revision": "40 lowercase hexadecimal characters",
+    "worktree": "exact key and SHA-256 digest",
+    "session": "one stable opaque session identifier",
+    "lease": "one exact lease identifier, worker identifier, and lease digest; resume cannot cross the binding"
+  },
+  "events": {
+    "maximum": 32,
+    "types": ["session_started", "ui_rendered", "ui_input", "ui_checkpointed", "ui_interrupt_requested", "ui_interruption_acknowledged"],
+    "final_types": ["safe_exit", "interrupted", "completed"],
+    "projection": "Only bounded event identifiers, enumerations, sequence numbers, and evidence digests; no UI text, provider data, prompts, transcripts, credentials, or network values.",
+    "rule": "Events are ordered, single-use, and followed by exactly one validated final event."
+  },
+  "resume": {
+    "safe_exit": "A user-requested or host-shutdown safe exit is resumable only from a referenced UI checkpoint.",
+    "interruption": "An acknowledged interruption is resumable only from a referenced UI checkpoint.",
+    "binding": "Resume uses the exact task, project, worktree, session, and lease binding and the exact prior trace digest.",
+    "completed": "A completed session has no resume record."
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "cross-project/worktree/session/lease binding", "replayed event or digest", "unknown field", "private value", "unbounded event list", "invalid final event", "resume without checkpoint", "changed prior trace"],
+    "side_effects": "The model and checker perform no UI, provider, network, process, Git, Coordinator, AWQ, AWG, or durable-state operation."
+  },
+  "privacy": {
+    "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "provider payloads", "unknown fields"],
+    "projection": "Opaque identifiers, bounded enumerations, positive sequences, and SHA-256 digests only."
+  },
+  "limitations": [
+    "A passing record proves only deterministic structural consistency of supplied UI observations.",
+    "The checker does not render UI, accept human input, acquire or renew a lease, persist a checkpoint, contact a provider or network, or prove Coordinator state.",
+    "UI and Coordinator remain authoritative for human intent and task/lease state respectively; a final event is not task completion or approval."
+  ]
+}

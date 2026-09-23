@@ -146,6 +146,18 @@ cross-binding, and decision-bearing input. It does not submit an AWG
 discussion or establish Coordinator, provider, LLM, network, UI, or runtime
 success.
 
+AR-0011 adds the provider-neutral UI session bridge. Its bounded event record
+is bound exactly to AR-0011 at Coordinator revision 1, the project revision,
+worktree key and digest, session, and lease/worker binding. Events contain no
+UI text, provider payload, prompt, transcript, credential, host identifier,
+or network value. One validated final event may be `completed`, `interrupted`,
+or `safe_exit`; the latter two require a referenced UI checkpoint and exact
+prior-trace and binding digests for safe resume. A final event is an
+observation, never a Coordinator completion, AWQ acceptance, AWG decision, or
+provider result. The offline checker rejects stale, replayed, unknown,
+private, cross-binding, and invalid-final-event input and performs no external
+operation.
+
 AR-0017 defines the provider-neutral OpenDesk-style adapter envelope. Its
 capability report is versioned and digest-bound; requests carry only a
 bounded digest reference. A known capability absent from the report is not
