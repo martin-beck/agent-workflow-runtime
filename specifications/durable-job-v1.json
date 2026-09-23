@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-durable-revision-bound-job",
+  "version": "1.0.0",
+  "title": "Offline durable revision-bound job contract",
+  "normative": true,
+  "task": {"id": "AR-0061", "revision": 1},
+  "schema_evolution": {
+    "rule": "additive-only-with-version-bump",
+    "unknown_fields": "reject",
+    "required_fields": "may_not_be_removed",
+    "enum_values": "may_not_be_reused",
+    "digest_algorithm": "sha256-canonical-json",
+    "compatibility": "a reader accepts only its declared schema version"
+  },
+  "states": ["submitted", "admitted", "queued", "running", "awaiting_human_gate", "checkpointed", "cancelling", "succeeded", "failed", "cancelled"],
+  "terminal_states": ["succeeded", "failed", "cancelled"],
+  "authority": {
+    "coordinator": ["task identity", "revision", "dependencies", "claims", "leases", "durable state"],
+    "awq": ["requirements", "acceptance criteria", "evidence acceptance"],
+    "awg": ["decisions", "guidance"],
+    "ui": ["human gate rendering", "validated human input"],
+    "runtime": ["bounded job execution", "state-machine enforcement", "offline projection"]
+  },
+  "offline_boundary": {"execute": false, "network": "disabled", "provider": "not_performed", "llm": "not_performed", "live_service": "not_performed", "durable_state": "not_performed"},
+  "privacy": {"reject": ["credential", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "raw_output", "command", "network", "personal_data"]},
+  "failure_semantics": {"mode": "fail_closed", "binding_mismatch": "reject", "unknown_field": "reject", "duplicate_event": "reject", "invalid_transition": "reject", "missing_evidence": "reject"},
+  "limitations": ["The checker validates supplied canonical job records only.", "A passing record is structural offline evidence, not execution, provider support, human approval, or durable Coordinator state."],
+  "follow_up": ["Coordinator must independently admit and persist the job revision before execution.", "AWQ, AWG, and UI authorities must independently perform their owned decisions."],
+  "required_job_sections": ["objective", "inputs", "dependencies", "capabilities", "adapters", "acceptance", "budget", "deadline", "retry", "priority", "tenancy", "privacy", "artifacts", "human_gates", "cancellation", "idempotency", "provenance"]
+}

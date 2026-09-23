@@ -52,6 +52,17 @@ mismatch is an explicit non-executing observation and cannot change state.
 All components must preserve the task ID, task revision, worktree identity,
 session ID, adapter identity, and evidence digests across boundaries.
 
+## AR-0061 durable job boundary
+
+The durable job boundary is a strict, revision-bound projection between
+Coordinator-owned lifecycle state and runtime execution. It carries all job
+policy inputs as typed sections and permits only the declared state-machine
+transitions. AWR may enforce budgets, deadlines, retry limits, capability
+denials, cancellation acknowledgement, and digest-chain continuity; it may
+not manufacture Coordinator persistence, AWQ acceptance, AWG decisions, UI
+human input, provider execution, or remote success. Schema evolution is
+additive-only with a version bump and unknown fields fail closed.
+
 ## AR-0005 supervisor boundary
 
 Supervisor admission is bound to the Coordinator task revision, project and
