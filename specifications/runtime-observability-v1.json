@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-runtime-observability",
+  "version": "1.0.0",
+  "title": "Offline runtime observability and audit envelope",
+  "normative": true,
+  "task": {"id": "AR-0056", "revision": 5},
+  "limits": {"max_events": 32, "max_metrics": 64, "max_audit_events": 32, "max_trace_bytes": 8192, "max_label_cardinality": 8, "max_clock_skew_seconds": 30},
+  "retention": {"retention_days": 7, "mode": "digest_only", "raw_payloads": false, "export_max_bytes": 16384},
+  "alert_thresholds": {"provider_error_rate": 0.2, "provider_latency_ms": 2000, "resource_memory_bytes": 1073741824, "lease_expiry_total": 1, "clock_skew_seconds": 30},
+  "offline_boundary": {"collector": "supplied_observations_only", "provider": "not_performed", "network": "disabled", "llm": "not_performed", "durable_state": "not_performed", "remote_verification": "unverified"},
+  "required_surfaces": ["lifecycle", "provider", "resource", "cancellation", "lease", "quality", "guidance", "ui", "asb", "health", "readiness", "dashboards", "alerts", "retention", "redaction", "incident_export"],
+  "limitations": ["The checker performs no collection, export, network, provider, LLM, Coordinator, AWQ, AWG, UI, or ASB operation.", "Observability is non-authoritative and cannot establish execution, approval, readiness, or durable state."]
+}
