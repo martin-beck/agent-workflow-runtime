@@ -215,3 +215,13 @@ unauthorized actions are rejected before acceptance. The worktree field is an
 exclusive binding observation supplied to the model. It is not a filesystem
 inspection and does not prove physical isolation. The checker performs no tool,
 provider, network, process, Git, or durable-state operation.
+
+## AR-0021 publication/CI implementation bridge
+
+The AR-0021 bridge combines one exact branch head, signed-DCO commit
+observations, approved review, a non-executing merge handoff, and correlated CI
+success. CI is explicitly `verification: unverified`; local or supplied
+observations never become hosted-CI, remote, or release success. The model and
+checker are `scripts/publication_ci_bridge.py` and
+`scripts/check_publication_ci_bridge.py`. They perform no Git, CI, provider,
+network, merge, publication, or durable-state operation.

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-publication-ci-bridge", "version": "1.0.0"},
+  "task": {"id": "AR-0021", "revision": 1},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "worktree": {"key": "agent-workflow-runtime-0021", "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+  "branch": {"name": "feature/ar-0021", "head": "0123456789abcdef0123456789abcdef01234567"},
+  "commit": {"id": "0123456789abcdef0123456789abcdef01234567", "tree": "89abcdef0123456789abcdef0123456789abcdef", "parents": ["fedcba9876543210fedcba9876543210fedcba98"], "exact_head": true, "signature": {"status": "valid", "algorithm": "ssh", "key_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}, "dco": {"status": "signed", "trailer_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"}},
+  "review": {"id": "RV-AR0021-01", "status": "approved", "target_head": "0123456789abcdef0123456789abcdef01234567", "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"},
+  "merge_handoff": {"status": "ready", "target_head": "0123456789abcdef0123456789abcdef01234567", "evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"},
+  "ci": {"id": "CI-AR0021-01", "status": "success", "verification": "unverified", "target_head": "0123456789abcdef0123456789abcdef01234567", "review_id": "RV-AR0021-01", "evidence_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"},
+  "publication": {"status": "not_performed", "target_head": "0123456789abcdef0123456789abcdef01234567", "evidence_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"},
+  "evidence": [
+    {"id": "EV-AR0021-BRANCH", "kind": "branch", "digest": "sha256:74f954d154bf478554319606827ba303b057168eaac922708ec6ee4c4bf7073a"},
+    {"id": "EV-AR0021-COMMIT", "kind": "commit", "digest": "sha256:15499faa9c2eecd1729e413fa86b2054fe79e01e7fca7deb473685df13e80a3e"},
+    {"id": "EV-AR0021-REVIEW", "kind": "review", "digest": "sha256:fda62ab92fd1e1c770d835b4a8bf14009958b1f34fe13ce128e12b440d4ebfa9"},
+    {"id": "EV-AR0021-HANDOFF", "kind": "merge_handoff", "digest": "sha256:c1c1e68c26e8eb1840bbdebcdc65b09fd58b0b8e80ec30391227f5994b50b07b"},
+    {"id": "EV-AR0021-CI", "kind": "ci", "digest": "sha256:18188b774def85fbe6220e2db6d108540dddc4afd5dccf1f27000d55a0f636cf"},
+    {"id": "EV-AR0021-PUBLICATION", "kind": "publication", "digest": "sha256:4def1906e0740509fc06973f7ff9a46cb560e3397692f7805042215412ce9d81"},
+    {"id": "EV-AR0021-CORRELATION", "kind": "correlation", "digest": "sha256:eaad3715ee586cb5a75b1164bee115101ec174d5c1659096d9c7b149e0bb0911"}
+  ]
+}

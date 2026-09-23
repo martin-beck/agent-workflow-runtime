@@ -97,6 +97,8 @@ checker preserve exact bindings and external AWG attribution while keeping
 `quality_status` and `oracle_status` at `not_decided`. They perform no AWQ,
 AWG, provider, network, LLM, or durable-state operation.
 
+AR-0021 adds `specifications/publication-ci-bridge-v1.json`, a revision-1-bound implementation bridge joining signed-DCO publication observations, review/merge handoff, exact-head CI correlation, and explicit `verification: unverified` remote status. Its offline model/checker validate supplied evidence only; merge, publication, CI, provider, network, Git, and durable-state operations are not performed.
+
 ## License
 
 MIT, with the Huawei copyright notice in `LICENSE`.

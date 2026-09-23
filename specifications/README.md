@@ -423,3 +423,21 @@ The positive fixture is synthetic evidence only. Hostile tests cover stale
 revision, replay, unknown/private values, wrong correlation, and an attempt to
 promote an unverified remote success. No request is sent and no CI, provider,
 network, remote, or durable-state operation occurs.
+
+## AR-0021 publication and CI implementation bridge
+
+`publication-ci-bridge-v1.json` defines a revision-1-bound envelope that
+preserves one exact branch head through commit, review, merge handoff, and CI.
+It requires valid signature and signed-DCO observations while keeping CI
+`verification: unverified` and merge handoff non-executing:
+
+```text
+python3 scripts/check_publication_ci_bridge.py \\
+  --spec specifications/publication-ci-bridge-v1.json \\
+  --record specifications/fixtures/publication-ci-bridge-ar0021-v1.json \\
+  --evidence specifications/fixtures/publication-ci-evidence-ar0021-v1.json \\
+  --expected-revision 1
+```
+
+The checker validates supplied observations only and has no Git, CI, remote,
+provider, network, merge, publication, or durable-state side effects.
