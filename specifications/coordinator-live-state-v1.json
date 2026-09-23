@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-coordinator-live-state",
+  "version": "1.0.0",
+  "title": "Offline Coordinator identity, lease, revision, and event client contract",
+  "normative": true,
+  "task": {"id": "AR-0029", "revision": 3},
+  "authority": {
+    "coordinator": ["task identity", "dependencies", "claims", "revisions", "leases", "durable state events"],
+    "runtime": ["bounded translation", "binding enforcement", "replay evaluation", "privacy projection"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "decisions", "reusable guidance"],
+    "ui": ["human-facing rendering and validated input"]
+  },
+  "binding": {
+    "task_id": "^AR-[0-9]{4}$",
+    "project_key": "agent-workflow-runtime",
+    "worktree_key": "agent-workflow-runtime-0029",
+    "revision": "positive integer supplied by Coordinator",
+    "session_id": "^SES-[A-Z0-9-]{1,63}$",
+    "owner_id": "^WRK-[A-Z0-9-]{1,63}$",
+    "lease_id": "^LSE-[A-Z0-9-]{1,63}$",
+    "operation_id": "^OP-[A-Z0-9-]{1,63}$",
+    "digest": "sha256:64 lowercase hexadecimal characters"
+  },
+  "operations": {
+    "claim": "open task only; exact revision; unique owner/worktree; creates a lease and increments revision",
+    "heartbeat": "active matching owner, lease, session, worktree, and revision; extends lease without changing revision",
+    "state_event": "active matching lease and exact revision; bounded digest-only event; increments revision",
+    "release": "active matching lease and exact revision; terminal status is Coordinator-validated and increments revision"
+  },
+  "lifecycle": {
+    "states": ["open", "in_progress", "done", "blocked"],
+    "terminal": ["done", "blocked"],
+    "claim_transition": ["open", "in_progress"],
+    "release_transitions": [["in_progress", "done"], ["in_progress", "blocked"], ["in_progress", "open"]]
+  },
+  "durability": {
+    "format": "one canonical JSON document with an append-only digest-linked event list",
+    "write": "write a complete temporary document, flush and fsync it, then atomically replace the supplied file",
+    "recovery": "malformed JSON, broken chain, duplicate operation, or ambiguous write is rejected; success is never guessed",
+    "event_identity": "operation_id is single-use; identical replay returns the original result, changed replay fails"
+  },
+  "compatibility": {
+    "canonical_json": "UTF-8 JSON, sorted keys, compact separators, no trailing newline",
+    "major_change": "new specification_id or incompatible schema_version",
+    "minor_change": "new version and checker/fixture required"
+  },
+  "privacy": {
+    "forbidden_keys": ["credential", "password", "secret", "token", "prompt", "transcript", "private_path", "host_identifier", "raw_output"],
+    "projection": "only opaque identifiers, bounded enums, revisions, lease times, and sha256 digests"
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "crossed task/project/worktree/session", "wrong owner or lease", "expired lease", "replay with changed content", "unknown fields", "privacy-bearing payload", "unbounded value", "unauthorized status"],
+    "external_effects": "none: no network, provider, LLM, hosted CI, Git, or durable Coordinator repository mutation"
+  },
+  "evidence_boundary": {
+    "offline": "fixture and local harness qualification only",
+    "live": "unverified; this AR does not enable a remote Coordinator client",
+    "follow_up": ["Use the project-bound handoffctl/Coordinator client for live state operations after independent security and approval gates.", "Add production transport and crash-injection qualification only under a separately approved integration task."]
+  }
+}

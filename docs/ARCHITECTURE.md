@@ -287,3 +287,20 @@ or UI. Its ordered maintenance phases cover coordinator, runtime, quality,
 guidance, UI, release, and proposal-only self-evolution observations. The
 offline model and checker do not update an umbrella, publish a release, or
 mutate durable state.
+
+## AR-0029 Coordinator live-state boundary
+
+AR-0029 defines the Coordinator client boundary without enabling a live
+transport. The local harness models Coordinator-owned task identity,
+dependency-ready status, exact project/worktree/session binding, claims,
+leases, CAS-style revisions, and durable state events. Operation IDs are
+single-use: identical retries return the original result and changed retries
+fail closed. Events form a canonical SHA-256 chain and are persisted by
+atomic temporary-file replacement with flush and fsync.
+
+The runtime may enforce and project these contracts but cannot grant claims,
+change authority, manufacture completion, or accept a stale lease. The fixture
+checker is privacy-safe and structural; it proves neither a real Coordinator
+write nor live lease expiry, distributed locking, network reachability, or
+remote success. A production client remains gated behind independent security,
+approval, and crash-injection qualification.

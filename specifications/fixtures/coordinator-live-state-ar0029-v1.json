@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-coordinator-live-state", "version": "1.0.0"},
+  "task": {"id": "AR-0029", "revision": 6, "status": "done", "owner": "", "lease": "", "claim_expires": ""},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+  "worktree": {"key": "agent-workflow-runtime-0029", "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+  "session_id": "",
+  "events": [
+    {"claim_expires":"2026-09-23T19:00:00+00:00","event_digest":"sha256:769ad35771b150814f05a89947f3ec4cbfe0305a8e2f33cfb6b3151efcfaa859","kind":"claim","lease":"LSE-AR0029-A","operation_id":"OP-AR0029-1","owner":"WRK-AR0029-A","previous_digest":"sha256:0000000000000000000000000000000000000000000000000000000000000000","sequence":1,"session_id":"SES-AR0029-A","task_revision":3},
+    {"claim_expires":"2026-09-23T20:00:00+00:00","event_digest":"sha256:4f43f295c0e44904abf9d7d3edeec5641f0d5b2429d181e9cfbaf52eb62f3679","kind":"heartbeat","lease":"LSE-AR0029-A","operation_id":"OP-AR0029-2","owner":"WRK-AR0029-A","previous_digest":"sha256:769ad35771b150814f05a89947f3ec4cbfe0305a8e2f33cfb6b3151efcfaa859","sequence":2,"session_id":"SES-AR0029-A","task_revision":4},
+    {"event_digest":"sha256:81adb4edb55ed642cbf26a38845328e8fac7c8200d0d94864f8f2b0bbcaad988","event_type":"checkpoint","evidence_digest":"sha256:3333333333333333333333333333333333333333333333333333333333333333","kind":"state_event","lease":"LSE-AR0029-A","operation_id":"OP-AR0029-3","owner":"WRK-AR0029-A","previous_digest":"sha256:4f43f295c0e44904abf9d7d3edeec5641f0d5b2429d181e9cfbaf52eb62f3679","sequence":3,"session_id":"SES-AR0029-A","task_revision":4},
+    {"event_digest":"sha256:fda07dfbae4e198cddfb80a9f388ab473311dddad3df9839b95ddf1f57865de3","kind":"release","lease":"LSE-AR0029-A","operation_id":"OP-AR0029-4","owner":"WRK-AR0029-A","previous_digest":"sha256:81adb4edb55ed642cbf26a38845328e8fac7c8200d0d94864f8f2b0bbcaad988","sequence":4,"session_id":"SES-AR0029-A","status":"done","task_revision":5}
+  ],
+  "head_digest": "sha256:fda07dfbae4e198cddfb80a9f388ab473311dddad3df9839b95ddf1f57865de3",
+  "operations": {
+    "OP-AR0029-1":{"fingerprint":"sha256:bd914896b7bd8dfeb7363385d4f67dc26b1be7ed15e1be0fac48a4124b38676a","result":{"disposition":"accepted","event_digest":"sha256:769ad35771b150814f05a89947f3ec4cbfe0305a8e2f33cfb6b3151efcfaa859","task_revision":3}},
+    "OP-AR0029-2":{"fingerprint":"sha256:5c89473d16e711fd837ef25b8bd9f2a5823a40e61f6ed9eff9a79a83560df096","result":{"disposition":"accepted","event_digest":"sha256:4f43f295c0e44904abf9d7d3edeec5641f0d5b2429d181e9cfbaf52eb62f3679","task_revision":4}},
+    "OP-AR0029-3":{"fingerprint":"sha256:de1e1bedd01cd01db21f26613d1a45ac03a93cf47026144b783a01fa5c2c1c91","result":{"disposition":"accepted","event_digest":"sha256:81adb4edb55ed642cbf26a38845328e8fac7c8200d0d94864f8f2b0bbcaad988","task_revision":4}},
+    "OP-AR0029-4":{"fingerprint":"sha256:d3c57116e839d46ecabb1e765c1bfff81ad63b5ab12b51b693ed71ff2f8aaf12","result":{"disposition":"accepted","event_digest":"sha256:fda07dfbae4e198cddfb80a9f388ab473311dddad3df9839b95ddf1f57865de3","task_revision":5}}
+  },
+  "evidence": {"checker":"awr-coordinator-live-state-checker/1.0.0","safe_digest":"sha256:948e7506ee5d1e85567cca854b153d903e3d044d9aba15265122bbc42bc00788","specification_digest":"sha256:08d05636fccf244f1eeb5f57cfc51ea8660b7aa601c7ea7eb3aa3272b8771ca5"}
+}
