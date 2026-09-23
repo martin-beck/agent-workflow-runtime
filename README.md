@@ -75,6 +75,13 @@ authority ownership. `scripts/runtime_model.py` and
 positive and hostile trace corpus is under `specifications/fixtures/` and the
 focused tests are in `tests/test_runtime_model.py`.
 
+AR-0018 adds the cohesive Supervisor implementation boundary in
+`specifications/supervisor-runtime-v1.json`. `scripts/supervisor_runtime.py`
+composes exact admission binding, fenced leases, lifecycle transitions,
+cancellation acknowledgement, stale recovery, and digest-only lifecycle
+evidence. Its checker is offline and does not launch workers, contact
+Coordinator, or claim provider, network, remote, or durable-state success.
+
 ## License
 
 MIT, with the Huawei copyright notice in `LICENSE`.

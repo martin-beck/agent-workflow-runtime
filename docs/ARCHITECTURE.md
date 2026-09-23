@@ -186,3 +186,11 @@ reconciliation before completion, and rejects publication side-effect claims.
 The positive trace and hostile corpus exercise stale, replay, authority,
 privacy, oracle, recovery, publication, and terminal violations. It validates
 deterministic supplied traces only and makes no external call.
+
+## AR-0018 supervisor runtime boundary
+
+The supervisor runtime composes admission, exclusive leases, lifecycle
+transitions, cancellation acknowledgement, stale recovery, and digest-only
+lifecycle evidence. Recovery fences the old worker and requires a future lease;
+the model and checker perform no process supervision, provider, network, or
+Coordinator mutation.
