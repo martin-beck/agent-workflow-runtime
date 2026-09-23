@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-agent-capability-preflight", "version": "1.0.0"},
+  "task": {"id": "AR-0051", "revision": 5},
+  "agent": {
+    "task": {"id": "AR-0051", "revision": 5},
+    "agent_id": "AG-CODEX",
+    "adapter_id": "AD-CODEX",
+    "adapter_version": "1.0.0",
+    "catalog_acceptance": "accepted",
+    "declared_capabilities": ["streaming", "tool_use", "file_read", "resume"],
+    "supported_capabilities": ["streaming", "tool_use", "file_read", "resume"],
+    "model_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "configuration": {
+    "setup_acceptance": "accepted",
+    "credential_reference": {"status": "ready", "reference_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "value_absent": true},
+    "host_gate": "pass",
+    "network_gate": "pass",
+    "requested_capabilities": ["streaming", "tool_use", "file_read"],
+    "benchmark_capabilities": ["file_read", "streaming"]
+  },
+  "preflight": {
+    "catalog_acceptance": "accepted",
+    "setup_acceptance": "accepted",
+    "credential_readiness": "ready",
+    "host_gate": "pass",
+    "network_gate": "pass",
+    "capability_support": "supported",
+    "benchmark_compatibility": "compatible",
+    "state_before": "configured",
+    "state_after": "eligible",
+    "adapter_execution": "not_performed",
+    "live_support": "unverified"
+  },
+  "result": {"status": "eligible", "benchmark_eligibility": "eligible", "execute": false, "provider_support": "unverified", "live_support": "unverified", "durable_state": "not_performed"},
+  "evidence": {
+    "checker": "awr-agent-capability-preflight-checker/1.0.0",
+    "record_digest": "sha256:514d8b4743c2189bdbb9a6fa1d1202aa466b4aed6fa52b84b03dbfec6a424dbd",
+    "hostile_cases": ["missing_credential", "partial_credential", "unsupported_capability", "host_mismatch", "network_mismatch", "provider_unverified"],
+    "offline_boundary": {"provider": "not_performed", "adapter_execution": "not_performed", "network": "disabled", "credentials": "references_only", "live_support": "unverified", "durable_state": "not_performed"}
+  }
+}
