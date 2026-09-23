@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "task": {"id": "AR-0003", "revision": 5},
+  "specification": {"id": "awr-agent-adapter-lifecycle", "version": "1.0.0", "sha256": "sha256:328d51ce3a634ddaf4b05ff30244ee7f01b348c2538610024af5ea2da3d5b836"},
+  "trace": {"sha256": "sha256:1d4030dea2fb3575e02f704eca1fba33bca7031704a0e8d294b779a9497ff7f9"},
+  "evidence": [
+    {"id": "EV-AR0003-DISCOVERY", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    {"id": "EV-AR0003-TERMINATION", "digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"}
+  ],
+  "tools": {"python": "3.12.3", "network": "not_used", "provider": "not_used"},
+  "result": "offline_checker_passed"
+}

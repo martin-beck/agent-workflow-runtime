@@ -56,3 +56,27 @@ python3 scripts/check_session_events.py \
 This checker validates supplied trace consistency only. It does not consult or
 prove Coordinator state, AWQ/AWG/UI decisions, evidence truth, signing,
 process isolation, provider behavior, hosted CI, or remote runtime success.
+
+## AR-0003 agent adapter lifecycle
+
+`agent-adapter-lifecycle-v1.json` defines the provider-neutral adapter
+capability report and the fail-closed lifecycle from discovery through start,
+bounded digest-referenced interaction, termination, or failure. The offline
+reference implementation is `scripts/agent_adapter.py`; its checker validates
+the deterministic trace fixture with no provider or process connection:
+
+```text
+python3 scripts/check_agent_adapter.py \
+  --spec specifications/agent-adapter-lifecycle-v1.json \
+  --trace specifications/fixtures/adapter-trace-ar0003-v1.json \
+  --expected-revision 5
+```
+
+This contract does not launch agents, authenticate providers, or provide
+resume, supervision, resource containment, durable journaling, or recovery.
+Those boundaries remain deferred to the follow-up ARs named by the
+specification.
+
+`fixtures/adapter-evidence-ar0003-v1.json` records the exact revision,
+specification and trace digests, evidence identifiers, and offline tool
+versions. It does not claim provider or remote execution.
