@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-publication-release-bridge", "version": "1.0.0"},
+  "task": {"id": "AR-0040", "revision": 3},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:4a8dd40ac61b6c9e0b41d63208a905775b6144a9db2c9b0d6443ad0590b2fe63"},
+  "worktree": {"key": "agent-workflow-runtime-0040", "digest": "sha256:bd8770a16d5a7f07fe7378245caa4d5958ba3cedcb674ff7b8cebc845dc4f445"},
+  "artifact": {
+    "branch": "feature/ar-0040", "head": "0123456789abcdef0123456789abcdef01234567", "tree": "89abcdef0123456789abcdef0123456789abcdef",
+    "signature": {"status": "valid", "algorithm": "ssh", "key_digest": "sha256:40e64a8057f54cd8c986c67292a0bac8bc7515ff02c978877ac10b8660bc6bef"},
+    "dco": {"status": "signed", "trailer_digest": "sha256:f104f67d51dbd39ef56d573ae873bbd608b2b027ed22946e3c3f2dedba0aebc3"},
+    "review": {"id": "RV-AR0040-01", "status": "approved", "target_head": "0123456789abcdef0123456789abcdef01234567", "evidence_digest": "sha256:0523a88fe0b339342ecc653cdaa63373e04ccb274efc2f50e52f309c953c2345"},
+    "ci": {"id": "CI-AR0040-01", "status": "success", "verification": "unverified", "target_head": "0123456789abcdef0123456789abcdef01234567", "review_id": "RV-AR0040-01", "evidence_digest": "sha256:9ec5ff2dcc0f9a3e3234d3dbaaae9636c57f60b1a565ad6b774a19e60a72d840"}
+  },
+  "trace": [
+    {"id": "OP-AR0040-OBSERVE", "kind": "observe", "from": "observed", "to": "qualified", "head": "0123456789abcdef0123456789abcdef01234567", "evidence_digest": "sha256:5430eed0ae07572d563805612d8265f97db778c4ee0bd8f38f8b9e9ff9aa7a6d"},
+    {"id": "OP-AR0040-QUALIFY", "kind": "qualify", "from": "qualified", "to": "handoff_ready", "head": "0123456789abcdef0123456789abcdef01234567", "evidence_digest": "sha256:f478587aa82ea495e5520399f72c5fcf108ed0db80de7c1299feee1a666cd998"},
+    {"id": "OP-AR0040-HANDOFF", "kind": "handoff", "from": "handoff_ready", "to": "release_ready", "head": "0123456789abcdef0123456789abcdef01234567", "evidence_digest": "sha256:78dbf9a7dd67fae85059425f073fa934329008500f27f1fce633040f99c42276"},
+    {"id": "OP-AR0040-ROLLBACK", "kind": "rollback_prepare", "from": "release_ready", "to": "rollback_ready", "head": "0123456789abcdef0123456789abcdef01234567", "evidence_digest": "sha256:6002d746b0b673f93ca2ccfffa0232b7f29145c919104fbe4b082907d9fad6a9"}
+  ],
+  "result": {"state": "rollback_ready", "release": "not_performed", "publication": "not_performed", "rollback": "prepared", "remote_verification": "unverified", "execute": false}
+}
