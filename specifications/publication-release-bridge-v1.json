@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-publication-release-bridge",
+  "version": "1.0.0",
+  "title": "Offline exact-head publication, CI, release, and rollback bridge",
+  "normative": true,
+  "task": {"id": "AR-0040", "revision": 3},
+  "authority": {"coordinator": "task identity, revisions, claims, leases, durable transitions", "awq": "requirements, quality gates, evidence acceptance", "awg": "uncertainty, decisions, reusable guidance", "ui": "human rendering and validated input", "awr": "translation, bounded observation, supervision, and fail-closed integration"},
+  "states": ["observed", "qualified", "handoff_ready", "release_ready", "rollback_ready", "interrupted"],
+  "transitions": [["observed", "qualified"], ["qualified", "handoff_ready"], ["handoff_ready", "release_ready"], ["release_ready", "rollback_ready"]],
+  "bindings": "Every artifact and transition is bound to AR-0040 revision 3, one project revision, one worktree digest, and one exact 40-hex source head.",
+  "rules": {"head": "review, CI, and every transition use the artifact head", "ci": "success is supplied evidence and remains remote_verification unverified", "release": "release and publication are not_performed", "rollback": "rollback is prepared for the exact source head and is never executed", "interruption": "an interruption cannot reach a terminal state; recovery requires a matching checkpoint and requalification"},
+  "privacy": {"allowed": ["bounded identifiers", "enumerations", "booleans", "versions", "Git object IDs", "SHA-256 digests"], "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "emails", "raw output", "unknown fields"]},
+  "failure_semantics": {"mode": "fail_closed", "invalid_input": "reject without partial output", "stale_or_crossed_binding": "reject without state change", "live_gate": "execute false; no publication, release, rollback, network, provider, Git, CI, or durable-state operation", "recovery": "interruption requires checkpoint and a new bounded lease under Coordinator authority"},
+  "limitations": ["The checker validates supplied deterministic observations only.", "It does not inspect Git, CI, review systems, release stores, Coordinator, AWQ, AWG, UI, providers, hosts, or networks.", "A passing fixture is local structural qualification, not hosted CI, publication, release, rollback, remote execution, or recovery proof."],
+  "follow_up": ["Integrate only after independent AWQ qualification, AWG decisions where needed, Coordinator lease/revision admission, and explicit human approval.", "Add live evidence separately; never promote this offline result to a publication or release claim."]
+}
