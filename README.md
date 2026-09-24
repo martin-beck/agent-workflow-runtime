@@ -228,3 +228,14 @@ python3 scripts/check_durable_scheduler.py --spec specifications/durable-schedul
 The model is deterministic and offline: it does not mutate Coordinator state,
 execute workers, contact providers or live services, use an LLM, or claim
 durable persistence or remote success.
+
+AR-0081 adds `specifications/coordinator-client-v1.json` and the bounded
+`scripts/coordinator_client.py` client boundary. Typed revision reads and
+compare-and-swap event writes preserve the Coordinator-owned task, worktree,
+session, lease, auth-reference, operation, and correlation bindings. Retries
+are limited to unavailable, deadline, and timeout faults; stale revisions,
+changed replays, malformed responses, and correlation mismatches fail closed.
+An ambiguous write is returned as `unknown_outcome` and is never guessed
+successful. The in-process fake and fixture checker use deterministic fault
+injection only; no network, provider, LLM, credential, or live Coordinator
+operation is performed.
