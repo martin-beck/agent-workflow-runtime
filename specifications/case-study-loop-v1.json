@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-case-study-loop",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0097", "revision": 3},
+  "classification": ["outcome", "failure", "intervention", "bottleneck", "improvement_proposal"],
+  "invariants": ["raw prompts and private execution data are never exported", "findings are proposal-only", "case studies never approve releases or mutate policy", "projects remain consumers, not runtime authorities"],
+  "offline_boundary": {"raw_content": false, "network": "disabled", "provider": "not_performed", "llm": "not_performed", "policy_mutation": "not_performed", "approval": "not_performed"}
+}
