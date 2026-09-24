@@ -1,0 +1,1 @@
+{"schema_version":1,"specification_id":"awr-executable-observability","version":"1.0.0","task":{"id":"AR-0078","revision":1},"offline":{"execute":false,"network":"disabled","remote":"unverified"},"invariants":["bounded events","digest-only job identity","privacy rejection","accounting/status distinction","deterministic alerts"]}
