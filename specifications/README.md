@@ -628,3 +628,10 @@ interruption, checkpoint/resume fencing, failure, and close. The reference
 model and checker are offline only. Unknown capabilities are rejected; known
 but unadvertised capabilities return `unsupported` with no execution or state
 change. Inputs are digests or opaque `secret-ref:` identifiers only.
+
+## AR-0065 evidence and accounting
+
+`evidence-accounting-v1.json` defines an append-only digest-linked audit and
+usage ledger. It reconciles bounded seconds, token counts, and event budgets;
+prompts, transcripts, secrets, and billing claims are not stored, and billing
+remains explicitly unverified.
