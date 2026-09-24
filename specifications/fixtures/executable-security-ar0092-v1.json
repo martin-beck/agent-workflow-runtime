@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-executable-security", "version": "1.0.0"},
+  "task": {"id": "AR-0092", "revision": 3},
+  "offline": {"network": "disabled", "provider": "not_performed", "llm": "not_performed", "scanner": "supplied_observations_only", "mutation": "not_performed"},
+  "artifact": {"status": "verified", "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "provenance_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "signature_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "dco": "signed", "verified": true},
+  "dependency": {"status": "verified", "manifest_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "lock_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555", "pinned": true, "license_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666", "vulnerability_status": "clear"},
+  "sbom": {"status": "verified", "format": "spdx-json", "digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777", "complete": true},
+  "secret_refs": {"status": "pass", "values_absent": true, "references": ["secret-ref:fixture"], "rotation_required": false},
+  "privilege": {"status": "pass", "granted": ["read", "edit", "test"], "denied": ["network", "credentials", "provider", "llm", "publication"], "elevation": "none"},
+  "egress": {"status": "pass", "network": "disabled", "allowlist": [], "fallback": "deny"},
+  "sandbox": {"status": "pass", "filesystem": "workspace_only", "process": "bounded", "fallback": "deny"},
+  "redaction": {"status": "pass", "raw_content_absent": true, "private_values_absent": true, "digest_only": true},
+  "rotation": {"status": "pass", "old_key": "revocable", "new_key": "prepared", "overlap": "bounded"},
+  "containment": {"status": "pass", "on_failure": "stop_preserve_digest_only_escalate", "recovery": "requires_requalification"},
+  "evidence": {"record_digest": "sha256:8c7a2713fe127389ee4f40840c08b3d30c2298a088d469050ccae206e2fc3adc", "artifact_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "dependency_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}
+}
