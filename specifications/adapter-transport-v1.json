@@ -1,0 +1,1 @@
+{"schema_version":1,"specification_id":"awr-adapter-transport","version":"1.0.0","task":{"id":"AR-0073","revision":1},"offline":{"execute":false,"network":"disabled","provider":"not_performed","llm":"not_performed"},"invariants":["exact binding","bounded frames","opaque payloads","normalized lifecycle","interrupt/close fencing","privacy rejection"]}
