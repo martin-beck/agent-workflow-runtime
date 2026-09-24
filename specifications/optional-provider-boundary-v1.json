@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-optional-provider-boundary",
+  "version": "1.0.0",
+  "baseline": {"credentials": "not_required", "network": "disabled", "provider": "not_performed", "llm": "not_performed"},
+  "plugin": {"identity_required": true, "version_required": true, "capabilities_required": true, "unsupported_outcome": "unsupported_capability", "unknown_outcome": "unknown", "failure_outcome": "failed"},
+  "credential_policy": {"metadata_form": "reference_only", "secret_values": "forbidden", "explicit_opt_in": true},
+  "execution_policy": {"bounded_calls": true, "cancellation": true, "redaction": true, "least_privilege": true, "network_default": "disabled"},
+  "qualification": {"contract": "offline_fixture_allowed", "local_mock": "mandatory_baseline", "provider_e2e": "separate_direct_evidence_required"},
+  "invariants": ["baseline succeeds without external connectivity", "provider qualification is never inferred", "unsupported and unknown remain non-success", "provider metadata cannot contain secret values"]
+}

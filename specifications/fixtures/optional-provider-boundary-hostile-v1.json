@@ -1,0 +1,7 @@
+[
+  {"name": "secret_value", "credential_reference": "token=secret"},
+  {"name": "implicit_opt_in", "explicit_opt_in": true, "execution": "provider_e2e"},
+  {"name": "provider_claim_without_evidence", "provider_e2e": "verified"},
+  {"name": "unknown_as_success", "result": "unknown"},
+  {"name": "network_default_open", "network": "enabled"}
+]

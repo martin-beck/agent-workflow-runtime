@@ -1,0 +1,11 @@
+{
+  "plugin_id": "generic-mock-agent",
+  "plugin_version": "1.0.0",
+  "capabilities": ["edit", "test"],
+  "credential_reference": null,
+  "explicit_opt_in": false,
+  "execution": "deterministic_local_mock",
+  "result": "qualified_local_mock",
+  "provider_e2e": "unverified",
+  "network": "disabled"
+}
