@@ -1,0 +1,259 @@
+"""Bounded project validation and local mock bootstrap CLI."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import re
+import sys
+from pathlib import Path
+from typing import Any
+
+
+class CliError(ValueError):
+    """Invalid input or unsafe local workspace state."""
+
+
+AUTHORITY_NAMES = {"coordinator", "quality", "guidance", "ui"}
+TOP_KEYS = {"schema", "project", "authorities", "runtime_owns"}
+PROJECT_KEYS = {"name", "title", "kind", "organization", "state_repository"}
+AUTHORITY_KEYS = {"repository", "owns"}
+IDENTIFIER = re.compile(r"^[a-z][a-z0-9-]{1,62}$")
+REPOSITORY = re.compile(r"^[A-Za-z0-9_.-]{1,100}/[A-Za-z0-9_.-]{1,100}$")
+
+
+def canonical(value: Any) -> bytes:
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+
+
+def digest_bytes(value: bytes) -> str:
+    return "sha256:" + hashlib.sha256(value).hexdigest()
+
+
+def _scalar(text: str) -> Any:
+    text = text.strip()
+    if not text:
+        raise CliError("empty_yaml_scalar")
+    if text.startswith("[") and text.endswith("]"):
+        inner = text[1:-1].strip()
+        return [] if not inner else [_scalar(item) for item in inner.split(",")]
+    if text.startswith("\""):
+        try:
+            value = json.loads(text)
+        except json.JSONDecodeError as exc:
+            raise CliError("invalid_yaml_scalar") from exc
+        if not isinstance(value, str):
+            raise CliError("manifest_scalars_must_be_strings")
+        return value
+    if text.startswith("'") and text.endswith("'") and len(text) >= 2:
+        return text[1:-1].replace("''", "'")
+    if any(token in text for token in ("&", "*", "!", "|", ">", "{", "}")):
+        raise CliError("unsupported_yaml_feature")
+    if text in {"true", "false", "null", "~"}:
+        raise CliError("manifest_scalars_must_be_strings")
+    return text
+
+
+def parse_manifest_yaml(raw: bytes) -> dict[str, Any]:
+    """Parse the deliberately small, deterministic YAML subset used by manifests."""
+    try:
+        source = raw.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise CliError("manifest_not_utf8") from exc
+    lines: list[tuple[int, str]] = []
+    for number, line in enumerate(source.splitlines(), 1):
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        indent = len(line) - len(line.lstrip(" "))
+        content = line[indent:]
+        if "\t" in line or indent % 2:
+            raise CliError(f"invalid_indentation_line_{number}")
+        if len(content) > 1024 or len(lines) >= 400:
+            raise CliError("manifest_complexity_limit")
+        lines.append((indent, content))
+    if not lines:
+        raise CliError("empty_manifest")
+
+    def block(index: int, indent: int) -> tuple[Any, int]:
+        if lines[index][1].startswith("- "):
+            values: list[Any] = []
+            while index < len(lines) and lines[index][0] == indent:
+                content = lines[index][1]
+                if not content.startswith("- "):
+                    break
+                values.append(_scalar(content[2:]))
+                index += 1
+                if index < len(lines) and lines[index][0] > indent:
+                    raise CliError("nested_yaml_sequence_not_supported")
+            return values, index
+        result: dict[str, Any] = {}
+        while index < len(lines) and lines[index][0] == indent:
+            _, content = lines[index]
+            if content.startswith("-"):
+                raise CliError("invalid_yaml_sequence")
+            if ":" not in content:
+                raise CliError("invalid_mapping_entry")
+            key, value = content.split(":", 1)
+            if not re.fullmatch(r"[a-z][a-z0-9_]*", key) or key in result:
+                raise CliError("invalid_or_duplicate_mapping_key")
+            index += 1
+            if value.strip():
+                result[key] = _scalar(value)
+            elif index < len(lines) and lines[index][0] > indent:
+                if lines[index][0] != indent + 2:
+                    raise CliError("invalid_indentation")
+                result[key], index = block(index, indent + 2)
+            else:
+                result[key] = {}
+            if index < len(lines) and lines[index][0] < indent:
+                break
+            if index < len(lines) and lines[index][0] > indent:
+                raise CliError("invalid_indentation")
+        return result, index
+
+    parsed, end = block(0, lines[0][0])
+    if end != len(lines) or not isinstance(parsed, dict):
+        raise CliError("invalid_manifest_structure")
+    return parsed
+
+
+def _string(value: Any, pattern: re.Pattern[str], code: str) -> bool:
+    return isinstance(value, str) and pattern.fullmatch(value) is not None
+
+
+def validate_manifest(raw: bytes) -> tuple[dict[str, Any], str]:
+    if not isinstance(raw, bytes) or len(raw) > 65536:
+        raise CliError("manifest_size_limit")
+    manifest = parse_manifest_yaml(raw)
+    if set(manifest) != TOP_KEYS or manifest.get("schema") != "1":
+        raise CliError("invalid_manifest_top_level")
+    project = manifest["project"]
+    if not isinstance(project, dict) or set(project) != PROJECT_KEYS:
+        raise CliError("invalid_project_section")
+    if not all(isinstance(project.get(key), str) and 1 <= len(project[key]) <= 160 for key in PROJECT_KEYS):
+        raise CliError("invalid_project_value")
+    if not _string(project["name"], IDENTIFIER, "name") or not _string(project["organization"], IDENTIFIER, "organization"):
+        raise CliError("invalid_project_identity")
+    if not _string(project["state_repository"], REPOSITORY, "state_repository"):
+        raise CliError("invalid_state_repository")
+    authorities = manifest["authorities"]
+    if not isinstance(authorities, dict) or set(authorities) != AUTHORITY_NAMES:
+        raise CliError("invalid_authorities")
+    for name, authority in authorities.items():
+        if not isinstance(authority, dict) or set(authority) != AUTHORITY_KEYS:
+            raise CliError("invalid_authority_section")
+        if not _string(authority["repository"], REPOSITORY, "repository"):
+            raise CliError("invalid_authority_repository")
+        owns = authority["owns"]
+        if not isinstance(owns, list) or not 1 <= len(owns) <= 32 or any(not isinstance(item, str) or not 1 <= len(item) <= 160 for item in owns):
+            raise CliError("invalid_authority_ownership")
+    runtime_owns = manifest["runtime_owns"]
+    if not isinstance(runtime_owns, list) or not 1 <= len(runtime_owns) <= 32 or any(not isinstance(item, str) or not 1 <= len(item) <= 160 for item in runtime_owns):
+        raise CliError("invalid_runtime_ownership")
+    return manifest, digest_bytes(raw)
+
+
+def _read_manifest(path: Path) -> tuple[dict[str, Any], str]:
+    try:
+        raw = path.read_bytes()
+    except OSError as exc:
+        raise CliError("manifest_unreadable") from exc
+    return validate_manifest(raw)
+
+
+def make_plan(
+    manifest: dict[str, Any], revision: str, workspace_label: str, expected_revision: str | None = None
+) -> dict[str, Any]:
+    if not re.fullmatch(r"sha256:[0-9a-f]{64}", revision):
+        raise CliError("invalid_project_revision")
+    if expected_revision is not None and expected_revision != revision:
+        raise CliError("stale_project_revision")
+    body = {
+        "schema_version": 1,
+        "project": manifest["project"]["name"],
+        "project_revision": revision,
+        "workspace": workspace_label,
+        "mode": "local_mock",
+        "dry_run": True,
+        "steps": ["create_project_directory", "write_validated_manifest", "create_local_mock_state"],
+        "effects": {
+            "provider": "not_performed", "credentials": "not_required", "network": "disabled",
+            "coordinator": "not_performed", "awq": "not_performed", "awg": "not_performed", "ui": "not_performed",
+        },
+    }
+    return {**body, "plan_digest": digest_bytes(canonical(body))}
+
+
+def initialize_mock(manifest: dict[str, Any], revision: str, workspace: Path) -> dict[str, Any]:
+    if not re.fullmatch(r"sha256:[0-9a-f]{64}", revision):
+        raise CliError("invalid_project_revision")
+    if workspace.is_symlink() or (workspace.exists() and (not workspace.is_dir() or any(workspace.iterdir()))):
+        raise CliError("workspace_must_be_absent_or_empty")
+    if workspace.resolve() == Path(workspace.anchor) or workspace.name in {"", ".", ".."}:
+        raise CliError("unsafe_workspace")
+    root = workspace
+    project_dir = root / "project"
+    state_dir = root / ".awr" / "local-mock"
+    if any(path.exists() for path in (project_dir, state_dir)):
+        raise CliError("workspace_layout_exists")
+    state = {
+        "schema_version": 1,
+        "kind": "awr-local-mock-state",
+        "project": manifest["project"]["name"],
+        "project_revision": revision,
+        "lifecycle": "new",
+        "provider": "not_performed",
+        "network": "disabled",
+        "credentials": "not_required",
+        "authority_state": "not_performed",
+    }
+    project_manifest = canonical(manifest) + b"\n"
+    state_bytes = canonical(state) + b"\n"
+    try:
+        project_dir.mkdir(parents=True, exist_ok=False)
+        state_dir.mkdir(parents=True, exist_ok=False)
+        (project_dir / "project-manifest.json").write_bytes(project_manifest)
+        (state_dir / "state.json").write_bytes(state_bytes)
+    except OSError as exc:
+        raise CliError("workspace_creation_failed") from exc
+    return {"status": "created", "project_revision": revision, "layout": ["project/project-manifest.json", ".awr/local-mock/state.json"]}
+
+
+def parser() -> argparse.ArgumentParser:
+    root = argparse.ArgumentParser(prog="awr", description="Validate and bootstrap provider-neutral local mock projects.")
+    commands = root.add_subparsers(dest="command", required=True)
+    validate = commands.add_parser("validate", help="validate a project manifest")
+    validate.add_argument("--manifest", type=Path, required=True)
+    init = commands.add_parser("init", help="create a local mock workspace and state layout")
+    init.add_argument("--manifest", type=Path, required=True)
+    init.add_argument("--workspace", type=Path, required=True)
+    plan = commands.add_parser("plan", help="emit a revision-bound dry-run plan")
+    plan.add_argument("--manifest", type=Path, required=True)
+    plan.add_argument("--workspace", required=True, help="opaque display label; no filesystem access")
+    plan.add_argument("--expected-revision", help="require this exact sha256 manifest digest")
+    return root
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parser().parse_args(argv)
+    try:
+        manifest, revision = _read_manifest(args.manifest)
+        if args.command == "validate":
+            output = {"status": "valid", "project": manifest["project"]["name"], "project_revision": revision}
+        elif args.command == "init":
+            output = initialize_mock(manifest, revision, args.workspace)
+        else:
+            if not re.fullmatch(r"[a-zA-Z0-9._/-]{1,160}", args.workspace) or ".." in args.workspace.split("/"):
+                raise CliError("invalid_workspace_label")
+            output = make_plan(manifest, revision, args.workspace, args.expected_revision)
+        print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+        return 0
+    except CliError as exc:
+        print(f"awr: {exc}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
