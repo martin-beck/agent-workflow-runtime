@@ -54,6 +54,8 @@ jobs:
         run: python scripts/check_multi_project_workflow.py --spec specifications/multi-project-workflow-v1.json --fixture specifications/fixtures/multi-project-workflow-ar0095-v1.json --expected-revision 3
       - name: Run AR-0096 release readiness contract checker
         run: python scripts/check_release_readiness.py --spec specifications/release-readiness-v1.json --fixture specifications/fixtures/release-readiness-ar0096-v1.json --expected-revision 3
+      - name: Run AR-0097 case-study contract checker
+        run: python scripts/check_case_study_loop.py --spec specifications/case-study-loop-v1.json --fixture specifications/fixtures/case-study-loop-ar0097-v1.json --expected-revision 3
       - name: Run AR-0087 project isolation contract checker
         run: python scripts/check_project_isolation.py --spec specifications/multi-project-isolation-v1.json --fixture specifications/fixtures/multi-project-isolation-ar0087-v1.json --expected-revision 3
       - name: Run AR-0089 project integration contract checker

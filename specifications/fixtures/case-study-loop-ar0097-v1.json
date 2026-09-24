@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-case-study-loop", "version": "1.0.0"},
+  "task": {"id": "AR-0097", "revision": 3},
+  "offline": {"raw_content": false, "network": "disabled", "provider": "not_performed", "llm": "not_performed", "policy_mutation": "not_performed", "approval": "not_performed"},
+  "cycles": [{"id":"CYCLE-A","project_digest":"sha256:1111111111111111111111111111111111111111111111111111111111111111","task_revision":3,"autonomy":"autonomous","roles":["worker","quality"],"concurrency":3,"interventions":0,"blocked":false,"retries":1,"terminal":"completed","evidence_digest":"sha256:33571a6232caf631508445d1e5da28825a89a40690f47a1841fefd21c4024b66"},{"id":"CYCLE-B","project_digest":"sha256:2222222222222222222222222222222222222222222222222222222222222222","task_revision":3,"autonomy":"human_assisted","roles":["worker","quality","oracle"],"concurrency":2,"interventions":1,"blocked":true,"retries":2,"terminal":"reconciled","evidence_digest":"sha256:9b60afc143bec7583ecb6eeda579b0999f9befc95bdf81106bab1610800ddbce"}],
+  "findings": [{"kind":"outcome","code":"completed_cycle","count":1,"proposal_only":true,"evidence_digest":"sha256:4cd220afd581a9b25791cb74501ffd31b618acece8fd39d512f6f7957b46a750"},{"kind":"bottleneck","code":"human_gate_wait","count":1,"proposal_only":true,"evidence_digest":"sha256:2e81128ff42ee864c7ed311321454587b516f1f9022417f17c41602b233536b1"},{"kind":"improvement_proposal","code":"bounded_repair_guidance","count":1,"proposal_only":true,"evidence_digest":"sha256:43a2d6894d3a5c850539e124164f0536828a577113db23fc62060433354e801f"}],
+  "analysis": {"cross_project": true, "approval": "not_performed", "policy_mutation": "not_performed", "guidance_authoring": "not_performed", "projects": 2},
+  "evidence": {"record_digest": "sha256:17c0a8225519a76d0c2c5aa954d47b648cc8d15928e3d0042287f7dd00b8c280", "checker": "awr-case-study-loop-checker/1.0.0"}
+}
