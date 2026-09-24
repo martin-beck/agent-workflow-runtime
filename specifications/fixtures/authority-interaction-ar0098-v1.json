@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-authority-interaction-model", "version": "1.0.0"},
+  "task": {"id": "AR-0098", "revision": 1},
+  "jobs": ["JOB-A", "JOB-B"],
+  "actions": [
+    {"action_id": "A-01", "sequence": 1, "job_id": "JOB-A", "authority": "awc", "operation": "admit", "task_revision": 1, "lease_id": "", "payload": {"admitted": true, "revision": 1, "admission_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"}},
+    {"action_id": "B-01", "sequence": 2, "job_id": "JOB-B", "authority": "awc", "operation": "admit", "task_revision": 1, "lease_id": "", "payload": {"admitted": true, "revision": 1, "admission_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"}},
+    {"action_id": "A-02", "sequence": 3, "job_id": "JOB-A", "authority": "awc", "operation": "lease", "task_revision": 1, "lease_id": "", "payload": {"new_lease_id": "LSE-A", "lease_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}},
+    {"action_id": "B-02", "sequence": 4, "job_id": "JOB-B", "authority": "awc", "operation": "lease", "task_revision": 1, "lease_id": "", "payload": {"new_lease_id": "LSE-B", "lease_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}},
+    {"action_id": "A-03", "sequence": 5, "job_id": "JOB-A", "authority": "awr", "operation": "dispatch", "task_revision": 1, "lease_id": "LSE-A", "payload": {"admission_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "dispatch_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"}},
+    {"action_id": "B-03", "sequence": 6, "job_id": "JOB-B", "authority": "awr", "operation": "dispatch", "task_revision": 1, "lease_id": "LSE-B", "payload": {"admission_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "dispatch_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"}},
+    {"action_id": "A-04", "sequence": 7, "job_id": "JOB-A", "authority": "awr", "operation": "start", "task_revision": 1, "lease_id": "LSE-A", "payload": {"start_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"}},
+    {"action_id": "B-04", "sequence": 8, "job_id": "JOB-B", "authority": "awr", "operation": "start", "task_revision": 1, "lease_id": "LSE-B", "payload": {"start_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"}},
+    {"action_id": "A-05", "sequence": 9, "job_id": "JOB-A", "authority": "awr", "operation": "evidence", "task_revision": 1, "lease_id": "LSE-A", "payload": {"evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"}},
+    {"action_id": "B-05", "sequence": 10, "job_id": "JOB-B", "authority": "awr", "operation": "evidence", "task_revision": 1, "lease_id": "LSE-B", "payload": {"evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"}},
+    {"action_id": "A-06", "sequence": 11, "job_id": "JOB-A", "authority": "awq", "operation": "quality_accept", "task_revision": 1, "lease_id": "LSE-A", "payload": {"evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "result": "accepted", "source": "awq"}},
+    {"action_id": "B-06", "sequence": 12, "job_id": "JOB-B", "authority": "awq", "operation": "quality_accept", "task_revision": 1, "lease_id": "LSE-B", "payload": {"evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "result": "accepted", "source": "awq"}},
+    {"action_id": "A-07", "sequence": 13, "job_id": "JOB-A", "authority": "awr", "operation": "alternative", "task_revision": 1, "lease_id": "LSE-A", "payload": {"alternative_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555", "reason": "test refinement", "change_kind": "test_change"}},
+    {"action_id": "B-07", "sequence": 14, "job_id": "JOB-B", "authority": "awr", "operation": "request_completion", "task_revision": 1, "lease_id": "LSE-B", "payload": {"quality_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"}},
+    {"action_id": "A-08", "sequence": 15, "job_id": "JOB-A", "authority": "awg", "operation": "guidance_decide", "task_revision": 1, "lease_id": "LSE-A", "payload": {"decision_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666", "decision": "requires_ui", "source": "awg"}},
+    {"action_id": "B-08", "sequence": 16, "job_id": "JOB-B", "authority": "awc", "operation": "commit", "task_revision": 1, "lease_id": "LSE-B", "payload": {"commit_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777", "terminal": true}},
+    {"action_id": "A-09", "sequence": 17, "job_id": "JOB-A", "authority": "ui", "operation": "ui_decide", "task_revision": 1, "lease_id": "LSE-A", "payload": {"decision_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888", "decision": "approved", "outcome": "approved", "source": "ui"}},
+    {"action_id": "A-10", "sequence": 18, "job_id": "JOB-A", "authority": "awr", "operation": "continue", "task_revision": 1, "lease_id": "LSE-A", "payload": {"quality_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"}},
+    {"action_id": "A-11", "sequence": 19, "job_id": "JOB-A", "authority": "awr", "operation": "request_completion", "task_revision": 1, "lease_id": "LSE-A", "payload": {"quality_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"}},
+    {"action_id": "A-12", "sequence": 20, "job_id": "JOB-A", "authority": "awc", "operation": "commit", "task_revision": 1, "lease_id": "LSE-A", "payload": {"commit_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777", "terminal": true}}
+  ],
+  "expected": {"JOB-A": "completed", "JOB-B": "completed"},
+  "refinement": ["admitted", "running", "executing", "observed", "accepted", "succeeded"],
+  "offline": {"network": "disabled", "provider": "not_performed", "llm": "not_performed", "ui": "not_performed", "durable_state": "not_performed"}
+}
