@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agent-workflow-runtime-cli"
-version = "0.1.0"
+version = "0.1.2"
 description = "Provider-neutral local mock bootstrap CLI for Agent Workflow Runtime"
 requires-python = ">=3.10"
 dependencies = []
@@ -13,5 +13,4 @@ dependencies = []
 awr = "awr_cli.cli:main"
 
 [tool.setuptools]
-packages = ["awr_cli"]
-
+packages = ["awr_cli", "scripts"]
