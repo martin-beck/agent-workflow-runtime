@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-local-supervisor",
+  "version": "1.0.0",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "revision", "lease", "worktree"],
+    "runtime": ["process admission", "resource enforcement", "cancellation", "cleanup"],
+    "awq": ["requirements", "evidence", "acceptance"]
+  },
+  "admission": {
+    "executable": "exact allowlisted interpreter",
+    "helper": "exact repository-owned helper under worktree",
+    "argv": "bounded array without shell syntax",
+    "environment": "explicit allowlist only",
+    "lease": "worker and lease identity plus future expiry"
+  },
+  "boundary": {
+    "worktree": "exact resolved cwd",
+    "network": "offline_fixture",
+    "process_group": "new session and group cancellation",
+    "limits": ["cpu_ms", "memory_bytes", "file_bytes", "process_count", "timeout_ms", "output_bytes"]
+  },
+  "lifecycle": ["admit", "launch", "complete", "failed", "timed_out", "cancelled", "recover"],
+  "privacy": {
+    "inherit_environment": false,
+    "stdout_stderr": "bounded and redacted",
+    "published_fields": ["run_id", "disposition", "returncode", "redacted_output", "lease_id"]
+  },
+  "failure_semantics": "fail_closed",
+  "unsupported_controls": "block admission",
+  "execution": {
+    "qualification": "repository-owned deterministic helper only",
+    "provider": "never required",
+    "network": "never used"
+  }
+}
