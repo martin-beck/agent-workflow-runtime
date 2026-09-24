@@ -1,0 +1,109 @@
+{
+  "projects": [
+    {
+      "project_key": "project-one",
+      "tenant": "tenant-a",
+      "project_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "project_key": "project-two",
+      "tenant": "tenant-a",
+      "project_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  ],
+  "contexts": {
+    "one": {
+      "task_id": "AR-0087",
+      "task_revision": 3,
+      "tenant": "tenant-a",
+      "project_key": "project-one",
+      "project_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "worktree_key": "WT-PROJECT-ONE-0087-1",
+      "worker_id": "WRK-ONE-1",
+      "lease_id": "LSE-ONE-1",
+      "fence": 1,
+      "session_id": "SES-ONE-1",
+      "coordinator_revision": 3
+    },
+    "two": {
+      "task_id": "AR-0087",
+      "task_revision": 3,
+      "tenant": "tenant-a",
+      "project_key": "project-two",
+      "project_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "worktree_key": "WT-PROJECT-TWO-0087-1",
+      "worker_id": "WRK-TWO-1",
+      "lease_id": "LSE-TWO-1",
+      "fence": 1,
+      "session_id": "SES-TWO-1",
+      "coordinator_revision": 3
+    },
+    "one_recovered": {
+      "task_id": "AR-0087",
+      "task_revision": 3,
+      "tenant": "tenant-a",
+      "project_key": "project-one",
+      "project_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "worktree_key": "WT-PROJECT-ONE-0087-1",
+      "worker_id": "WRK-ONE-2",
+      "lease_id": "LSE-ONE-2",
+      "fence": 2,
+      "session_id": "SES-ONE-2",
+      "coordinator_revision": 3
+    }
+  },
+  "actions": [
+    {
+      "kind": "allocate",
+      "context": "one"
+    },
+    {
+      "kind": "allocate",
+      "context": "two"
+    },
+    {
+      "kind": "publish",
+      "context": "one",
+      "artifact_id": "ART-API",
+      "payload": {
+        "schema": 1,
+        "owner": "one"
+      }
+    },
+    {
+      "kind": "allow_dependency",
+      "consumer": "project-two",
+      "producer": "project-one",
+      "artifact_id": "ART-API",
+      "source_worktree_key": "WT-PROJECT-ONE-0087-1",
+      "content_digest": "sha256:8379b361f3f932146b5b5b9c48d886ef679fff377e7825a47327066bc7f754f9",
+      "provenance_digest": "sha256:dc46e2158e6738b581158c96cc5ea02b27f6e81f36658cbdca9488654cab450b"
+    },
+    {
+      "kind": "read_dependency",
+      "context": "two",
+      "producer": "project-one",
+      "artifact_id": "ART-API"
+    },
+    {
+      "kind": "cleanup_interrupted",
+      "context": "one",
+      "operation_id": "OP-CLEANUP-AR0087"
+    },
+    {
+      "kind": "recover_cleanup",
+      "context": "one_recovered",
+      "operation_id": "OP-RECOVER-AR0087"
+    }
+  ],
+  "expected": {
+    "projects": 2,
+    "worktrees": 2,
+    "artifacts": 1,
+    "dependencies": 1,
+    "final_worktree_states": {
+      "project-one": "cleaned",
+      "project-two": "active"
+    }
+  }
+}
