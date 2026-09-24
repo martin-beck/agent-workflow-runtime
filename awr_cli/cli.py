@@ -264,6 +264,12 @@ def parser() -> argparse.ArgumentParser:
     audit.add_argument("--detail", default="")
     commands.add_parser("audit-status", help="validate and summarize the local audit journal").add_argument("--home", type=Path)
     commands.add_parser("security-check", help="check local runtime-home security boundaries").add_argument("--home", type=Path)
+    release = commands.add_parser("release-verify", help="verify an offline release artifact and provenance")
+    release.add_argument("--artifact", type=Path, required=True)
+    release.add_argument("--version", required=True)
+    release.add_argument("--source-commit", required=True)
+    release.add_argument("--sha256", required=True)
+    release.add_argument("--rollback-version")
     return root
 
 
@@ -305,6 +311,11 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "security-check":
             from .security import check
             output = check(args.home)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "release-verify":
+            from .release import verify_artifact
+            output = verify_artifact(args.artifact, version=args.version, source_commit=args.source_commit, expected_sha256=args.sha256, rollback_version=args.rollback_version)
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
