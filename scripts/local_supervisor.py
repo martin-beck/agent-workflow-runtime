@@ -82,6 +82,25 @@ def _bounded_int(value: object, name: str, *, minimum: int = 1) -> int:
     return value
 
 
+def _validate_redaction_values(values: Iterable[str]) -> tuple[str, ...]:
+    """Validate caller-declared sensitive values without redacting ambient env."""
+
+    if isinstance(values, (str, bytes)):
+        raise SupervisorError("redaction values must be an iterable of strings")
+    try:
+        bounded = tuple(values)
+    except TypeError as exc:
+        raise SupervisorError("redaction values must be an iterable") from exc
+    if len(bounded) > 32 or any(
+        not isinstance(value, str) or not value or len(value) > 256
+        for value in bounded
+    ):
+        raise SupervisorError("redaction values are unbounded or malformed")
+    if len(set(bounded)) != len(bounded):
+        raise SupervisorError("redaction values must be unique")
+    return bounded
+
+
 @dataclass(frozen=True)
 class Lease:
     worker_id: str
@@ -278,6 +297,7 @@ class LocalSupervisor:
         lease: Lease,
         budget: Budget,
         environment: dict[str, str] | None = None,
+        redaction_values: Iterable[str] = (),
         now: float | None = None,
     ) -> RunHandle:
         self.policy.validate()
@@ -292,6 +312,7 @@ class LocalSupervisor:
         self._validate_command(argv)
         cwd = self.policy.worktree.resolve(strict=True)
         env = self._filter_environment(environment or {})
+        explicit_redactions = _validate_redaction_values(redaction_values)
         state_file = self.state_dir / f"{run_id}.json"
         if state_file.exists():
             raise SupervisorError("run record already exists")
@@ -313,7 +334,7 @@ class LocalSupervisor:
         except (OSError, ValueError) as exc:
             raise SupervisorError("helper process admission failed") from exc
         handle = RunHandle(
-            run_id, process, lease, budget, cwd, state_file, tuple(env.values())
+            run_id, process, lease, budget, cwd, state_file, explicit_redactions
         )
         self._active[run_id] = handle
         _write_state(
