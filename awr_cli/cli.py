@@ -283,6 +283,11 @@ def parser() -> argparse.ArgumentParser:
     schedule_done = commands.add_parser("schedule-complete", help="complete a local leased job")
     schedule_done.add_argument("--state-file", type=Path, required=True); schedule_done.add_argument("--job-id", required=True); schedule_done.add_argument("--worker", required=True); schedule_done.add_argument("--lease", required=True); schedule_done.add_argument("--status", default="done")
     commands.add_parser("schedule-status", help="read local scheduler state").add_argument("--state-file", type=Path, required=True)
+    host = commands.add_parser("host-run", help="run one bounded local worker process")
+    host.add_argument("--root", type=Path, required=True); host.add_argument("--cwd", type=Path, required=True)
+    host.add_argument("--timeout", type=float, default=5.0); host.add_argument("--output-limit", type=int, default=16384)
+    host.add_argument("--allow-env", action="append", default=[]); host.add_argument("--env", action="append", default=[])
+    host.add_argument("--allow-network", action="store_true"); host.add_argument("argv", nargs=argparse.REMAINDER)
     return root
 
 
@@ -346,6 +351,17 @@ def main(argv: list[str] | None = None) -> int:
             elif args.command == "schedule-dispatch": output = store.dispatch(args.worker)
             elif args.command == "schedule-complete": output = store.complete(args.job_id, args.worker, args.lease, args.status)
             else: output = store.status()
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "host-run":
+            from .host_supervisor import HostSupervisor
+            if not args.argv or args.argv[0] == "--":
+                raise CliError("host_argv_invalid")
+            supplied = {}
+            for item in args.env:
+                if "=" not in item: raise CliError("host_environment_invalid")
+                key, value = item.split("=", 1); supplied[key] = value
+            output = HostSupervisor(args.root).run(args.argv, args.cwd, env=supplied, allowed_env=args.allow_env, timeout_seconds=args.timeout, output_limit=args.output_limit, require_network_disabled=not args.allow_network)
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
