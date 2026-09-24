@@ -458,6 +458,21 @@ python3 scripts/check_durable_scheduler.py --spec specifications/durable-schedul
 
 ## AR-0081 executable Coordinator client
 
+## AR-0129 local LLM mock protocol
+
+`awr_cli.local_llm_mock` provides an in-process deterministic request,
+response, and ordered streaming protocol. Requests bind the exact task,
+revision, session, adapter profile, and registry revision. The mock has no
+provider, URL, credential, socket, subprocess, or network surface.
+
+Records retain only request/response/stream digests, authority and lease
+bindings, and bounded usage; messages, prompts, transcripts, and raw output
+are excluded. Replay recomputes the response and rejects changed inputs,
+configuration, profile, response, or record digests. Comparison requires two
+distinct registered agents and binds both runs to one input/configuration
+digest. `LocalMockWorkflow` routes execution through the scheduler lease,
+mandatory authority observations, and evidence/accounting ledger.
+
 `coordinator-client-v1.json` defines the bounded executable client boundary.
 Every request carries exact Coordinator task/project/worktree/session/owner/
 lease bindings, an opaque auth reference, a unique operation ID, and a

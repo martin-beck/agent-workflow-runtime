@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 DIGEST = re.compile(r"^sha256:[0-9a-f]{64}$")
-ID = re.compile(r"^(?:JOB|LEASE|SES|EV|RUN)-[A-Z0-9-]{1,63}$")
+ID = re.compile(r"^(?:JOB|LEASE|LSE|SES|EV|RUN)-[A-Z0-9-]{1,63}$")
 PRIVATE = re.compile(
     r"credential|password|secret|token|prompt|transcript|private[_ -]?path|raw[_ -]?output",
     re.IGNORECASE,
