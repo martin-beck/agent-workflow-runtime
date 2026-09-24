@@ -1,0 +1,1 @@
+{"schema_version":1,"specification_id":"awr-runtime-host-boundary","version":"1.0.0","task":{"id":"AR-0072","revision":1},"offline":{"execute":false,"network":"disabled","credentials":"not_performed"},"invariants":["worktree containment","capability allowlist","bounded resources","lease-bound cancellation","digest-only command/path evidence","fail closed"]}
