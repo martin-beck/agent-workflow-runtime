@@ -628,3 +628,10 @@ interruption, checkpoint/resume fencing, failure, and close. The reference
 model and checker are offline only. Unknown capabilities are rejected; known
 but unadvertised capabilities return `unsupported` with no execution or state
 change. Inputs are digests or opaque `secret-ref:` identifiers only.
+
+## AR-0064 deterministic fake-agent simulator
+
+`fake-agent-simulator-v1.json` defines a virtual-clock, digest-only
+interleaving model for deterministic fake agents and injected provider, host,
+crash, UI, and quality failures. Its checker never starts an agent or contacts
+a provider.
