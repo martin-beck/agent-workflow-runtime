@@ -283,6 +283,10 @@ def parser() -> argparse.ArgumentParser:
     schedule_done = commands.add_parser("schedule-complete", help="complete a local leased job")
     schedule_done.add_argument("--state-file", type=Path, required=True); schedule_done.add_argument("--job-id", required=True); schedule_done.add_argument("--worker", required=True); schedule_done.add_argument("--lease", required=True); schedule_done.add_argument("--status", default="done")
     commands.add_parser("schedule-status", help="read local scheduler state").add_argument("--state-file", type=Path, required=True)
+    agent = commands.add_parser("agent-run", help="run one provider-neutral local agent adapter")
+    agent.add_argument("--root", type=Path, required=True); agent.add_argument("--cwd", type=Path, required=True)
+    agent.add_argument("--session-id", required=True); agent.add_argument("--adapter", required=True); agent.add_argument("--input-digest", required=True)
+    agent.add_argument("--timeout", type=float, default=5.0); agent.add_argument("argv", nargs=argparse.REMAINDER)
     host = commands.add_parser("host-run", help="run one bounded local worker process")
     host.add_argument("--root", type=Path, required=True); host.add_argument("--cwd", type=Path, required=True)
     host.add_argument("--timeout", type=float, default=5.0); host.add_argument("--output-limit", type=int, default=16384)
@@ -362,6 +366,12 @@ def main(argv: list[str] | None = None) -> int:
                 if "=" not in item: raise CliError("host_environment_invalid")
                 key, value = item.split("=", 1); supplied[key] = value
             output = HostSupervisor(args.root).run(args.argv, args.cwd, env=supplied, allowed_env=args.allow_env, timeout_seconds=args.timeout, output_limit=args.output_limit, require_network_disabled=not args.allow_network)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "agent-run":
+            from .agent_session import AgentSession
+            if not args.argv or args.argv[0] == "--": raise CliError("host_argv_invalid")
+            output = AgentSession(args.root, args.session_id, args.adapter).run(args.argv, args.cwd, input_digest=args.input_digest, timeout_seconds=args.timeout)
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
