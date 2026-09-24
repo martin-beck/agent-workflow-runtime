@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-cross-agent-accounting",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0090", "revision": 3},
+  "offline": {"execute": false, "provider": "not_performed", "network": "disabled", "llm": "not_performed"},
+  "accounting": ["exact job/task/project/revision/lease/session/agent attribution", "immutable digest chain", "bounded seconds/tokens/events", "canonical replay", "same-benchmark multi-agent comparison"],
+  "privacy": {"raw_prompts": "forbidden", "transcripts": "forbidden", "secrets": "forbidden", "private_paths": "forbidden"},
+  "hostile_cases": ["replay", "budget_exceeded", "privacy_violation", "non_comparable_runs", "contradictory_event", "crossed_binding"]
+}

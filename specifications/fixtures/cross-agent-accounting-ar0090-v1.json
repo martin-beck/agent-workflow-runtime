@@ -1,0 +1,39 @@
+{
+  "runs": [
+    {
+      "job_id": "JOB-A", "lease_id": "LEASE-A", "session_id": "SES-A", "agent_id": "agent-a",
+      "benchmark_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "configuration_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "budget": {"seconds": 10, "tokens": 20, "events": 2},
+      "events": [{"event_id": "EV-A-1", "kind": "completion", "usage": {"seconds": 2, "tokens": 5}, "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "revision": 3}],
+      "expected": {
+        "job_id": "JOB-A", "lease_id": "LEASE-A", "session_id": "SES-A", "agent_id": "agent-a",
+        "benchmark_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "budget": {"seconds": 10, "tokens": 20, "events": 2}, "usage": {"seconds": 2, "tokens": 5, "events": 1},
+        "events": [{"event_id": "EV-A-1", "sequence": 1, "job_id": "JOB-A", "lease_id": "LEASE-A", "session_id": "SES-A", "agent_id": "agent-a", "revision": 3, "kind": "completion", "usage": {"seconds": 2, "tokens": 5}, "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "previous_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "digest": "sha256:4579a02b19cc5c288c6fb07c99da146b95ac2bd0a9363c13b34b18727bdc576f"}],
+        "execute": false, "provider": "not_performed", "network": "disabled"
+      }
+    },
+    {
+      "job_id": "JOB-B", "lease_id": "LEASE-B", "session_id": "SES-B", "agent_id": "agent-b",
+      "benchmark_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "configuration_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "budget": {"seconds": 10, "tokens": 20, "events": 2},
+      "events": [{"event_id": "EV-B-1", "kind": "completion", "usage": {"seconds": 3, "tokens": 7}, "evidence_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "revision": 3}],
+      "expected": {
+        "job_id": "JOB-B", "lease_id": "LEASE-B", "session_id": "SES-B", "agent_id": "agent-b",
+        "benchmark_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "budget": {"seconds": 10, "tokens": 20, "events": 2}, "usage": {"seconds": 3, "tokens": 7, "events": 1},
+        "events": [{"event_id": "EV-B-1", "sequence": 1, "job_id": "JOB-B", "lease_id": "LEASE-B", "session_id": "SES-B", "agent_id": "agent-b", "revision": 3, "kind": "completion", "usage": {"seconds": 3, "tokens": 7}, "evidence_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "previous_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000", "digest": "sha256:cf668f7e68eaf4aa0ec4379e5fec36ed8f32009a1fadf575c0b8801fb9ec8d2d"}],
+        "execute": false, "provider": "not_performed", "network": "disabled"
+      }
+    }
+  ],
+  "expected": {
+    "agents": ["agent-a", "agent-b"],
+    "benchmark_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "configuration_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "results": [{"agent_id": "agent-a", "events": 1, "replayed": true, "usage": {"seconds": 2, "tokens": 5, "events": 1}}, {"agent_id": "agent-b", "events": 1, "replayed": true, "usage": {"seconds": 3, "tokens": 7, "events": 1}}],
+    "measurement": "not_performed", "comparable": true, "execute": false
+  }
+}
