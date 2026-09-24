@@ -276,6 +276,13 @@ def parser() -> argparse.ArgumentParser:
     coord_status.add_argument("--state-file", type=Path, required=True)
     coord_claim = commands.add_parser("coord-claim", help="claim a local Coordinator-shaped task")
     coord_claim.add_argument("--state-file", type=Path, required=True); coord_claim.add_argument("--owner", required=True); coord_claim.add_argument("--expected-revision", type=int, required=True)
+    sched = commands.add_parser("schedule-submit", help="submit a local durable mock job")
+    sched.add_argument("--state-file", type=Path, required=True); sched.add_argument("--job-id", required=True); sched.add_argument("--project", required=True); sched.add_argument("--dependency", action="append", default=[]); sched.add_argument("--priority", type=int, default=50)
+    dispatch = commands.add_parser("schedule-dispatch", help="dispatch a local ready job")
+    dispatch.add_argument("--state-file", type=Path, required=True); dispatch.add_argument("--worker", required=True)
+    schedule_done = commands.add_parser("schedule-complete", help="complete a local leased job")
+    schedule_done.add_argument("--state-file", type=Path, required=True); schedule_done.add_argument("--job-id", required=True); schedule_done.add_argument("--worker", required=True); schedule_done.add_argument("--lease", required=True); schedule_done.add_argument("--status", default="done")
+    commands.add_parser("schedule-status", help="read local scheduler state").add_argument("--state-file", type=Path, required=True)
     return root
 
 
@@ -330,6 +337,15 @@ def main(argv: list[str] | None = None) -> int:
             if args.command == "coord-init": output = store.init(args.task_id, args.project_revision, args.worktree_digest, args.session_id)
             elif args.command == "coord-status": output = store.snapshot()
             else: output = store.claim(args.owner, args.expected_revision)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command in {"schedule-submit", "schedule-dispatch", "schedule-complete", "schedule-status"}:
+            from .scheduler_local import LocalScheduler
+            store = LocalScheduler(args.state_file)
+            if args.command == "schedule-submit": output = store.submit(args.job_id, args.project, args.dependency, args.priority)
+            elif args.command == "schedule-dispatch": output = store.dispatch(args.worker)
+            elif args.command == "schedule-complete": output = store.complete(args.job_id, args.worker, args.lease, args.status)
+            else: output = store.status()
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
