@@ -289,6 +289,8 @@ def parser() -> argparse.ArgumentParser:
     agent.add_argument("--timeout", type=float, default=5.0); agent.add_argument("argv", nargs=argparse.REMAINDER)
     gate = commands.add_parser("authority-admit", help="consume mandatory local authority gate observations")
     gate.add_argument("--task", required=True); gate.add_argument("--revision", type=int, required=True)
+    qualification = commands.add_parser("qualify-concurrent", help="run bounded concurrent provider-free qualification")
+    qualification.add_argument("--root", type=Path, required=True); qualification.add_argument("--count", type=int, default=2)
     host = commands.add_parser("host-run", help="run one bounded local worker process")
     host.add_argument("--root", type=Path, required=True); host.add_argument("--cwd", type=Path, required=True)
     host.add_argument("--timeout", type=float, default=5.0); host.add_argument("--output-limit", type=int, default=16384)
@@ -380,6 +382,11 @@ def main(argv: list[str] | None = None) -> int:
             from .authority_gates import AuthorityGates
             from scripts.local_authority_transport import demo_client
             output = AuthorityGates(demo_client()).admit(task=args.task, revision=args.revision)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "qualify-concurrent":
+            from .qualification import run_concurrent
+            output = run_concurrent(args.root, args.count)
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
