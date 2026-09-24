@@ -248,6 +248,12 @@ def parser() -> argparse.ArgumentParser:
     workflow = commands.add_parser("local-run", help="run the deterministic offline mock workflow")
     workflow.add_argument("--manifest", type=Path, required=True)
     workflow.add_argument("--expected-revision")
+    register = commands.add_parser("project-register", help="register an existing project/state binding locally")
+    register.add_argument("--name", required=True)
+    register.add_argument("--project", type=Path, required=True)
+    register.add_argument("--state", type=Path, required=True)
+    register.add_argument("--home", type=Path)
+    commands.add_parser("project-list", help="list locally registered projects").add_argument("--home", type=Path)
     return root
 
 
@@ -265,6 +271,16 @@ def main(argv: list[str] | None = None) -> int:
             record = run(raw, args.expected_revision)
             output = validate(record, args.expected_revision)
             print(json.dumps({"result": output, "record": record}, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "project-register":
+            from .project_registry import register
+            output = register(args.name, args.project, args.state, args.home)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "project-list":
+            from .project_registry import list_projects
+            output = list_projects(args.home)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
             from . import __version__
