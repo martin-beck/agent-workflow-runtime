@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-authority-interaction-model",
+  "version": "1.0.0",
+  "title": "Mandatory AWC/AWR/AWQ/AWG/UI authority interaction model",
+  "normative": true,
+  "authorities": {
+    "awc": {"owns": ["identity", "revision", "admission", "lease", "recovery", "terminal_commit"]},
+    "awr": {"owns": ["dispatch", "execution", "evidence_projection", "retry", "repair_escalation"]},
+    "awq": {"owns": ["evidence_acceptance", "quality_result"]},
+    "awg": {"owns": ["material_alternative_decision", "decision_routing", "guidance"]},
+    "ui": {"owns": ["human_decision_interface_outcome"]}
+  },
+  "states": ["new", "admitted", "leased", "dispatched", "executing", "quality_pending", "quality_accepted", "oracle_pending", "repair_pending", "ui_pending", "completion_pending", "recovering", "completed", "blocked"],
+  "operations": {
+    "admit": "awc", "lease": "awc", "dispatch": "awr", "start": "awr", "evidence": "awr", "quality_accept": "awq", "quality_reject": "awq", "quality_unknown": "awq", "alternative": "awr", "guidance_decide": "awg", "ui_decide": "ui", "continue": "awr", "checkpoint": "awr", "crash": "awr", "recover": "awc", "failure": "awr", "retry": "awr", "repair_escalate": "awr", "block": "awr", "request_completion": "awr", "commit": "awc"
+  },
+  "invariants": [
+    "dispatch requires current AWC admission and a non-empty current lease",
+    "execution and continuation require an AWQ accepted result attributed to AWQ",
+    "a material alternative requires an AWG decision; AWG may route required change control to UI",
+    "refinement, test-change, and specification-change decisions cannot be mutated by AWR or an agent",
+    "bounded repair exhaustion requires AWG then UI when a user decision is required",
+    "missing, stale, replayed, crossed, ambiguous, or expired authority results never approve",
+    "completion requires an AWC terminal commit after all mandatory gates",
+    "recovery advances the task revision and fences the old lease"
+  ],
+  "temporal_properties": [
+    "G(dispatch(job) -> previously(admitted(job) and leased(job)))",
+    "G(continue(job) -> previously(awq_accepted(job) and not_pending(awg_or_ui(job))))",
+    "G(material_alternative(job) -> eventually(awg_decision(job)))",
+    "G(required_change(job) -> awg_routes_to_ui(job) and eventually(ui_outcome(job)))",
+    "G(unresolved_repair(job) -> awg_routes_to_ui(job) and blocked_until_ui_outcome(job))",
+    "G(completed(job) -> previously(awc_terminal_commit(job)))"
+  ],
+  "refinement_events": {
+    "admitted": "admit", "queued": "lease", "running": "dispatch", "checkpointed": "checkpoint", "retry_queued": "retry", "succeeded": "commit", "failed": "failure", "scheduled": "lease", "assigned": "dispatch", "executing": "start", "observed": "evidence", "quality_pending": "evidence", "oracle_pending": "alternative", "accepted": "commit", "rejected": "quality_reject"
+  },
+  "hostile_cases": ["skipped_awc_lease", "skipped_awq_acceptance", "skipped_awg_decision", "direct_ui_mutation", "unresolved_repair_escalation", "stale_revision", "replay", "crash_recovery"],
+  "offline_boundary": {"network": "disabled", "provider": "not_performed", "llm": "not_performed", "ui": "not_performed", "durable_state": "not_performed"},
+  "limitations": ["This is a deterministic supplied-observation model and not a live authority client.", "A successful trace proves contract refinement only; it does not prove host isolation, agent behavior, human intent, or durable Coordinator persistence.", "UI outcomes are represented as attributed fixture observations and no UI is opened."]
+}
