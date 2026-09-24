@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-agent-session", "version": "1.0.0"},
+  "task": {"id": "AR-0085", "revision": 3},
+  "profiles": ["codex-agent", "opencode-agent", "opendesk-agent", "generic-mock-agent"],
+  "cases": [
+    {"name": "start_request_stream", "expected": "normalized events", "state_change": true},
+    {"name": "interruption_resume_close", "expected": "checkpoint fenced lifecycle", "state_change": true},
+    {"name": "capability_mismatch", "expected": "blocked without execution", "state_change": false},
+    {"name": "stale_lease", "expected": "blocked without execution", "state_change": false},
+    {"name": "bounded_payload", "expected": "blocked at profile limit", "state_change": false},
+    {"name": "concurrent_profiles", "expected": "four profiles use one boundary", "state_change": true},
+    {"name": "mock_boundary", "expected": "local mock only", "state_change": true},
+    {"name": "replay", "expected": "deterministic event digests", "state_change": true}
+  ],
+  "execution": {
+    "mode": "offline_fixture",
+    "process": "local_deterministic_helper_only",
+    "provider": "not_performed",
+    "backend": "not_performed",
+    "credentials": "not_used",
+    "network": "disabled",
+    "llm": "not_performed",
+    "durable_state": "not_performed"
+  },
+  "evidence": {"checker": "awr-agent-session-checker/1.0.0", "live_execution": "unverified", "replay": "deterministic_fixture"}
+}

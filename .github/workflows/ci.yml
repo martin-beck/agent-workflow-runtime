@@ -34,6 +34,8 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Run AR-0098 bounded authority model
         run: python scripts/check_authority_interaction.py --spec specifications/authority-interaction-v1.json --trace specifications/fixtures/authority-interaction-ar0098-v1.json --bounded-depth 4
+      - name: Run AR-0085 session contract checker
+        run: python scripts/check_agent_sessions.py --spec specifications/agent-session-v1.json --fixture specifications/fixtures/agent-session-ar0085-v1.json --expected-revision 3
 
   schemas-and-fixtures:
     name: JSON schema and fixture integrity

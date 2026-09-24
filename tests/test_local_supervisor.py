@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 import tempfile
 import time
@@ -125,6 +126,33 @@ class LocalSupervisorTests(unittest.TestCase):
                     budget=Budget(),
                     environment={"TOKEN": "not-allowed"},
                 )
+        finally:
+            state.cleanup()
+
+    def test_safe_environment_values_do_not_corrupt_structured_output(self) -> None:
+        supervisor, state = self.supervisor()
+        try:
+            result = supervisor.run(
+                "RUN-JSON",
+                command("json"),
+                lease=Lease("WRK-A", "LSE-A", time.monotonic() + 10),
+                budget=Budget(timeout_ms=1_000),
+            )
+            self.assertEqual(json.loads(result.stdout), {"value": 1, "status": "ok"})
+        finally:
+            state.cleanup()
+
+    def test_only_explicit_redaction_values_are_applied(self) -> None:
+        supervisor, state = self.supervisor()
+        try:
+            result = supervisor.run(
+                "RUN-EXPLICIT-REDACTION",
+                command("value", "PRIVATE-VALUE"),
+                lease=Lease("WRK-A", "LSE-A", time.monotonic() + 10),
+                budget=Budget(timeout_ms=1_000),
+                redaction_values=("PRIVATE-VALUE",),
+            )
+            self.assertEqual(result.stdout.strip(), "REDACTED")
         finally:
             state.cleanup()
 

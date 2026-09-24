@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-agent-session",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0085", "revision": 3},
+  "dependencies": {"supervisor": "AR-0083", "registry": "AR-0084", "transport": "AR-0073"},
+  "lifecycle": ["new", "started", "streaming", "interrupted", "closed", "failed"],
+  "event_contract": {
+    "required_fields": ["schema_version", "protocol", "event_id", "event_digest", "sequence", "event_type", "task", "session", "adapter", "correlation", "disposition", "details", "evidence_digest"],
+    "event_types": ["session_started", "request_accepted", "stream_chunk", "interrupted", "resumed", "closed"],
+    "terminal_types": ["closed", "failed", "interrupted"]
+  },
+  "fencing": {
+    "admission": "AR-0084 profile and AR-0083 lease",
+    "operation": "same worker and lease before every operation",
+    "resume": "exact interruption checkpoint and same lease",
+    "stale": "blocked without process launch or state change"
+  },
+  "bounds": {
+    "request": "profile max_request_bytes",
+    "events": "profile max_output_events",
+    "arguments": "AR-0083 bounded shell-free argv",
+    "response": "AR-0083 output cap"
+  },
+  "normalized_errors": ["unknown_profile", "capability_mismatch", "stale_lease", "expired_lease", "payload_too_large", "invalid_state", "fence_mismatch", "supervisor_failure", "malformed_mock"],
+  "offline_boundary": {
+    "provider": "not_performed",
+    "backend": "not_performed",
+    "credentials": "not_used",
+    "network": "disabled",
+    "llm": "not_performed",
+    "local_mock": "deterministic_only",
+    "durable_state": "not_performed",
+    "remote_verification": "unverified"
+  },
+  "hostile_cases": ["start_request_stream", "interruption_resume_close", "capability_mismatch", "stale_lease", "bounded_payload", "concurrent_profiles", "mock_boundary", "replay"],
+  "limitations": [
+    "The local helper is a deterministic executable fixture and is not a provider or backend.",
+    "The LiteLLM-shaped envelope is a shape-compatible local mock, not an LLM result.",
+    "The session does not persist Coordinator state, AWQ evidence, AWG decisions, or UI events."
+  ]
+}

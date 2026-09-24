@@ -13,7 +13,7 @@ import time
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "mode", choices=("success", "sleep", "child", "output", "env", "fail")
+        "mode", choices=("success", "sleep", "child", "output", "env", "json", "value", "fail")
     )
     parser.add_argument("value", nargs="?", default="")
     args = parser.parse_args()
@@ -44,6 +44,12 @@ def main() -> int:
             + os.environ.get("TOKEN", ""),
             flush=True,
         )
+        return 0
+    if args.mode == "json":
+        print('{"value":1,"status":"ok"}', flush=True)
+        return 0
+    if args.mode == "value":
+        print(args.value, flush=True)
         return 0
     print("password=FAILURE", file=sys.stderr, flush=True)
     return 7
