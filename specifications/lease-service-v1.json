@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-shared-lease-service",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0082", "revision": 3},
+  "binding": {"task_id": "AR-0082", "project_key": "agent-workflow-runtime", "worktree_key": "agent-workflow-runtime-0082"},
+  "operations": {
+    "acquire": "CAS an unowned task and allocate the next fencing token",
+    "heartbeat": "CAS the exact owner, lease, token and strictly advance time and expiry",
+    "handoff": "atomically replace an unexpired owner and allocate the next token",
+    "recover_expired": "atomically replace only an expired owner and allocate the next token",
+    "release": "CAS the exact owner and clear ownership before expiry"
+  },
+  "invariants": [
+    "At most one owner is committed for a task revision.",
+    "Every acquire, handoff, and expiry recovery strictly increases the fencing token.",
+    "Every mutation uses the exact current task revision as a compare-and-swap.",
+    "Heartbeat time and expiry are strictly monotonic for the current owner.",
+    "An old owner, lease, or token cannot mutate state after replacement or recovery.",
+    "An operation ID is idempotent only for the identical request and changed replay is rejected.",
+    "Ambiguous or delayed responses remain unknown until the same operation ID is replayed or delivered."
+  ],
+  "interleavings": {"worker_bound": 8, "schedule": "fixed round-robin with crash, delay, replay and expiry windows", "counterexamples": "retained in fixture"},
+  "failure_semantics": {"mode": "fail_closed", "unknown": ["ambiguous_outcome", "delayed_response"], "reject": ["stale_cas_revision", "already_owned", "owner_or_fence_mismatch", "lease_not_expired", "changed_replay", "crossed_binding"]},
+  "evidence_boundary": {"network": "disabled", "provider": "not_performed", "llm": "not_performed"}
+}
