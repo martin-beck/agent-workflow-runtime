@@ -10,6 +10,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
+from .agent_registry import AdapterRegistry, RegistryError
+
 from .cli import CliError, canonical
 
 
@@ -19,9 +21,10 @@ def _digest(value: Any) -> str:
 
 
 class LocalScheduler:
-    def __init__(self, path: Path, max_concurrency: int = 2):
+    def __init__(self, path: Path, max_concurrency: int = 2, *, registry: AdapterRegistry | None = None):
         self.path = path.expanduser().absolute(); self.lock = self.path.with_suffix(self.path.suffix + ".lock")
         self.max_concurrency = max_concurrency
+        self.registry = registry or AdapterRegistry.memory_with_fakes()
         if self.path.is_symlink() or self.lock.is_symlink(): raise CliError("scheduler_state_symlink")
 
     @contextmanager
@@ -54,15 +57,19 @@ class LocalScheduler:
     def _view(value: dict[str, Any]) -> dict[str, Any]:
         return {"jobs": value["jobs"], "events": len(value["events"]), "fence": value["fence"], "state_digest": _digest(value), "network": "disabled", "provider": "not_performed"}
 
-    def submit(self, job_id: str, project: str, dependencies: list[str] | None = None, priority: int = 50, retry_limit: int = 1) -> dict[str, Any]:
+    def submit(self, job_id: str, project: str, dependencies: list[str] | None = None, priority: int = 50, retry_limit: int = 1, *, adapter_id: str = "fake-alpha", capabilities: list[str] | None = None) -> dict[str, Any]:
         dependencies = list(dependencies or [])
         if not job_id.startswith("JOB-") or not project or job_id in dependencies or len(set(dependencies)) != len(dependencies) or not 0 <= priority <= 100 or retry_limit < 0:
             raise CliError("scheduler_job_invalid")
+        try:
+            negotiation = self.registry.negotiate(adapter_id, capabilities or ["request"])
+        except RegistryError as exc:
+            raise CliError(f"scheduler_{exc}") from exc
         with self._locked():
             value = self._load()
             if job_id in value["jobs"]: raise CliError("scheduler_job_duplicate")
             if any(dep not in value["jobs"] for dep in dependencies): raise CliError("scheduler_dependency_missing")
-            value["jobs"][job_id] = {"job_id": job_id, "project": project, "dependencies": dependencies, "priority": priority, "retry_limit": retry_limit, "attempts": 0, "state": "queued" if not dependencies else "waiting", "lease": None}
+            value["jobs"][job_id] = {"job_id": job_id, "project": project, "dependencies": dependencies, "priority": priority, "retry_limit": retry_limit, "attempts": 0, "state": "queued" if not dependencies else "waiting", "lease": None, "adapter_id": adapter_id, "capabilities": negotiation["capabilities"], "registry_revision": negotiation["registry_revision"], "profile_digest": negotiation["profile_digest"]}
             value["events"].append({"kind": "submitted", "job_id": job_id})
             self._save(value); return self._view(value)
 
@@ -76,6 +83,12 @@ class LocalScheduler:
             ready = [job for job in value["jobs"].values() if job["state"] == "queued"]
             if not ready: raise CliError("scheduler_no_ready_job")
             job = sorted(ready, key=lambda item: (-item["priority"], item["attempts"], item["job_id"]))[0]
+            try:
+                negotiation = self.registry.negotiate(job["adapter_id"], job["capabilities"], expected_revision=job["registry_revision"])
+            except RegistryError as exc:
+                raise CliError(f"scheduler_{exc}") from exc
+            if negotiation["profile_digest"] != job["profile_digest"]:
+                raise CliError("scheduler_stale_profile")
             value["fence"] += 1; job["attempts"] += 1; job["state"] = "running"; job["lease"] = {"id": f"LSE-{value['fence']:08d}", "worker": worker_id, "fence": value["fence"]}
             value["events"].append({"kind": "dispatched", "job_id": job["job_id"], "lease": job["lease"]})
             self._save(value); return {"job": job.copy(), **self._view(value)}

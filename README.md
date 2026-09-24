@@ -26,6 +26,16 @@ AWR is not a replacement for the family authorities:
 - AWG owns oracle decisions and reusable guidance;
 - the UI owns human-facing discussion rendering and input.
 
+AR-0128 adds the executable provider-neutral adapter registry at
+`awr_cli.agent_registry`. It stores revisioned profiles with atomic JSON
+replacement and an advisory lock, and requires exact adapter identity,
+capabilities, lifecycle operations, resource limits, command profiles, and
+sandbox requirements. `AgentSession` and `LocalScheduler` negotiate against
+the same registry revision before starting or dispatching work; duplicate,
+stale, unsupported, or unsafe profiles fail closed. The built-in
+`fake-alpha` and `fake-beta` adapters are deterministic local test doubles;
+they never contact a provider or network.
+
 ## Initial architecture
 
 The initial repository defines the contracts first. Runtime implementations,

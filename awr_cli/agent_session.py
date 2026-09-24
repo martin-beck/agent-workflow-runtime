@@ -10,6 +10,7 @@ from typing import Any, Sequence
 
 from .cli import CliError, canonical
 from .host_supervisor import HostSupervisor
+from .agent_registry import AdapterRegistry, RegistryError
 
 
 SESSION_ID = re.compile(r"^SES-[A-Z0-9-]{3,64}$")
@@ -18,19 +19,30 @@ SESSION_ID = re.compile(r"^SES-[A-Z0-9-]{3,64}$")
 class AgentSession:
     """Execute a deterministic adapter command and normalize its lifecycle."""
 
-    def __init__(self, root: Path, session_id: str, adapter: str, *, sandboxed: bool = False):
+    def __init__(self, root: Path, session_id: str, adapter: str, *, sandboxed: bool = False, registry: AdapterRegistry | None = None):
         if not SESSION_ID.fullmatch(session_id) or not re.fullmatch(r"[a-z][a-z0-9-]{1,62}", adapter):
             raise CliError("session_identity_invalid")
         self.session_id = session_id
         self.adapter = adapter
         self.sandboxed = sandboxed
+        self.registry = registry or AdapterRegistry.memory_with_fakes()
+        try:
+            self.profile = self.registry.profile(adapter)
+        except RegistryError as exc:
+            raise CliError("session_adapter_unknown") from exc
         self.supervisor = HostSupervisor(root)
 
-    def run(self, argv: Sequence[str], cwd: Path, *, input_digest: str, timeout_seconds: float = 5.0) -> dict[str, Any]:
+    def run(self, argv: Sequence[str], cwd: Path, *, input_digest: str, timeout_seconds: float = 5.0, capabilities: Sequence[str] = ("request",)) -> dict[str, Any]:
         if not re.fullmatch(r"sha256:[0-9a-f]{64}", input_digest):
             raise CliError("session_input_digest_invalid")
+        try:
+            negotiation = self.registry.negotiate(self.adapter, capabilities)
+        except RegistryError as exc:
+            raise CliError(f"session_{exc}") from exc
+        if self.profile.sandbox_required and not self.sandboxed:
+            raise CliError("session_sandbox_required")
         events: list[dict[str, Any]] = [
-            {"kind": "session_admitted", "session_id": self.session_id, "adapter": self.adapter, "input_digest": input_digest},
+            {"kind": "session_admitted", "session_id": self.session_id, "adapter": self.adapter, "input_digest": input_digest, "registry_revision": negotiation["registry_revision"], "profile_digest": negotiation["profile_digest"]},
             {"kind": "session_started", "session_id": self.session_id},
         ]
         if self.sandboxed:
