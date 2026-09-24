@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "ar": "AR-0099",
+  "counterexamples": [
+    {"id": "skip-awc-admission", "operation": "dispatch", "expected": "rejected"},
+    {"id": "skip-awq-acceptance", "operation": "continue", "expected": "rejected"},
+    {"id": "skip-awg", "operation": "continue", "expected": "rejected"},
+    {"id": "direct-worker-user-decision-mutation", "operation": "ui_decide", "authority": "awr", "expected": "rejected"},
+    {"id": "direct-worker-test-change", "operation": "test_change", "authority": "awr", "expected": "rejected"},
+    {"id": "direct-worker-specification-change", "operation": "specification_change", "authority": "awr", "expected": "rejected"},
+    {"id": "ambiguous-ui-approval", "operation": "ui_decide", "outcome": "ambiguous", "expected": "blocked"},
+    {"id": "expired-ui-approval", "operation": "ui_decide", "outcome": "expired", "expected": "blocked"},
+    {"id": "repair-without-awg-ui", "operation": "continue", "expected": "rejected"},
+    {"id": "stale-revision", "operation": "dispatch", "task_revision": "stale", "expected": "rejected"},
+    {"id": "stale-lease", "operation": "dispatch", "lease": "old", "expected": "rejected"},
+    {"id": "replay", "operation": "replay", "expected": "rejected"}
+  ],
+  "rule": "every listed hostile trace must be rejected or remain blocked; none may approve"
+}

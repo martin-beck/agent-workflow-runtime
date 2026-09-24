@@ -9,3 +9,6 @@ build/
 *.egg-info/
 .runtime/
 
+# TLC state stores and traces are local validation output, never source.
+formal/authority/states/
+formal/authority/AuthorityInteraction_TTrace_*

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "ar": "AR-0099",
+  "model": "formal/authority/AuthorityInteraction.tla",
+  "config": "formal/authority/AuthorityInteraction.cfg",
+  "liveness_config": "formal/authority/AuthorityInteractionLiveness.cfg",
+  "change_config": "formal/authority/AuthorityInteractionChange.cfg",
+  "repair_config": "formal/authority/AuthorityInteractionRepair.cfg",
+  "jar": "formal/authority/tla2tools.jar",
+  "jar_sha256": "b658b4e504fdf0b721caf7066320f6b6fe5805f4dd2f717d0e47baba4097205e",
+  "jobs": ["A", "B"],
+  "max_repairs": 1,
+  "positive_paths": [
+    ["admit", "lease", "dispatch", "start", "evidence", "quality_accept", "request_completion", "commit"],
+    ["admit", "lease", "dispatch", "start", "evidence", "quality_accept", "alternative", "guidance", "ui_decide", "request_completion", "commit"],
+    ["admit", "lease", "dispatch", "start", "repair", "repair_escalate", "guidance", "ui_decide", "evidence", "quality_accept", "request_completion", "commit"],
+    ["admit", "lease", "dispatch", "start", "checkpoint", "crash", "recover", "dispatch", "start", "evidence", "quality_accept", "request_completion", "commit"]
+  ],
+  "mandatory_edges": {
+    "dispatch": "awc_admission_and_current_lease",
+    "continue": "awq_acceptance_and_awg_ui_resolution",
+    "request_completion": "awq_acceptance_and_awg_ui_resolution",
+    "commit": "awc_terminal_commit",
+    "refinement": "awg_then_ui",
+    "test_change": "awg_then_ui",
+    "specification_change": "awg_then_ui",
+    "repair_escalation": "awg_then_ui_and_block_until_resolution"
+  },
+  "refinement_target": {
+    "specification": "specifications/authority-interaction-v1.json",
+    "protocol": "awr-authority-interaction-model",
+    "version": "1.0.0"
+  },
+  "offline": {
+    "network": "disabled",
+    "provider": "not_performed",
+    "llm": "not_performed",
+    "ui": "not_performed",
+    "durable_state": "not_performed"
+  }
+}
