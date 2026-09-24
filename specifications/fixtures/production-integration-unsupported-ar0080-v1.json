@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-production-integration-baseline", "version": "1.0.0"},
+  "task": {"id": "AR-0080", "revision": 1},
+  "selection": {"runtime_profile": "awr-runtime", "host_profile": "local-mock-host", "project_class": "generic-agent-workflow", "agent_profile": "codex-agent", "authority_profile": "agent-workflow-authorities", "mode": "local_host", "requested_capabilities": ["checkpoint", "edit", "read", "test"]},
+  "authority_snapshot": {"profile_id": "agent-workflow-authorities", "owners": {"awq": "quality", "awg": "guidance", "coordinator": "coordination", "runtime": "execution", "ui": "human-interaction"}, "contract_versions": {"awq": "1.0.0", "awg": "1.0.0", "coordinator": "1.0.0", "runtime": "1.0.0", "ui": "1.0.0"}},
+  "version_negotiation": {"runtime_version": "1.0.0", "adapter_version": "1.0.0"},
+  "observation": {"matrix_status": "unknown", "matched_row": null, "version_status": "compatible", "capability_status": "supported", "authority_status": "owned"},
+  "result": {"status": "blocked", "admission": false, "classification": "unsupported_combination", "execute": false, "qualification": "supplied_only", "provider_support": "unverified", "remote_verification": "unverified", "durable_state": "not_performed"},
+  "evidence": {"checker": "awr-production-integration-baseline-checker/1.0.0", "specification_digest": "sha256:8662f602be4f4dc694287eaa9bb491bc3d14c49b4fed273abc5d8c9235171b8a", "record_digest": "sha256:c4790fda1cf2252885e3833bafc296f0b1d504fa11a6492e91854da105838d86", "hostile_cases": ["unknown_capability", "unknown_runtime_version", "unknown_adapter_version", "crossed_revision", "crossed_authority", "unsupported_combination", "provider_claim_without_evidence"], "offline_boundary": {"provider": "not_performed", "network": "disabled", "llm": "not_performed", "adapter_execution": "not_performed", "local_host_execution": "not_performed", "durable_state": "not_performed", "remote_verification": "unverified"}}
+}

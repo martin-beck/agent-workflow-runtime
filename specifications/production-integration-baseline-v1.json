@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-production-integration-baseline",
+  "version": "1.0.0",
+  "title": "Offline production-integration baseline and compatibility matrix",
+  "normative": true,
+  "task": {"id": "AR-0080", "revision": 1},
+  "profiles": {
+    "runtime": [{"id": "awr-runtime", "version": "1.0.0", "features": ["bounded-scheduler", "evidence-accounting", "fenced-recovery"], "contract_versions": ["1.0.0"]}],
+    "hosts": [
+      {"id": "local-mock-host", "version": "1.0.0", "capabilities": ["deterministic-clock", "filesystem-fixture", "process-mock"], "network": "disabled"},
+      {"id": "local-host", "version": "1.0.0", "capabilities": ["filesystem-isolation", "process-supervision", "resource-observation"], "network": "disabled"},
+      {"id": "remote-observation", "version": "1.0.0", "capabilities": ["supplied-observation"], "network": "observed_only"}
+    ],
+    "projects": [{"id": "generic-agent-workflow", "version": "1.0.0", "authority_profile": "agent-workflow-authorities", "modes": ["local_mock", "local_host", "remote_observation"]}],
+    "agents": [
+      {"id": "codex-agent", "version": "1.0.0", "adapter_id": "codex-adapter", "adapter_version": "1.0.0", "capabilities": ["checkpoint", "edit", "read", "test"]},
+      {"id": "opencode-agent", "version": "1.0.0", "adapter_id": "opencode-adapter", "adapter_version": "1.0.0", "capabilities": ["checkpoint", "edit", "read", "test"]},
+      {"id": "opendesk-agent", "version": "1.0.0", "adapter_id": "opendesk-adapter", "adapter_version": "1.0.0", "capabilities": ["checkpoint", "edit", "read", "test"]}
+    ],
+    "authorities": [{"id": "agent-workflow-authorities", "version": "1.0.0", "owners": {"awq": "quality", "awg": "guidance", "coordinator": "coordination", "runtime": "execution", "ui": "human-interaction"}, "contract_versions": {"awq": "1.0.0", "awg": "1.0.0", "coordinator": "1.0.0", "runtime": "1.0.0", "ui": "1.0.0"}}]
+  },
+  "authority_ownership": {
+    "awc": {"owner": "awc", "domains": ["claims", "dependencies", "leases", "revisions", "task-identity", "terminal-commit"], "may_approve": true},
+    "awr": {"owner": "awr", "domains": ["execution-enforcement", "retry-mechanics", "scheduling", "supervision", "translation"], "may_approve": false},
+    "awq": {"owner": "awq", "domains": ["evidence-policy", "quality-acceptance", "quality-evaluation", "requirements"], "may_approve": true},
+    "awg": {"owner": "awg", "domains": ["guidance", "oracle-decision", "oracle-escalation"], "may_approve": true}
+  },
+  "failure_classifications": {
+    "compatible": {"outcome": "admitted", "authority": "awr", "retryable": false},
+    "degraded_combination": {"outcome": "degraded", "authority": "awr", "retryable": false},
+    "incompatible_version": {"outcome": "blocked", "authority": "awr", "retryable": false},
+    "unsupported_capability": {"outcome": "blocked", "authority": "awr", "retryable": false},
+    "unsupported_combination": {"outcome": "blocked", "authority": "awr", "retryable": false},
+    "unsupported_mode": {"outcome": "blocked", "authority": "awr", "retryable": false},
+    "crossed_revision": {"outcome": "blocked", "authority": "awc", "retryable": false},
+    "crossed_authority": {"outcome": "blocked", "authority": "awc", "retryable": false},
+    "missing_authority_result": {"outcome": "blocked", "authority": "awc", "retryable": false},
+    "stale_authority_result": {"outcome": "blocked", "authority": "awc", "retryable": false},
+    "ambiguous_authority_result": {"outcome": "unknown", "authority": "awc", "retryable": false},
+    "provider_claim_without_evidence": {"outcome": "blocked", "authority": "awr", "retryable": false}
+  },
+  "modes": {
+    "local_mock": {"host_profile": "local-mock-host", "execution": "not_performed", "qualification": "synthetic", "remote_support": "not_applicable"},
+    "local_host": {"host_profile": "local-host", "execution": "not_performed", "qualification": "supplied_only", "remote_support": "not_applicable"},
+    "remote_observation": {"host_profile": "remote-observation", "execution": "not_performed", "qualification": "supplied_only", "remote_support": "unverified"}
+  },
+  "matrix": [
+    {"id": "mock-codex", "runtime_profile": "awr-runtime", "host_profile": "local-mock-host", "project_class": "generic-agent-workflow", "agent_profile": "codex-agent", "authority_profile": "agent-workflow-authorities", "mode": "local_mock", "status": "compatible", "reason": "deterministic local mock qualification"},
+    {"id": "mock-opencode", "runtime_profile": "awr-runtime", "host_profile": "local-mock-host", "project_class": "generic-agent-workflow", "agent_profile": "opencode-agent", "authority_profile": "agent-workflow-authorities", "mode": "local_mock", "status": "compatible", "reason": "deterministic local mock qualification"},
+    {"id": "mock-opendesk", "runtime_profile": "awr-runtime", "host_profile": "local-mock-host", "project_class": "generic-agent-workflow", "agent_profile": "opendesk-agent", "authority_profile": "agent-workflow-authorities", "mode": "local_mock", "status": "compatible", "reason": "deterministic local mock qualification"},
+    {"id": "host-codex", "runtime_profile": "awr-runtime", "host_profile": "local-host", "project_class": "generic-agent-workflow", "agent_profile": "codex-agent", "authority_profile": "agent-workflow-authorities", "mode": "local_host", "status": "compatible", "reason": "bounded local-host integration"},
+    {"id": "host-opencode", "runtime_profile": "awr-runtime", "host_profile": "local-host", "project_class": "generic-agent-workflow", "agent_profile": "opencode-agent", "authority_profile": "agent-workflow-authorities", "mode": "local_host", "status": "compatible", "reason": "bounded local-host integration"},
+    {"id": "host-opendesk", "runtime_profile": "awr-runtime", "host_profile": "local-host", "project_class": "generic-agent-workflow", "agent_profile": "opendesk-agent", "authority_profile": "agent-workflow-authorities", "mode": "local_host", "status": "compatible", "reason": "bounded local-host integration"},
+    {"id": "remote-codex", "runtime_profile": "awr-runtime", "host_profile": "remote-observation", "project_class": "generic-agent-workflow", "agent_profile": "codex-agent", "authority_profile": "agent-workflow-authorities", "mode": "remote_observation", "status": "degraded", "reason": "remote observation is supplied and unverified"},
+    {"id": "remote-opencode", "runtime_profile": "awr-runtime", "host_profile": "remote-observation", "project_class": "generic-agent-workflow", "agent_profile": "opencode-agent", "authority_profile": "agent-workflow-authorities", "mode": "remote_observation", "status": "degraded", "reason": "remote observation is supplied and unverified"},
+    {"id": "remote-opendesk", "runtime_profile": "awr-runtime", "host_profile": "remote-observation", "project_class": "generic-agent-workflow", "agent_profile": "opendesk-agent", "authority_profile": "agent-workflow-authorities", "mode": "remote_observation", "status": "degraded", "reason": "remote observation is supplied and unverified"}
+  ],
+  "outcomes": {"admitted": "all selected versions, capabilities, authorities, mode, and matrix row are compatible", "degraded": "a known matrix row is structurally usable but contains an explicitly unverified limitation", "blocked": "unknown, incompatible, or unsupported input cannot be admitted"},
+  "privacy": {"allowed": ["bounded identifiers", "enums", "versions", "digests", "capabilities", "authority ownership"], "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "network addresses", "raw output", "unknown fields"]},
+  "offline_boundary": {"provider": "not_performed", "network": "disabled", "llm": "not_performed", "adapter_execution": "not_performed", "local_host_execution": "not_performed", "durable_state": "not_performed", "remote_verification": "unverified"},
+  "hostile_qualification": ["unknown_capability", "unknown_runtime_version", "unknown_adapter_version", "crossed_revision", "crossed_authority", "unsupported_combination", "provider_claim_without_evidence"],
+  "limitations": ["The checker evaluates only supplied deterministic profiles and compatibility declarations.", "It does not inspect hosts, launch agents, contact providers, use an LLM, mutate Coordinator state, or verify remote observations.", "Admitted means structurally admissible for a declared mode; it is not evidence of execution or provider support."],
+  "follow_up": ["Implement Coordinator state-client integration against its authoritative contract.", "Add bounded host/process supervision and adapter transport using this admission result.", "Keep real-provider and remote observations separately unverified until independently supplied."]
+}
