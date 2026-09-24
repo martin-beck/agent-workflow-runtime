@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-agent-registry",
+  "version": "1.0.0",
+  "title": "Versioned agent registry and capability preflight",
+  "normative": true,
+  "task": {"id": "AR-0084", "revision": 3},
+  "registry_version": "1.0.0",
+  "capability_vocabulary": ["checkpoint", "edit", "file_read", "file_write", "read", "resume", "streaming", "structured_output", "test", "tool_use"],
+  "profiles": [
+    {"id": "codex-agent", "version": "1.0.0", "adapter_id": "codex-adapter", "adapter_version": "1.0.0", "protocol_versions": ["1.0.0"], "capabilities": ["checkpoint", "edit", "file_read", "read", "resume", "streaming", "test", "tool_use"], "resources": {"max_concurrency": 1, "max_request_bytes": 4096, "max_output_events": 8}, "configuration_reference": "config:codex-agent:v1", "unsupported_capabilities": ["file_write", "structured_output"], "profile_digest": "sha256:49b931bcdaebd47453290b906420079d6443ec27c2dfaa2535ef03fc52c4484d"},
+    {"id": "opencode-agent", "version": "1.0.0", "adapter_id": "opencode-adapter", "adapter_version": "1.0.0", "protocol_versions": ["1.0.0"], "capabilities": ["checkpoint", "edit", "file_read", "file_write", "read", "resume", "streaming", "test", "tool_use"], "resources": {"max_concurrency": 2, "max_request_bytes": 8192, "max_output_events": 16}, "configuration_reference": "config:opencode-agent:v1", "unsupported_capabilities": ["structured_output"], "profile_digest": "sha256:fad056d3c8b5e34bf06d69a6a237b1029db0448990ac0cce5e747cde9cedde1b"},
+    {"id": "opendesk-agent", "version": "1.0.0", "adapter_id": "opendesk-adapter", "adapter_version": "1.0.0", "protocol_versions": ["1.0.0"], "capabilities": ["checkpoint", "file_read", "read", "resume", "streaming", "structured_output", "test"], "resources": {"max_concurrency": 1, "max_request_bytes": 2048, "max_output_events": 4}, "configuration_reference": "config:opendesk-agent:v1", "unsupported_capabilities": ["edit", "file_write", "tool_use"], "profile_digest": "sha256:c909578361688330bc745753712c3e18c59aafc1314ec650fbf9b9ad9bb4e855"},
+    {"id": "generic-mock-agent", "version": "1.0.0", "adapter_id": "generic-mock-adapter", "adapter_version": "1.0.0", "protocol_versions": ["1.0.0"], "capabilities": ["checkpoint", "edit", "file_read", "file_write", "read", "resume", "streaming", "structured_output", "test", "tool_use"], "resources": {"max_concurrency": 4, "max_request_bytes": 16384, "max_output_events": 32}, "configuration_reference": "config:generic-mock-agent:v1", "unsupported_capabilities": [], "profile_digest": "sha256:4c3ba0089d7a34ed858e32d0cb1a04d8171cb4fa2619dc081a5f3e398d4c0717"}
+  ],
+  "qualification_modes": {
+    "catalog": {"accepted": "profile is present in this exact registry digest"},
+    "configuration": {"accepted": "configuration reference is present and structurally valid"},
+    "local_mock": {"accepted": "deterministic fake qualification evidence is supplied"},
+    "provider": {"accepted": "never inferred; separately supplied evidence is required"}
+  },
+  "outcomes": {"admitted": "all local preflight gates pass", "blocked": "a required gate is missing, stale, contradictory, or unsupported", "unknown": "an authority or evidence result is ambiguous"},
+  "privacy": {"allowed": ["bounded identifiers", "versions", "capabilities", "resource limits", "opaque digests", "configuration references"], "reject": ["credentials", "prompts", "transcripts", "private paths", "network addresses", "raw output", "unknown fields"]},
+  "offline_boundary": {"provider": "not_performed", "network": "disabled", "llm": "not_performed", "adapter_execution": "not_performed", "local_mock": "deterministic_fake_only", "durable_state": "not_performed", "remote_verification": "unverified"},
+  "hostile_qualification": ["unknown_profile", "stale_profile", "unsupported_capability", "missing_configuration", "contradictory_qualification", "provider_claim_without_execution", "crossed_revision"],
+  "limitations": ["The registry evaluates only supplied deterministic profiles and evidence.", "Local mock qualification is not provider or network verification.", "Provider verification remains unverified and cannot be inferred from catalog presence, configuration acceptance, or adapter capability declarations.", "The checker does not launch an adapter, use an LLM, contact a provider, mutate Coordinator state, or verify a host."]
+}

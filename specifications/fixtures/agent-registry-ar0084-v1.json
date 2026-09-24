@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-agent-registry", "version": "1.0.0"},
+  "task": {"id": "AR-0084", "revision": 3},
+  "registry_digest": "sha256:568b5d646ad0b53f43135c30e1e0bc1f9f478749c3b796edf8a63f396b48da9e",
+  "request": {"profile_id": "codex-agent", "profile_version": "1.0.0", "adapter_version": "1.0.0", "protocol_version": "1.0.0", "requested_capabilities": ["checkpoint", "edit", "read", "test"]},
+  "configuration": {"status": "accepted", "reference": "config:codex-agent:v1", "reference_digest": "sha256:4c02a05edb59f9feabf8853e18ecb5c834ba8a544978a83591ab8165ca68d5d5", "value_absent": true},
+  "qualification": {"local_mock": {"status": "qualified", "evidence_digest": "sha256:d3792d9b53d94c9569a8bc75fecb86302d26ff3c9edcd9113e176001b2ea4af8", "execution": "deterministic_fake"}, "provider": {"status": "unverified", "evidence_digest": null, "execution": "not_performed"}},
+  "negotiation": {"catalog_status": "accepted", "profile_digest": "sha256:49b931bcdaebd47453290b906420079d6443ec27c2dfaa2535ef03fc52c4484d", "protocol_status": "supported", "capability_status": "supported", "selected_capabilities": ["checkpoint", "edit", "read", "test"], "unsupported_capabilities": []},
+  "result": {"status": "admitted", "admission": true, "classification": "compatible", "execute": false, "catalog_acceptance": "accepted", "configuration_acceptance": "accepted", "local_mock_qualification": "qualified", "provider_verification": "unverified", "provider_support": "unverified", "remote_verification": "unverified", "durable_state": "not_performed"},
+  "evidence": {"checker": "awr-agent-registry-checker/1.0.0", "registry_digest": "sha256:568b5d646ad0b53f43135c30e1e0bc1f9f478749c3b796edf8a63f396b48da9e", "record_digest": "sha256:f428cfc20c093d50cb3131cc00c0ee3d1f840ed3acf468ec07fd08afd390fdd4", "hostile_cases": ["unknown_profile", "stale_profile", "unsupported_capability", "missing_configuration", "contradictory_qualification", "provider_claim_without_execution", "crossed_revision"], "offline_boundary": {"provider": "not_performed", "network": "disabled", "llm": "not_performed", "adapter_execution": "not_performed", "local_mock": "deterministic_fake_only", "durable_state": "not_performed", "remote_verification": "unverified"}}
+}
