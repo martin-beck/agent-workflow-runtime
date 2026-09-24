@@ -1,0 +1,1 @@
+{"binding":{"session_id":"SES-AR0074-1","lease_id":"LSE-AR0074-1"},"request_digest":"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","expected":{"provider":"codex-compatible","capabilities":["request","stream","interrupt","checkpoint","resume"],"state":"closed","events":4,"execute":false,"network":"disabled"}}
