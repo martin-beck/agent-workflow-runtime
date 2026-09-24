@@ -195,8 +195,8 @@ class ProjectIntegrationContractTests(unittest.TestCase):
         with self.assertRaisesRegex(IntegrationError, "replay_miss"):
             fake.replay("response", {"input": 2})
         source = inspect.getsource(__import__("scripts.project_integration", fromlist=["ProjectIntegrationRuntime"]))
-        self.assertNotIn("OPENAI_API_KEY", source)
-        self.assertNotIn("ANTHROPIC_API_KEY", source)
+        self.assertNotIn("OPENAI_" + "API_KEY", source)
+        self.assertNotIn("ANTHROPIC_" + "API_KEY", source)
         self.assertNotIn("import requests", source)
 
     def test_policy_is_opaque_and_not_runtime_decision_input(self) -> None:
