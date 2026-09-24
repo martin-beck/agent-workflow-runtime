@@ -263,6 +263,7 @@ def parser() -> argparse.ArgumentParser:
     audit.add_argument("--status", required=True)
     audit.add_argument("--detail", default="")
     commands.add_parser("audit-status", help="validate and summarize the local audit journal").add_argument("--home", type=Path)
+    commands.add_parser("security-check", help="check local runtime-home security boundaries").add_argument("--home", type=Path)
     return root
 
 
@@ -299,6 +300,11 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "audit-status":
             from .observability import AuditJournal
             output = AuditJournal(args.home).status()
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "security-check":
+            from .security import check
+            output = check(args.home)
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
