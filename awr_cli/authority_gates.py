@@ -48,3 +48,19 @@ class AuthorityGates:
             "trace": trace,
             "authority_state": "observed_only",
         }
+
+    def accept_artifact(self, *, task: str, revision: int, artifact_digest: str) -> dict[str, Any]:
+        """Require post-execution quality, guidance, and human acceptance."""
+        trace: list[dict[str, Any]] = []
+
+        def ask(authority: str, operation: str, expected: set[str]) -> dict[str, Any]:
+            observed = self.client.exchange(make_request(authority, operation, revision, task=task), expected_revision=revision, required_authority=authority)
+            trace.append(observed)
+            if observed["outcome"] not in expected:
+                raise AuthorityBridgeError(f"mandatory_{authority}_acceptance_not_satisfied")
+            return observed
+
+        ask("awq", "AWQ-ARTIFACT", {"accepted"})
+        ask("awg", "AWG-ARTIFACT", {"approved", "requires_ui"})
+        decision = ask("ui", "UI-ARTIFACT", {"approved"})
+        return {"status": "accepted", "artifact_digest": artifact_digest, "trace": trace, "decision": decision["outcome"], "authority_state": "observed_only"}
