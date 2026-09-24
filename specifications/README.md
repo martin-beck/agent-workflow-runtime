@@ -635,3 +635,10 @@ change. Inputs are digests or opaque `secret-ref:` identifiers only.
 interleaving model for deterministic fake agents and injected provider, host,
 crash, UI, and quality failures. Its checker never starts an agent or contacts
 a provider.
+
+## AR-0065 evidence and accounting
+
+`evidence-accounting-v1.json` defines an append-only digest-linked audit and
+usage ledger. It reconciles bounded seconds, token counts, and event budgets;
+prompts, transcripts, secrets, and billing claims are not stored, and billing
+remains explicitly unverified.
