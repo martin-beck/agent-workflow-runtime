@@ -254,6 +254,15 @@ def parser() -> argparse.ArgumentParser:
     register.add_argument("--state", type=Path, required=True)
     register.add_argument("--home", type=Path)
     commands.add_parser("project-list", help="list locally registered projects").add_argument("--home", type=Path)
+    audit = commands.add_parser("audit-record", help="append a privacy-safe digest-only audit event")
+    audit.add_argument("--home", type=Path)
+    audit.add_argument("--event-id", required=True)
+    audit.add_argument("--task-id", required=True)
+    audit.add_argument("--task-revision", type=int, required=True)
+    audit.add_argument("--category", required=True)
+    audit.add_argument("--status", required=True)
+    audit.add_argument("--detail", default="")
+    commands.add_parser("audit-status", help="validate and summarize the local audit journal").add_argument("--home", type=Path)
     return root
 
 
@@ -280,6 +289,16 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "project-list":
             from .project_registry import list_projects
             output = list_projects(args.home)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "audit-record":
+            from .observability import AuditJournal
+            output = AuditJournal(args.home).append(event_id=args.event_id, task_id=args.task_id, task_revision=args.task_revision, category=args.category, status=args.status, detail=args.detail)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "audit-status":
+            from .observability import AuditJournal
+            output = AuditJournal(args.home).status()
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
