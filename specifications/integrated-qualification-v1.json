@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-integrated-qualification",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0094", "revision": 3},
+  "scenarios": ["concurrency", "resource_contention", "lease_loss", "process_loss", "authority_outage", "replay", "cancellation", "upgrade", "rollback"],
+  "thresholds": {"jobs": 256, "projects": 4, "agents": 6, "min_fairness_percent": 100, "max_recovery_events": 32, "max_privacy_violations": 0},
+  "offline_boundary": {"virtual_time": true, "local_mock_agents": true, "provider": "not_performed", "network": "disabled", "llm": "not_performed", "durable_state": "not_performed"},
+  "failure_semantics": {"mode": "fail_closed", "counterexample": "minimized_and_replayable", "release": "offline_qualified_live_unverified"}
+}

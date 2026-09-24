@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-integrated-qualification", "version": "1.0.0"},
+  "task": {"id": "AR-0094", "revision": 3},
+  "offline": {"virtual_time": true, "local_mock_agents": true, "provider": "not_performed", "network": "disabled", "llm": "not_performed", "durable_state": "not_performed"},
+  "configuration": {"seed": 17, "jobs": 256, "projects": 4, "agents": 6, "replay_required": true},
+  "scenarios": ["concurrency", "resource_contention", "lease_loss", "process_loss", "authority_outage", "replay", "cancellation", "upgrade", "rollback"],
+  "expected": {"seed": 17, "jobs": 256, "completed": 252, "blocked": 4, "recovery_events": 9, "projects": 4, "agents": 6, "fairness_percent": 100, "privacy_violations": 0, "scenario_count": 9, "trace_digest": "sha256:e36e4be611f538dc7c9852c6fdea70cac5506db6a8f142b030ad152aada33271"},
+  "replay": {"equal": true, "first_digest": "sha256:e36e4be611f538dc7c9852c6fdea70cac5506db6a8f142b030ad152aada33271", "second_digest": "sha256:e36e4be611f538dc7c9852c6fdea70cac5506db6a8f142b030ad152aada33271", "counterexample": null}
+}
