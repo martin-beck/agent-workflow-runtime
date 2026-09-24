@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-operational-observability",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0091", "revision": 3},
+  "surfaces": ["lifecycle_metrics", "bounded_traces", "queue_dashboard", "lease_dashboard", "resource_dashboard", "liveness", "readiness", "slos", "alerts", "incident_snapshot", "retention", "diagnosis"],
+  "privacy": {"projection": "bounded identifiers, enums, counts, non-negative values, and SHA-256 digests", "reject": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "network addresses"]},
+  "authority": {"runtime": "observes and diagnoses supplied evidence", "coordinator": "owns task, lease, and durable state", "awq": "owns requirements, gates, and evidence acceptance", "telemetry": "cannot approve, reconcile, or mutate"},
+  "offline_boundary": {"collection": "supplied_observations_only", "provider": "not_performed", "network": "disabled", "llm": "not_performed", "coordinator_write": "not_performed", "durable_state": "not_performed"},
+  "limitations": ["The checker does not collect telemetry or run a workload.", "Observed health and SLO status are not production readiness, hosted success, or authority decisions.", "Incident export is prepared but not sent or persisted."]
+}

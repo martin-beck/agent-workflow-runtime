@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-operational-observability", "version": "1.0.0"},
+  "task": {"id": "AR-0091", "revision": 3},
+  "project": {"key": "agent-workflow-runtime", "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+  "worktree": {"key": "agent-workflow-runtime-0091", "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+  "boundary": {"collection": "supplied_observations_only", "provider": "not_performed", "network": "disabled", "llm": "not_performed", "coordinator_write": "not_performed", "durable_state": "not_performed", "authority": "observed_not_authoritative"},
+  "limits": {"max_observations": 64, "max_metrics": 64, "max_agents": 8, "max_alerts": 32, "max_incident_events": 32, "max_export_bytes": 16384, "max_age_seconds": 60},
+  "observations": [
+    {"sequence": 1, "id": "OBS-1", "agent_id": "AGENT-A", "kind": "admission", "state": "observed", "at": 100, "attributes": {"status": "observed"}, "evidence_digest": "sha256:bd5fe8e64f61c5e4029b4fbc87217455ecae67226d1156ac612f65ebae2307a0", "previous_digest": "sha256:c39d75c5426988326e58c908d94a01be5b0bd0825be7ccabbc98aca0d0bb856b"},
+    {"sequence": 2, "id": "OBS-2", "agent_id": "AGENT-A", "kind": "queue", "state": "observed", "at": 101, "attributes": {"status": "observed"}, "evidence_digest": "sha256:bd5fe8e64f61c5e4029b4fbc87217455ecae67226d1156ac612f65ebae2307a0", "previous_digest": "sha256:0ec64d85586e818df020f472ad86914b9cba72da6e1718a1a46c61667b0718b8"},
+    {"sequence": 3, "id": "OBS-3", "agent_id": "AGENT-B", "kind": "lease", "state": "observed", "at": 102, "attributes": {"status": "observed"}, "evidence_digest": "sha256:bd5fe8e64f61c5e4029b4fbc87217455ecae67226d1156ac612f65ebae2307a0", "previous_digest": "sha256:6931298cec628c68b3a7eff771851ae8fb1eb858431f8e8087630036e0cbed37"},
+    {"sequence": 4, "id": "OBS-4", "agent_id": "AGENT-B", "kind": "resource", "state": "observed", "at": 103, "attributes": {"status": "observed"}, "evidence_digest": "sha256:bd5fe8e64f61c5e4029b4fbc87217455ecae67226d1156ac612f65ebae2307a0", "previous_digest": "sha256:5dabb7887e5adac2c650c645704d4f1a3d30875df038c8e0db2696388598b716"},
+    {"sequence": 5, "id": "OBS-5", "agent_id": "AGENT-A", "kind": "failure", "state": "observed", "at": 104, "attributes": {"status": "observed"}, "evidence_digest": "sha256:bd5fe8e64f61c5e4029b4fbc87217455ecae67226d1156ac612f65ebae2307a0", "previous_digest": "sha256:a79debf76df4799d796901fda18cda276c39e0c6540cd6c0979723175a815cec"},
+    {"sequence": 6, "id": "OBS-6", "agent_id": "AGENT-A", "kind": "recovery", "state": "observed", "at": 105, "attributes": {"status": "observed"}, "evidence_digest": "sha256:bd5fe8e64f61c5e4029b4fbc87217455ecae67226d1156ac612f65ebae2307a0", "previous_digest": "sha256:098aa93518fb1db20bfba97f14dffa05545f9c199d37b366bf2661b5a136c221"},
+    {"sequence": 7, "id": "OBS-7", "agent_id": "AGENT-B", "kind": "terminal", "state": "observed", "at": 106, "attributes": {"status": "observed"}, "evidence_digest": "sha256:bd5fe8e64f61c5e4029b4fbc87217455ecae67226d1156ac612f65ebae2307a0", "previous_digest": "sha256:0b74844dedb33a9610e06a8577730af839317dddc6f39c8da73058c7822b269f"}
+  ],
+  "metrics": [
+    {"name": "queue_depth", "value": 2, "unit": "items", "agent_id": "AGENT-A", "evidence_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+    {"name": "lease_expiries", "value": 1, "unit": "events", "agent_id": "AGENT-B", "evidence_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+    {"name": "memory_bytes", "value": 512, "unit": "bytes", "agent_id": "AGENT-B", "evidence_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"}
+  ],
+  "dashboards": {
+    "queue": {"agents": 2, "status": "degraded", "observed_not_authoritative": true, "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+    "leases": {"agents": 2, "status": "degraded", "observed_not_authoritative": true, "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
+    "resources": {"agents": 2, "status": "healthy", "observed_not_authoritative": true, "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}
+  },
+  "health": {"liveness": "alive", "observed_at": 100, "max_age_seconds": 60, "status": "observed", "stale": false},
+  "readiness": {"status": "observed", "dependencies": "supplied_only", "provider": "not_performed", "network": "disabled", "authority": "not_authoritative"},
+  "slos": [
+    {"name": "admission", "target": 0.99, "window": "day", "status": "observed", "evidence_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"},
+    {"name": "scheduling", "target": 0.99, "window": "day", "status": "observed", "evidence_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555"},
+    {"name": "recovery", "target": 0.95, "window": "day", "status": "observed", "evidence_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666"},
+    {"name": "evidence", "target": 0.99, "window": "day", "status": "observed", "evidence_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"}
+  ],
+  "alerts": [{"id": "ALERT-1", "name": "lease_expiry", "threshold": 1, "status": "firing", "disposition": "observed", "dedup_key": "LEASE-EXPIRY", "evidence_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888"}],
+  "incident": {"id": "INCIDENT-1", "status": "observed", "event_count": 7, "snapshot_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999", "redacted": true, "export": "prepared_not_exported", "diagnosis": ["queue_pressure", "lease_expiry", "resource_pressure", "recovery_observed"], "authority": "not_authoritative"},
+  "retention": {"days": 7, "mode": "digest_only", "raw_payloads": false, "max_export_bytes": 16384},
+  "evidence": {"record_digest": "sha256:8648a712a43305eb3b6c6fb05a20f6b47a61a3df0a28ba28f312f3e0afd4526d"}
+}
