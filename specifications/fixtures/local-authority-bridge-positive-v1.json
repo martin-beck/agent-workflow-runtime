@@ -1,0 +1,11 @@
+{
+  "protocol": {"id": "awr-local-authority-bridge", "version": "1.0.0"},
+  "task_id": "AR-LOCAL-1", "task_revision": 9, "project_revision": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "worktree_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "session_id": "SES-LOCAL-1", "operation_id": "OP-LOCAL-1", "payload_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "exchanges": [
+    {"authority": "coordinator", "actor": "runtime", "requested_kind": "observation", "outcome": "observed"},
+    {"authority": "awq", "actor": "autonomous_worker", "requested_kind": "evidence", "outcome": "accepted"},
+    {"authority": "awg", "actor": "runtime", "requested_kind": "decision", "outcome": "requires_ui"},
+    {"authority": "ui", "actor": "human", "requested_kind": "decision", "outcome": "approved"}
+  ],
+  "offline": {"network": "disabled", "durable_state": "not_performed"}
+}

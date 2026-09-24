@@ -1,0 +1,7 @@
+[
+  {"name": "stale_revision", "authority": "awq", "task_revision": 8, "expected_revision": 9},
+  {"name": "crossed_authority", "authority": "ui", "response_authority": "awg"},
+  {"name": "ambiguous_outcome", "authority": "awg", "outcome": "unknown"},
+  {"name": "worker_authors_specification", "authority": "awg", "actor": "autonomous_worker", "requested_kind": "specification"},
+  {"name": "missing_digest", "authority": "coordinator", "payload_digest": null}
+]

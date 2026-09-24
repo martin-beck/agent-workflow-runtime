@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-local-authority-bridge",
+  "version": "1.0.0",
+  "offline": {"network": "disabled", "provider": "not_performed", "llm": "not_performed", "durable_state": "not_performed"},
+  "authorities": {
+    "coordinator": {"owns": ["task_identity", "claims", "leases", "revisions", "terminal_state"], "outcomes": ["observed", "stale", "not_found"]},
+    "awq": {"owns": ["requirements", "quality_gates", "evidence_acceptance"], "outcomes": ["accepted", "rejected", "not_applicable"]},
+    "awg": {"owns": ["guidance", "decisions", "alternatives"], "outcomes": ["approved", "rejected", "requires_ui", "not_applicable"]},
+    "ui": {"owns": ["validated_human_input", "decision_session"], "outcomes": ["approved", "rejected", "cancelled", "expired"]}
+  },
+  "binding": {"required": ["task_id", "task_revision", "project_revision", "worktree_digest", "session_id", "operation_id", "payload_digest"], "digest_pattern": "^sha256:[0-9a-f]{64}$", "revision_minimum": 1},
+  "request": {"actors": ["runtime", "autonomous_worker", "human"], "kinds": ["observation", "evidence", "decision", "test", "specification"], "worker_forbidden_kinds": ["decision", "test", "specification"], "max_attempts": 5},
+  "response": {"unknown_outcomes": ["unknown", "ambiguous", "indeterminate"], "must_correlate": ["authority", "operation_id", "task_id", "task_revision", "request_digest"]},
+  "invariants": ["authority ownership is not transferable", "stale or crossed revisions fail closed", "unknown outcomes block rather than approve", "runtime projects observations only", "workers cannot author user decisions, tests, or specifications", "every exchange is deterministic and replayable"]
+}
