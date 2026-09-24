@@ -81,7 +81,7 @@ class AwrInstallTests(unittest.TestCase):
                     install(home)
         with patch("sys.stdout") as output:
             self.assertEqual(main(["version"]), 0)
-        self.assertIn('"version":"0.1.3"', "".join(call.args[0] for call in output.write.call_args_list))
+        self.assertIn('"version":"0.1.5"', "".join(call.args[0] for call in output.write.call_args_list))
 
 
 if __name__ == "__main__":

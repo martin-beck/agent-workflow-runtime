@@ -1,6 +1,7 @@
 # Offline release verification
 
-The AR-0122 integration release is `v0.1.3`; its artifact must be built from
+The AR-0122 integration release is superseded by corrected release `v0.1.5`;
+its artifact must be built from
 the exact tagged source commit and verified with the command below before the
 umbrella compatibility pin is changed.
 
