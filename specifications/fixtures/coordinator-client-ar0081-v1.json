@@ -1,0 +1,31 @@
+{
+  "specification_id": "awr-executable-coordinator-client",
+  "task": {"id": "AR-0081", "revision": 3},
+  "binding": {
+    "task_id": "AR-0081",
+    "project_key": "agent-workflow-runtime",
+    "worktree_key": "agent-workflow-runtime-0081",
+    "session_id": "SES-AR0081-REFERENCE",
+    "owner_id": "WRK-AR0081-REFERENCE",
+    "lease_id": "LSE-AR0081-REFERENCE",
+    "auth_reference": "AUTH-AR0081"
+  },
+  "transcript": [
+    {
+      "operation": "read_revision", "operation_id": "OP-AR0081-READ1", "correlation_id": "CORR-AR0081-READ1",
+      "expected_revision": 1, "attempt": 1,
+      "response": {"disposition": "accepted", "task_id": "AR-0081", "task_revision": 1, "event_count": 0, "state_digest": "sha256:7f8c9a8e3e7f9c3a0a6b61f0b2f2e5db8e3b2a4f0ad2ef7d1f5c6b7a8e9d0c1b", "correlation_id": "CORR-AR0081-READ1", "operation_id": "OP-AR0081-READ1"}
+    },
+    {
+      "operation": "write_event", "operation_id": "OP-AR0081-WRITE1", "correlation_id": "CORR-AR0081-WRITE1",
+      "expected_revision": 1, "attempt": 1, "event_kind": "checkpoint", "event_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "response": {"disposition": "accepted", "task_id": "AR-0081", "task_revision": 2, "event_count": 1, "event_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "correlation_id": "CORR-AR0081-WRITE1", "operation_id": "OP-AR0081-WRITE1"}
+    },
+    {
+      "operation": "read_revision", "operation_id": "OP-AR0081-READ2", "correlation_id": "CORR-AR0081-READ2",
+      "expected_revision": 2, "attempt": 1,
+      "response": {"disposition": "accepted", "task_id": "AR-0081", "task_revision": 2, "event_count": 1, "state_digest": "sha256:8b8f6d4d3f5a1c0a9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a29181716151413", "correlation_id": "CORR-AR0081-READ2", "operation_id": "OP-AR0081-READ2"}
+    }
+  ],
+  "evidence": {"network": "disabled", "provider": "not_performed", "llm": "not_performed", "live_verification": "unverified"}
+}

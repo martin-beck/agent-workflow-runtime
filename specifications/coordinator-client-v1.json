@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-executable-coordinator-client",
+  "version": "1.0.0",
+  "title": "Bounded executable Coordinator state client",
+  "normative": true,
+  "task": {"id": "AR-0081", "revision": 3},
+  "authority": {
+    "coordinator": ["task identity", "claims", "leases", "revisions", "durable state"],
+    "runtime": ["bounded transport", "typed translation", "correlation", "retry classification", "fail-closed handling"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["oracle decisions", "reusable guidance"]
+  },
+  "binding": {
+    "task_id": "^AR-[0-9]{4}$",
+    "project_key": "agent-workflow-runtime",
+    "worktree_key": "bounded opaque identifier",
+    "session_id": "^SES-[A-Z0-9-]{1,63}$",
+    "owner_id": "^WRK-[A-Z0-9-]{1,63}$",
+    "lease_id": "^LSE-[A-Z0-9-]{1,63}$",
+    "auth_reference": "^AUTH-[A-Z0-9-]{1,63}$",
+    "operation_id": "^OP-[A-Z0-9-]{1,63}$",
+    "correlation_id": "^CORR-[A-Z0-9-]{1,63}$"
+  },
+  "operations": {
+    "read_revision": "typed current revision and digest read",
+    "write_event": "compare-and-swap event write requiring exact expected revision"
+  },
+  "request": {
+    "timeout_ms": {"minimum": 1, "maximum": 30000},
+    "attempt": {"minimum": 1, "maximum": 3},
+    "payload": "bounded event kind and sha256 event digest only",
+    "auth": "opaque auth reference plus derived proof digest; no credential value"
+  },
+  "retry": {
+    "retryable": ["unavailable", "deadline_exceeded", "timeout"],
+    "maximum_attempts": 3,
+    "never_retry_as_success": ["stale_revision", "changed_replay", "ambiguous_outcome", "unauthorized"],
+    "idempotency": "same operation ID and canonical request returns the original response; changed replay rejects"
+  },
+  "ambiguity": {
+    "write": "transport loss after commit returns unknown_outcome and never guesses success",
+    "recovery": "the caller may reconcile by repeating the identical operation ID or reading the current revision"
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale revision", "crossed binding", "wrong correlation", "malformed response", "privacy-bearing value", "unbounded value"],
+    "external_effects": "none in this AR: no network, provider, LLM, hosted CI, Git, or live Coordinator"
+  },
+  "evidence_boundary": {
+    "offline": "in-process fake, deterministic fault injection, fixture and hostile checker",
+    "live_verification": "unverified",
+    "network": "disabled",
+    "provider": "not_performed",
+    "llm": "not_performed"
+  }
+}

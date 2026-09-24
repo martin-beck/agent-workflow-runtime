@@ -455,3 +455,26 @@ use an LLM, or access a live service:
 ```text
 python3 scripts/check_durable_scheduler.py --spec specifications/durable-scheduler-v1.json --fixture specifications/fixtures/durable-scheduler-ar0062-v1.json --expected-revision 1
 ```
+
+## AR-0081 executable Coordinator client
+
+`coordinator-client-v1.json` defines the bounded executable client boundary.
+Every request carries exact Coordinator task/project/worktree/session/owner/
+lease bindings, an opaque auth reference, a unique operation ID, and a
+correlation ID. `read_revision` returns a typed revision snapshot; `write_event`
+is a compare-and-swap operation that accepts only the exact expected revision.
+The client retries only bounded transport faults and treats stale revisions,
+changed replays, malformed responses, and correlation mismatches as failures.
+Transport loss after a write may have committed produces `unknown_outcome`,
+never local success; the caller can reconcile with the identical operation ID
+or a subsequent revision read.
+
+The reference implementation is `scripts/coordinator_client.py`, with the
+deterministic `InProcessCoordinator` fake, hostile tests, and fixture checker
+under `tests/test_coordinator_client.py` and
+`scripts/check_coordinator_client.py`. It performs no network, provider, LLM,
+credential, Git, or live Coordinator operation:
+
+```text
+python3 scripts/check_coordinator_client.py --spec specifications/coordinator-client-v1.json --fixture specifications/fixtures/coordinator-client-ar0081-v1.json --expected-revision 3
+```
