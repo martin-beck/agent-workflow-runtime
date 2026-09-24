@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-deployment-operations", "version": "1.0.0"},
+  "task": {"id": "AR-0093", "revision": 3},
+  "offline": {"package": "not_performed", "deployment": "not_performed", "publication": "not_performed", "network": "disabled", "provider": "not_performed", "llm": "not_performed"},
+  "artifact": {"status": "verified", "name": "agent-runtime", "version": "1.2.3", "source_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "artifact_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "format": "tar"},
+  "compatibility": {"status": "compatible", "runtime_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "platform_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "contracts": [{"id": "runtime-contract", "version": "1.0.0", "digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555", "mode": "exact"}]},
+  "migration": {"status": "prepared", "from_version": "1.2.2", "to_version": "1.2.3", "config_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666", "reversible": true, "interruption_recovery": "checkpoint_required"},
+  "rollout": {"status": "prepared", "strategy": "canary", "execute": false, "health_gate": "supplied_observation", "target": "supplied_target", "network": "disabled"},
+  "rollback": {"status": "ready", "target_version": "1.2.2", "target_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "execute": false, "exact_target": true, "durable_state": "not_performed"},
+  "health": {"status": "observed", "liveness": "alive", "readiness": "ready", "stale": false, "evidence_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"},
+  "provenance": {"status": "complete", "source_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "artifact_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "release_digest": "sha256:8888888888888888888888888888888888888888888888888888888888888888", "publication": "not_performed"},
+  "evidence": {"record_digest": "sha256:4406e011483ff3062c86dbfd759b1f88ba892198629d90b32a082f21b76d0169", "checker": "awr-deployment-operations-checker/1.0.0"}
+}
