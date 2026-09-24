@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-deployment-operations",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0093", "revision": 3},
+  "areas": ["packaging", "compatibility", "migration", "rollout", "health", "rollback", "provenance"],
+  "failure_semantics": {"mode": "fail_closed", "upgrade_interruption": "checkpoint_and_recover", "rollback": "exact_target_only"},
+  "offline_boundary": {"network": "disabled", "provider": "not_performed", "llm": "not_performed", "deployment": "not_performed", "publication": "not_performed"}
+}

@@ -46,6 +46,8 @@ jobs:
         run: python scripts/check_operational_observability.py --spec specifications/operational-observability-v1.json --fixture specifications/fixtures/operational-observability-ar0091-v1.json --expected-revision 3
       - name: Run AR-0092 executable security contract checker
         run: python scripts/check_executable_security.py --spec specifications/executable-security-v1.json --fixture specifications/fixtures/executable-security-ar0092-v1.json --expected-revision 3
+      - name: Run AR-0093 deployment operations contract checker
+        run: python scripts/check_deployment_operations.py --spec specifications/deployment-operations-v1.json --fixture specifications/fixtures/deployment-operations-ar0093-v1.json --expected-revision 3
       - name: Run AR-0087 project isolation contract checker
         run: python scripts/check_project_isolation.py --spec specifications/multi-project-isolation-v1.json --fixture specifications/fixtures/multi-project-isolation-ar0087-v1.json --expected-revision 3
       - name: Run AR-0089 project integration contract checker
