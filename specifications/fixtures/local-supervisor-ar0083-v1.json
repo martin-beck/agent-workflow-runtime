@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-local-supervisor", "version": "1.0.0"},
+  "task": {"id": "AR-0083", "revision": 3},
+  "cases": [
+    {"name": "success", "disposition": "completed", "host_controls": "admitted"},
+    {"name": "timeout", "disposition": "timed_out", "host_controls": "admitted"},
+    {"name": "cancellation", "disposition": "cancelled", "host_controls": "admitted"},
+    {"name": "output_overflow", "disposition": "output_overflow", "host_controls": "admitted"},
+    {"name": "unsupported_control", "disposition": "blocked", "host_controls": "rejected"},
+    {"name": "stale_lease", "disposition": "blocked", "host_controls": "rejected"}
+  ],
+  "execution": {"mode": "offline_fixture", "process": "not_performed", "network": "disabled", "provider": "not_performed"},
+  "evidence": {"checker": "awr-local-supervisor-checker/1.0.0", "live_verification": "unverified"}
+}
