@@ -239,12 +239,23 @@ def parser() -> argparse.ArgumentParser:
     for name, help_text in (("install", "initialize a user-owned runtime home"), ("repair", "restore missing runtime files"), ("upgrade", "record the current installed runtime version"), ("rollback", "restore prior runtime installation metadata"), ("uninstall", "remove the runtime marker and preserve user data"), ("doctor", "check runtime-home health")):
         command = commands.add_parser(name, help=help_text)
         command.add_argument("--home", type=Path, help="runtime home (default: AWR_HOME or the user data directory)")
+    project = commands.add_parser("project-init", help="create a new local Agent Workflow project and state binding")
+    project.add_argument("--name", required=True)
+    project.add_argument("--organization", required=True)
+    project.add_argument("--project", type=Path, required=True)
+    project.add_argument("--state", type=Path, required=True)
+    project.add_argument("--preview", action="store_true")
     return root
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     try:
+        if args.command == "project-init":
+            from .project_bootstrap import bootstrap
+            output = bootstrap(args.name, args.organization, args.project, args.state, preview=args.preview)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
             from . import __version__
             from .install import doctor, install, rollback, uninstall
