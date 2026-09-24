@@ -1,5 +1,9 @@
 # Offline release verification
 
+The AR-0122 integration release is `v0.1.3`; its artifact must be built from
+the exact tagged source commit and verified with the command below before the
+umbrella compatibility pin is changed.
+
 Verify a locally available wheel or source artifact before installation:
 
 ```text

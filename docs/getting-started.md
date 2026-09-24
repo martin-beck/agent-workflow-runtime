@@ -5,7 +5,7 @@ and separate state directory, registers both in the runtime home, runs the
 deterministic mock workflow, and inspects the local audit/security boundaries.
 
 ```text
-python -m pip install agent_workflow_runtime_cli-0.1.2-py3-none-any.whl
+python -m pip install agent_workflow_runtime_cli-0.1.3-py3-none-any.whl
 awr install
 awr project-init --name inventory-system --organization example-org \
   --project ./inventory-system --state ./inventory-system-state --preview
