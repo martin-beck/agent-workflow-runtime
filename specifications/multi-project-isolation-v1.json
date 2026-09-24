@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-multi-project-isolation",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {
+    "id": "AR-0087",
+    "revision": 3
+  },
+  "authority_boundaries": {
+    "awc": "owns project and task identity, revisions, claims, leases, dependencies, and terminal commits",
+    "awr": "owns enforcement of supplied bindings, opaque worktree allocation, routing, cleanup, and evidence projection",
+    "awq": "owns quality acceptance and artifact evidence policy",
+    "awg": "owns guidance and user-decision escalation; routing cannot decide"
+  },
+  "invariants": [
+    "Every worktree is bound to exactly one tenant, project, task, revision, worker, lease, fence, and session.",
+    "AWR consumes an existing scheduler lease and never creates a competing lease authority.",
+    "A stale Coordinator revision or crossed dispatch lease is rejected before allocation.",
+    "Worktree keys are unique and collisions fail closed.",
+    "Opaque path tokens never expose a host path or permit path traversal.",
+    "Artifacts are namespaced by project and worktree.",
+    "Artifact content and provenance digests are immutable and replay-safe.",
+    "Artifact provenance retains the exact project revision and lease fence.",
+    "An artifact cannot be read by another project without an explicit dependency grant.",
+    "Dependency grants require both projects to exist and share a tenant.",
+    "Cross-tenant dependency grants and reads are always rejected.",
+    "Cleanup is fenced by the current worktree binding and is idempotent.",
+    "Interrupted cleanup remains pending and cannot be reported as complete.",
+    "Cleanup recovery requires a strictly newer lease fence.",
+    "Cleaned worktrees reject further artifact reads and writes.",
+    "Runtime routing cannot approve quality, guidance, specifications, tests, or terminal commits."
+  ],
+  "hostile_qualification": [
+    "cross-tenant dependency",
+    "ungranted cross-project artifact read",
+    "crossed task or revision",
+    "stale scheduler lease",
+    "worktree collision",
+    "artifact digest rewrite",
+    "conflicting idempotency replay",
+    "interrupted cleanup and same-fence recovery",
+    "concurrent project allocations",
+    "unknown project and malformed opaque binding"
+  ],
+  "offline_boundary": {
+    "checkout": "not_performed",
+    "coordinator_write": "not_performed",
+    "network": "disabled",
+    "provider": "not_performed",
+    "llm": "not_performed"
+  },
+  "required_fixture_fields": [
+    "projects",
+    "contexts",
+    "actions",
+    "expected"
+  ]
+}
