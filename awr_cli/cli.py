@@ -270,6 +270,12 @@ def parser() -> argparse.ArgumentParser:
     release.add_argument("--source-commit", required=True)
     release.add_argument("--sha256", required=True)
     release.add_argument("--rollback-version")
+    coord = commands.add_parser("coord-init", help="initialize a local Coordinator-shaped task state")
+    coord.add_argument("--state-file", type=Path, required=True); coord.add_argument("--task-id", required=True); coord.add_argument("--project-revision", required=True); coord.add_argument("--worktree-digest", required=True); coord.add_argument("--session-id", required=True)
+    coord_status = commands.add_parser("coord-status", help="read local Coordinator-shaped state")
+    coord_status.add_argument("--state-file", type=Path, required=True)
+    coord_claim = commands.add_parser("coord-claim", help="claim a local Coordinator-shaped task")
+    coord_claim.add_argument("--state-file", type=Path, required=True); coord_claim.add_argument("--owner", required=True); coord_claim.add_argument("--expected-revision", type=int, required=True)
     return root
 
 
@@ -316,6 +322,14 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "release-verify":
             from .release import verify_artifact
             output = verify_artifact(args.artifact, version=args.version, source_commit=args.source_commit, expected_sha256=args.sha256, rollback_version=args.rollback_version)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command in {"coord-init", "coord-status", "coord-claim"}:
+            from .coordinator_local import LocalCoordinator
+            store = LocalCoordinator(args.state_file)
+            if args.command == "coord-init": output = store.init(args.task_id, args.project_revision, args.worktree_digest, args.session_id)
+            elif args.command == "coord-status": output = store.snapshot()
+            else: output = store.claim(args.owner, args.expected_revision)
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
