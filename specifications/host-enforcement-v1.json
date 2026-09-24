@@ -1,1 +1,65 @@
-{"schema_version":1,"specification_id":"awr-host-enforcement","version":"1.0.0","task":{"id":"AR-0072","revision":1},"offline":{"execute":false,"network":"disabled","provider":"not_performed","credentials":"not_performed"},"invariants":["worktree containment","capability allowlist","bounded resources","lease-bound cancellation","digest-only command/path evidence","fail closed"]}
+{
+  "schema_version": 1,
+  "specification_id": "awr-host-enforcement",
+  "version": "1.0.0",
+  "normative": true,
+  "authority": {
+    "coordinator": ["task identity", "claims", "revisions", "leases", "durable state"],
+    "quality": ["requirements", "gates", "evidence acceptance"],
+    "guidance": ["oracle escalation", "decisions", "reusable guidance"],
+    "ui": ["human-facing rendering", "validated input"],
+    "runtime": ["translation", "host enforcement integration", "supervision", "recovery fencing"]
+  },
+  "binding": {
+    "task": "AR-0031 at the supplied Coordinator revision",
+    "project_revision": "sha256 digest of the exact project revision",
+    "worktree": "opaque isolated worktree key plus supplied binding digest",
+    "session_worker_lease": "exact session, worker, and lease tuple from admission",
+    "action": "every action repeats the complete binding and has a unique id"
+  },
+  "lifecycle": {
+    "states": ["admitted", "starting", "running", "interrupting", "interrupted", "completed", "timed_out", "failed", "recovering"],
+    "transitions": [
+      ["admitted", "start", "starting"], ["starting", "started", "running"],
+      ["running", "interrupt", "interrupting"], ["interrupting", "ack_interrupt", "interrupted"],
+      ["running", "complete", "completed"], ["running", "timeout", "timed_out"],
+      ["starting", "fail", "failed"], ["running", "fail", "failed"],
+      ["interrupted", "recover", "recovering"], ["failed", "recover", "recovering"],
+      ["timed_out", "recover", "recovering"], ["recovering", "resumed", "running"]
+    ],
+    "terminal": ["completed", "interrupted", "timed_out", "failed"],
+    "recovery": "old worker and lease are fenced; recovery requires a new lease, worker, expiry, and verified checkpoint digest"
+  },
+  "host_policy": {
+    "commands": "argv arrays only; executable and each argument are bounded strings; shell syntax, redirects, pipelines, env mutation, and unbounded output are forbidden",
+    "capabilities": ["read", "edit", "test"],
+    "tools": "must be declared in the grant and carry an exact tool version",
+    "resources": "cpu, memory, disk, process count/depth, network bytes, and wall time must be positive bounded integers",
+    "process": "the supplied process-tree observation must be complete and termination must be acknowledged when requested",
+    "cancellation": "interrupting is not terminal until acknowledgement is observed"
+  },
+  "gates": {
+    "offline": "no process, provider, network, Coordinator, Git, LLM, or durable-state operation",
+    "live": "explicit capability, credential reference, network, and human approval gates are required outside this fixture",
+    "credentials": "reference-only and never evidence payloads"
+  },
+  "compatibility": {
+    "canonical_json": "UTF-8 sorted keys compact separators",
+    "major_change": "new specification_id or incompatible schema_version",
+    "minor_change": "new version, checker, and fixture"
+  },
+  "privacy": {
+    "forbidden": ["credentials", "prompts", "transcripts", "private paths", "host identifiers", "raw output", "environment values"],
+    "projection": "bounded enums, opaque identifiers, integer observations, and sha256 digests only"
+  },
+  "failure_semantics": {
+    "mode": "fail_closed",
+    "reject": ["stale or crossed binding", "expired lease", "replayed action", "unknown field", "unauthorized capability", "shell command", "unbounded argument", "resource excess", "incomplete process tree", "unacknowledged interruption", "old worker recovery", "missing checkpoint"],
+    "partial_terminal": "not accepted as completion or recovery"
+  },
+  "limitations": [
+    "The fixture checks supplied observations and does not prove OS cgroups, namespaces, process killing, filesystem isolation, or lease validity.",
+    "Offline qualification is not provider, network, hosted-CI, remote, Coordinator, AWQ, AWG, or UI success.",
+    "Live host integration requires a separately approved AR and authority-gated implementation."
+  ]
+}
