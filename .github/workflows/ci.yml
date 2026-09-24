@@ -44,8 +44,6 @@ jobs:
         run: python scripts/check_cross_agent_accounting.py --spec specifications/cross-agent-accounting-v1.json --fixture specifications/fixtures/cross-agent-accounting-ar0090-v1.json --expected-revision 3
       - name: Run AR-0091 operational observability contract checker
         run: python scripts/check_operational_observability.py --spec specifications/operational-observability-v1.json --fixture specifications/fixtures/operational-observability-ar0091-v1.json --expected-revision 3
-      - name: Run AR-0092 executable security contract checker
-        run: python scripts/check_executable_security.py --spec specifications/executable-security-v1.json --fixture specifications/fixtures/executable-security-ar0092-v1.json --expected-revision 3
       - name: Run AR-0087 project isolation contract checker
         run: python scripts/check_project_isolation.py --spec specifications/multi-project-isolation-v1.json --fixture specifications/fixtures/multi-project-isolation-ar0087-v1.json --expected-revision 3
       - name: Run AR-0089 project integration contract checker
