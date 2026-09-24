@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-authority-bridges", "version": "1.0.0"},
+  "binding": {
+    "task": {"id": "AR-0088", "revision": 3},
+    "project": {"key": "agent-workflow-runtime", "revision": "sha256:1111111111111111111111111111111111111111111111111111111111111111"},
+    "worktree": {"key": "agent-workflow-runtime-0088", "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"},
+    "lease": {"id": "LSE-AR0088-WORKER", "worker_id": "WRK-AR0088-BRIDGE", "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"},
+    "session": {"id": "SES-AR0088-BRIDGE"}
+  },
+  "operations": [
+    {
+      "authority": "awq", "operation_id": "OP-AWQ-EVIDENCE", "request_id": "REQ-AWQ-EVIDENCE", "kind": "evidence", "change_kind": "none", "max_attempts": 3,
+      "request_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "attempts": [
+        {"authority": "awq", "operation_id": "OP-AWQ-EVIDENCE", "attempt": 1, "status": "pending", "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714", "result_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+        {"authority": "awq", "operation_id": "OP-AWQ-EVIDENCE", "attempt": 2, "status": "accepted", "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714", "result_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}
+      ], "status": "accepted", "resumed": 1, "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714"
+    },
+    {
+      "authority": "awq", "operation_id": "OP-AWQ-REJECTED", "request_id": "REQ-AWQ-REJECTED", "kind": "evidence", "change_kind": "none", "max_attempts": 1,
+      "request_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "attempts": [
+        {"authority": "awq", "operation_id": "OP-AWQ-REJECTED", "attempt": 1, "status": "rejected", "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714", "result_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"}
+      ], "status": "rejected", "resumed": 0, "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714"
+    },
+    {
+      "authority": "awg", "operation_id": "OP-AWG-CHANGE", "request_id": "REQ-AWG-CHANGE", "kind": "discussion", "change_kind": "specification_change", "max_attempts": 3,
+      "request_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "attempts": [
+        {"authority": "awg", "operation_id": "OP-AWG-CHANGE", "attempt": 1, "status": "timeout", "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714", "result_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"},
+        {"authority": "awg", "operation_id": "OP-AWG-CHANGE", "attempt": 2, "status": "requires_ui", "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714", "result_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999"}
+      ], "status": "requires_ui", "resumed": 0, "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714"
+    },
+    {
+      "authority": "ui", "operation_id": "OP-UI-CHANGE", "request_id": "REQ-UI-CHANGE", "kind": "human_gate", "change_kind": "specification_change", "max_attempts": 3,
+      "request_digest": "sha256:1212121212121212121212121212121212121212121212121212121212121212", "attempts": [
+        {"authority": "ui", "operation_id": "OP-UI-CHANGE", "attempt": 1, "status": "pending", "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714", "result_digest": "sha256:1313131313131313131313131313131313131313131313131313131313131313"},
+        {"authority": "ui", "operation_id": "OP-UI-CHANGE", "attempt": 2, "status": "approved", "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714", "result_digest": "sha256:1414141414141414141414141414141414141414141414141414141414141414"}
+      ], "status": "approved", "resumed": 1, "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714"
+    },
+    {
+      "authority": "awg", "operation_id": "OP-AWG-UNKNOWN", "request_id": "REQ-AWG-UNKNOWN", "kind": "discussion", "change_kind": "repair_escalation", "max_attempts": 2,
+      "request_digest": "sha256:1515151515151515151515151515151515151515151515151515151515151515", "attempts": [
+        {"authority": "awg", "operation_id": "OP-AWG-UNKNOWN", "attempt": 1, "status": "unknown", "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714", "result_digest": "sha256:1616161616161616161616161616161616161616161616161616161616161616"},
+        {"authority": "awg", "operation_id": "OP-AWG-UNKNOWN", "attempt": 2, "status": "unknown", "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714", "result_digest": "sha256:1717171717171717171717171717171717171717171717171717171717171717"}
+      ], "status": "blocked", "resumed": 1, "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714"
+    }
+  ],
+  "change_control": {"required": true, "change_kind": "specification_change", "awg_operation_id": "OP-AWG-CHANGE", "ui_operation_id": "OP-UI-CHANGE", "status": "authorized", "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714"},
+  "offline": {"network": "disabled", "provider": "not_performed", "llm": "not_performed", "durable_state": "not_performed"}
+}

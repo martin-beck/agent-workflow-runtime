@@ -1,0 +1,14 @@
+{
+  "checker": "awr-authority-bridges-checker/1.0.0",
+  "task_revision": 3,
+  "specification_digest": "sha256:f1bdeb02613157fca4dbd3c9d1e1889e91895843c2b6ca5109d283ee8f9ffb04",
+  "record_digest": "sha256:70b4430ef016f8977068bb2831e7a8599d06df3a5b2573575a0535ea6f7971f7",
+  "result": {
+    "protocol": "awr-authority-bridges@1.0.0",
+    "operations": 5,
+    "pending": 2,
+    "change_status": "authorized",
+    "binding_digest": "sha256:5781fc357c1c19174e92d897af2d9c0973a9b43a7f78b5e3003e8aaadc24e714"
+  },
+  "evidence_digest": "sha256:32fb76c85d8227022729c7935a8277e52929061e058eb3984029a3aaeade8258"
+}
