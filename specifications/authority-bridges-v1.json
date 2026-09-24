@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-authority-bridges",
+  "version": "1.0.0",
+  "title": "Offline AWQ/AWG/UI authority bridges and human gates",
+  "normative": true,
+  "authorities": {
+    "awq": {
+      "owns": ["evidence_acceptance", "quality_rejection", "quality_unknown"]
+    },
+    "awg": {
+      "owns": ["discussion_admission", "guidance_decision", "change_routing"]
+    },
+    "ui": {
+      "owns": ["human_gate_input", "human_approval", "human_rejection"]
+    },
+    "runtime": {
+      "may": ["request", "observe", "retry", "resume", "enforce"],
+      "may_not": ["manufacture_quality", "manufacture_guidance", "manufacture_human_approval", "mutate_user_decision"]
+    }
+  },
+  "states": ["new", "pending", "accepted", "approved", "rejected", "timeout", "unknown", "blocked", "authorized"],
+  "invariants": [
+    "every operation is bound to the exact task revision, lease, session, and worktree",
+    "pending authority outcomes require explicit observation and cannot approve",
+    "timeout and unknown outcomes require an explicit bounded retry or remain blocked",
+    "AWQ acceptance is attributed to AWQ and cannot be produced by the runtime",
+    "required refinements, test changes, specification changes, and repair escalations require AWG routing followed by UI approval",
+    "rejection, timeout, unknown, stale, replayed, crossed, and ambiguous outcomes fail closed",
+    "resume preserves the original binding and operation fingerprint"
+  ],
+  "required_change_kinds": ["refinement", "test_change", "specification_change", "repair_escalation"],
+  "hostile_cases": [
+    "stale_revision",
+    "crossed_lease",
+    "changed_replay",
+    "runtime_manufactured_acceptance",
+    "runtime_manufactured_guidance",
+    "runtime_manufactured_ui_approval",
+    "unresolved_pending_continuation",
+    "exhausted_unknown_retry",
+    "rejected_change",
+    "private_material"
+  ],
+  "offline_boundary": {
+    "network": "disabled",
+    "provider": "not_performed",
+    "llm": "not_performed",
+    "durable_state": "not_performed"
+  },
+  "limitations": [
+    "The local fakes prove protocol behavior only and are not live AWQ, AWG, or UI clients.",
+    "A successful fixture proves authority attribution and fail-closed control flow, not quality, guidance, or human intent.",
+    "Runtime evidence contains digests and identifiers only; private authority content is intentionally absent."
+  ]
+}
