@@ -1,0 +1,1 @@
+{"schema_version":1,"specification_id":"awr-codex-adapter","version":"1.0.0","task":{"id":"AR-0074","revision":1},"offline":{"execute":false,"network":"disabled","provider":"not_performed","llm":"not_performed"},"invariants":["shared transport","capability declaration","revision/lease binding","opaque payloads","bounded lifecycle"]}
