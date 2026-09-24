@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-local-mock-pilot",
+  "version": "1.0.0",
+  "task": {"id": "AR-0068", "revision": 9},
+  "boundary": {"local_execution": true, "network": "disabled", "external_provider": "not_performed", "credentials": "not_supplied"},
+  "invariants": ["deterministic request/response", "scheduler dispatch", "adapter-boundary exercise", "digest-linked accounting", "privacy-safe observability", "remote remains unverified"],
+  "limitations": ["The local mock is not a real provider and does not establish provider availability, model quality, authentication, or production readiness."]
+}
