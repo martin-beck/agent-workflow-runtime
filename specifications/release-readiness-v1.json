@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-release-readiness-gate",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0096", "revision": 3},
+  "sections": ["security", "compatibility", "capacity", "slos", "recovery", "observability", "deployment", "support", "incident", "rollback", "documentation", "residual_risk"],
+  "failure_semantics": {"mode": "fail_closed", "rollback": "prepared_exact_target", "owner": "explicit"},
+  "offline_boundary": {"local_mock_agents": true, "provider": "not_performed", "network": "disabled", "llm": "not_performed", "publication": "not_performed", "durable_state": "not_performed"}
+}
