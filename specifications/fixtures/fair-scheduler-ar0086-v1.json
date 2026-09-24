@@ -1,0 +1,92 @@
+{
+  "capacity": {"cpu": 4, "memory": 4, "disk": 4},
+  "limits": {
+    "max_concurrency": 2,
+    "max_queued": 16,
+    "lease_seconds": 5,
+    "aging_quantum": 2,
+    "tenant_quotas": {"alpha": 1, "beta": 2},
+    "project_quotas": {"core": 2, "docs": 2},
+    "agent_quotas": {"agent-a": 1, "agent-b": 1},
+    "authority_revision": 7,
+    "registry_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "agents": [
+    {
+      "agent_id": "agent-a",
+      "profile_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "capabilities": ["coding", "review"],
+      "capacity": {"cpu": 2, "memory": 2, "disk": 2},
+      "max_concurrency": 1,
+      "registry_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "agent_id": "agent-b",
+      "profile_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "capabilities": ["coding", "review"],
+      "capacity": {"cpu": 2, "memory": 2, "disk": 2},
+      "max_concurrency": 1,
+      "registry_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "jobs": [
+    {
+      "job_id": "JOB-A",
+      "tenant": "alpha",
+      "project": "core",
+      "priority": 90,
+      "resources": {"cpu": 1, "memory": 1, "disk": 1},
+      "required_capabilities": ["coding"],
+      "eligible_agents": ["agent-a"],
+      "max_attempts": 1,
+      "retry_budget": 0,
+      "coordinator_revision": 7,
+      "registry_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "job_id": "JOB-B",
+      "tenant": "beta",
+      "project": "docs",
+      "priority": 10,
+      "resources": {"cpu": 1, "memory": 1, "disk": 1},
+      "required_capabilities": ["review"],
+      "eligible_agents": ["agent-b"],
+      "max_attempts": 2,
+      "retry_budget": 1,
+      "retry_backoff": 1,
+      "coordinator_revision": 7,
+      "registry_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "job_id": "JOB-C",
+      "tenant": "beta",
+      "project": "docs",
+      "priority": 20,
+      "dependencies": ["JOB-A"],
+      "resources": {"cpu": 1, "memory": 1, "disk": 1},
+      "required_capabilities": ["coding"],
+      "eligible_agents": ["agent-a"],
+      "max_attempts": 1,
+      "retry_budget": 0,
+      "coordinator_revision": 7,
+      "registry_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "actions": [
+    {"kind": "dispatch", "operation_id": "OP-DISPATCH-A", "now": 0, "agent_id": "agent-a"},
+    {"kind": "complete", "operation_id": "OP-COMPLETE-A", "job_id": "JOB-A", "now": 1},
+    {"kind": "dispatch", "operation_id": "OP-DISPATCH-B", "now": 1, "agent_id": "agent-b"},
+    {"kind": "fail", "operation_id": "OP-FAIL-B", "job_id": "JOB-B", "reason": "worker_lost", "now": 2},
+    {"kind": "advance", "now": 3},
+    {"kind": "dispatch", "operation_id": "OP-DISPATCH-B2", "now": 3, "agent_id": "agent-b"},
+    {"kind": "complete", "operation_id": "OP-COMPLETE-B", "job_id": "JOB-B", "now": 4},
+    {"kind": "dispatch", "operation_id": "OP-DISPATCH-C", "now": 4},
+    {"kind": "complete", "operation_id": "OP-COMPLETE-C", "job_id": "JOB-C", "now": 5}
+  ],
+  "expected": {
+    "states": {"JOB-A": "succeeded", "JOB-B": "succeeded", "JOB-C": "succeeded"},
+    "events": 14,
+    "available": {"cpu": 4, "memory": 4, "disk": 4},
+    "fence": 4
+  }
+}
