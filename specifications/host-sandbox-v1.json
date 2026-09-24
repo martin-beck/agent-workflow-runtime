@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-host-sandbox",
+  "version": "1.0.0",
+  "normative": true,
+  "admission": "fail_closed",
+  "runtime": "bubblewrap",
+  "required_controls": [
+    "filesystem_worktree_writable",
+    "network_namespace",
+    "pid_namespace",
+    "cpu_limit",
+    "memory_limit",
+    "disk_per_file_limit",
+    "timeout",
+    "cancellation",
+    "cleanup"
+  ],
+  "unsupported_behavior": "reject_admission",
+  "subprocess_adapter": "not_sandboxed",
+  "evidence": "positive_probe_and_hostile_tests"
+}
