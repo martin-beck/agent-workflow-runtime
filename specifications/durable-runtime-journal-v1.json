@@ -1,0 +1,1 @@
+{"schema_version":1,"specification_id":"awr-durable-runtime-journal","version":"1.0.0","task":{"id":"AR-0070","revision":1},"offline":{"execute":false,"network":"disabled","provider":"not_performed","llm":"not_performed"},"invariants":["digest chain","fence monotonicity","ambiguous writes block until recovery","checkpoint head binding","replay idempotency"]}
