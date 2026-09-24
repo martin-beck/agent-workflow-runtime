@@ -245,6 +245,9 @@ def parser() -> argparse.ArgumentParser:
     project.add_argument("--project", type=Path, required=True)
     project.add_argument("--state", type=Path, required=True)
     project.add_argument("--preview", action="store_true")
+    workflow = commands.add_parser("local-run", help="run the deterministic offline mock workflow")
+    workflow.add_argument("--manifest", type=Path, required=True)
+    workflow.add_argument("--expected-revision")
     return root
 
 
@@ -255,6 +258,13 @@ def main(argv: list[str] | None = None) -> int:
             from .project_bootstrap import bootstrap
             output = bootstrap(args.name, args.organization, args.project, args.state, preview=args.preview)
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "local-run":
+            from scripts.local_project_workflow import run, validate
+            raw = args.manifest.read_bytes()
+            record = run(raw, args.expected_revision)
+            output = validate(record, args.expected_revision)
+            print(json.dumps({"result": output, "record": record}, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
             from . import __version__

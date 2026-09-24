@@ -28,3 +28,8 @@ authority mutation, publication, or remote verification. Passing this harness
 is local structural evidence only; it does not claim AR completion or
 Coordinator, AWQ, AWG, or UI approval.
 
+The same deterministic path is available through the operator entrypoint:
+
+```text
+awr local-run --manifest project-manifest.yaml
+```
