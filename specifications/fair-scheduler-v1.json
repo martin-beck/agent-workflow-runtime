@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-fair-scheduler",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0086", "revision": 3},
+  "authority_boundaries": {
+    "awc": "owns task identity, dependency revisions, claims, leases, and terminal commits",
+    "awr": "owns policy evaluation, reservations, dispatch decisions, and bounded retries only",
+    "awq": "owns quality acceptance and evidence policy; scheduler cannot approve",
+    "awg": "owns guidance and user-decision escalation; scheduler cannot decide",
+    "agent_registry": "supplied preflighted profiles are consumed without discovery or mutation",
+    "agent_sessions": "dispatch claims are handed to the provider-neutral session boundary"
+  },
+  "policy": {
+    "queue": "bounded admission with tenant and project backpressure",
+    "fairness": "priority plus virtual-time aging, then tenant/project service and stable tie-breaks",
+    "resources": "global, per-agent, per-tenant, per-project, and concurrency reservations",
+    "dependencies": "DAG readiness only after every dependency succeeds; terminal dependency failure propagates",
+    "cancellation": "queued cancellation is immediate and running cancellation fences further work",
+    "retry": "retryable failures consume an explicit bounded retry budget with virtual-time backoff",
+    "time": "caller-supplied monotonic virtual time"
+  },
+  "invariants": [
+    "no dispatch without accepted Coordinator revision and preflighted agent profile",
+    "no global, tenant, project, agent, or resource overcommitment",
+    "dependency DAG readiness cannot bypass a predecessor",
+    "aging gives every continuously eligible finite job bounded progress",
+    "virtual service accounting prevents a tenant or project from monopolizing ties",
+    "backpressure rejects admission before reservation or dispatch",
+    "cancellation has priority over continued work and releases reservations only after the fenced acknowledgement",
+    "retry attempts and retry budgets are monotonic and bounded",
+    "dispatch claims carry lease fence, Coordinator revision, profile digest, and session identity",
+    "stale or expired claims cannot complete, fail, heartbeat, or acknowledge cancellation",
+    "same operation and request digest replay identically; conflicting replay rejects",
+    "scheduler cannot approve quality, guidance, user decisions, tests, specifications, or terminal commits"
+  ],
+  "offline_boundary": {
+    "execute": false,
+    "network": "disabled",
+    "provider": "not_performed",
+    "llm": "not_performed",
+    "coordinator_write": "not_performed",
+    "agent_session": "not_performed"
+  },
+  "hostile_qualification": [
+    "unknown dependency and dependency cycle",
+    "stale Coordinator or registry revision",
+    "unknown, unpreflighted, or capability-incompatible agent",
+    "tenant/project/agent quota exhaustion and resource fragmentation",
+    "queue backpressure and idempotency conflict",
+    "expired, crossed, replayed, and cancellation-fenced leases",
+    "retry budget exhaustion and delayed virtual-time retry",
+    "many-tenant starvation and deterministic concurrent tie interleavings"
+  ],
+  "required_fixture_fields": ["capacity", "limits", "agents", "jobs", "actions", "expected"]
+}
