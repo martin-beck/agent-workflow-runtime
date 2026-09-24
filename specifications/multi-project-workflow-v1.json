@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-multi-project-workflow",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0095", "revision": 3},
+  "stages": ["intake", "decomposition", "scheduling", "specialist_a", "specialist_b", "integration", "quality", "oracle", "ui", "artifact"],
+  "invariants": ["AWQ, AWG, UI, coordinator, and reconciliation stages cannot be skipped", "parallel specialists share only dependency-approved inputs", "partial failure requires safe resume and terminal reconciliation", "external publication and provider execution remain unperformed"],
+  "offline_boundary": {"local_mock_agents": true, "provider": "not_performed", "network": "disabled", "llm": "not_performed", "publication": "not_performed", "durable_state": "not_performed"}
+}
