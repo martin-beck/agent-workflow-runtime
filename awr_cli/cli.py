@@ -222,6 +222,9 @@ def initialize_mock(manifest: dict[str, Any], revision: str, workspace: Path) ->
 
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(prog="awr", description="Validate and bootstrap provider-neutral local mock projects.")
+    from . import __version__
+
+    root.add_argument("--version", action="version", version=f"awr {__version__}")
     commands = root.add_subparsers(dest="command", required=True)
     validate = commands.add_parser("validate", help="validate a project manifest")
     validate.add_argument("--manifest", type=Path, required=True)
@@ -232,12 +235,32 @@ def parser() -> argparse.ArgumentParser:
     plan.add_argument("--manifest", type=Path, required=True)
     plan.add_argument("--workspace", required=True, help="opaque display label; no filesystem access")
     plan.add_argument("--expected-revision", help="require this exact sha256 manifest digest")
+    commands.add_parser("version", help="show the installed runtime version")
+    for name, help_text in (("install", "initialize a user-owned runtime home"), ("repair", "restore missing runtime files"), ("upgrade", "record the current installed runtime version"), ("rollback", "restore prior runtime installation metadata"), ("uninstall", "remove the runtime marker and preserve user data"), ("doctor", "check runtime-home health")):
+        command = commands.add_parser(name, help=help_text)
+        command.add_argument("--home", type=Path, help="runtime home (default: AWR_HOME or the user data directory)")
     return root
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     try:
+        if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
+            from . import __version__
+            from .install import doctor, install, rollback, uninstall
+
+            if args.command == "version":
+                output = {"status": "ok", "version": __version__}
+            elif args.command == "doctor":
+                output = doctor(args.home)
+            elif args.command in {"install", "repair", "upgrade"}:
+                output = install(args.home, repair=args.command == "repair", upgrade=args.command == "upgrade")
+            elif args.command == "rollback":
+                output = rollback(args.home)
+            else:
+                output = uninstall(args.home)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
         manifest, revision = _read_manifest(args.manifest)
         if args.command == "validate":
             output = {"status": "valid", "project": manifest["project"]["name"], "project_revision": revision}
@@ -256,4 +279,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
