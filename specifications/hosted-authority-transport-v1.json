@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-hosted-authority-transport",
+  "version": "1.0.0",
+  "task": {"id": "AR-0121", "revision": 2},
+  "purpose": "Bounded transport and observation projection for hosted Coordinator, AWQ, AWG, and UI contracts.",
+  "authority": {
+    "coordinator": ["task identity", "claims", "dependencies", "revisions", "leases", "durable state"],
+    "awq": ["requirements", "quality gates", "evidence acceptance"],
+    "awg": ["oracle escalation", "decisions", "reusable guidance"],
+    "ui": ["human-facing discussion rendering", "validated human input"],
+    "runtime": ["bounded transport", "correlation", "revision validation", "observation projection", "retry" ]
+  },
+  "transport": {
+    "request": ["protocol", "authority", "correlation_id", "attempt", "deadline_ms", "request"],
+    "correlation": "correlation_id equals request.operation_id and response correlation metadata",
+    "deadline": "positive bounded monotonic deadline; elapsed exchanges are rejected",
+    "retry": "at most five attempts and only transport failures before an authority response",
+    "ambiguous": "unknown, ambiguous, and indeterminate outcomes are blocking and never promoted or retried",
+    "order": ["coordinator", "awq", "awg", "ui"]
+  },
+  "limitations": [
+    "Deterministic fake-server qualification is not hosted success.",
+    "No network, credentials, remote authority, durable authority mutation, or live hosted check is performed."
+  ]
+}
