@@ -286,7 +286,7 @@ def parser() -> argparse.ArgumentParser:
     agent = commands.add_parser("agent-run", help="run one provider-neutral local agent adapter")
     agent.add_argument("--root", type=Path, required=True); agent.add_argument("--cwd", type=Path, required=True)
     agent.add_argument("--session-id", required=True); agent.add_argument("--adapter", required=True); agent.add_argument("--input-digest", required=True)
-    agent.add_argument("--timeout", type=float, default=5.0); agent.add_argument("argv", nargs=argparse.REMAINDER)
+    agent.add_argument("--timeout", type=float, default=5.0); agent.add_argument("--sandbox-required", action="store_true"); agent.add_argument("argv", nargs=argparse.REMAINDER)
     gate = commands.add_parser("authority-admit", help="consume mandatory local authority gate observations")
     gate.add_argument("--task", required=True); gate.add_argument("--revision", type=int, required=True)
     qualification = commands.add_parser("qualify-concurrent", help="run bounded concurrent provider-free qualification")
@@ -375,7 +375,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "agent-run":
             from .agent_session import AgentSession
             if not args.argv or args.argv[0] == "--": raise CliError("host_argv_invalid")
-            output = AgentSession(args.root, args.session_id, args.adapter).run(args.argv, args.cwd, input_digest=args.input_digest, timeout_seconds=args.timeout)
+            output = AgentSession(args.root, args.session_id, args.adapter, sandboxed=args.sandbox_required).run(args.argv, args.cwd, input_digest=args.input_digest, timeout_seconds=args.timeout)
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command == "authority-admit":

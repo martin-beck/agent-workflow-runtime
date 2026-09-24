@@ -16,11 +16,11 @@ class LocalContractor:
     def __init__(self, scheduler: LocalScheduler, gates: AuthorityGates, root: Path):
         self.scheduler, self.gates, self.root = scheduler, gates, root
 
-    def execute(self, *, job_id: str, task: str, revision: int, worker: str, session_id: str, adapter: str, argv: Sequence[str], cwd: Path) -> dict[str, Any]:
+    def execute(self, *, job_id: str, task: str, revision: int, worker: str, session_id: str, adapter: str, argv: Sequence[str], cwd: Path, sandboxed: bool = False) -> dict[str, Any]:
         self.scheduler.submit(job_id, task)
         lease = self.scheduler.dispatch(worker)["job"]["lease"]
         admission = self.gates.admit(task=task, revision=revision)
-        session = AgentSession(self.root, session_id, adapter).run(argv, cwd, input_digest=fake_digest(task))
+        session = AgentSession(self.root, session_id, adapter, sandboxed=sandboxed).run(argv, cwd, input_digest=fake_digest(task))
         artifact_digest = "sha256:" + hashlib.sha256(canonical({"session": session, "task": task, "revision": revision})).hexdigest()
         if session["status"] != "completed":
             self.scheduler.complete(job_id, worker, lease["id"], status="failed")

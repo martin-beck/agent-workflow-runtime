@@ -3,6 +3,7 @@ import unittest
 from awr_cli.authority_gates import AuthorityGates
 from scripts.local_authority_bridge import AuthorityBridgeError
 from scripts.local_authority_transport import LocalAuthorityClient, LocalAuthorityEndpoint
+from scripts.hosted_authority_transport import DeterministicHostedServer, HostedAuthorityClient
 
 
 def client(outcomes):
@@ -26,6 +27,17 @@ class AuthorityGateTests(unittest.TestCase):
         gates = AuthorityGates(client({"coordinator": ["observed"], "awq": ["accepted"], "awg": ["approved"], "ui": ["approved"]}))
         with self.assertRaisesRegex(AuthorityBridgeError, "revision"):
             gates.admit(task="AR-GATE-1", revision=0)
+
+    def test_hosted_shaped_transport_is_wired_through_all_gates(self):
+        endpoints = {
+            name: DeterministicHostedServer(name, values)
+            for name, values in {
+                "coordinator": ["observed"], "awq": ["accepted"], "awg": ["requires_ui"], "ui": ["approved"]
+            }.items()
+        }
+        result = AuthorityGates(HostedAuthorityClient(endpoints)).admit(task="AR-GATE-1", revision=3)
+        self.assertEqual(result["status"], "admitted")
+        self.assertEqual([event["authority"] for event in result["trace"]], ["coordinator", "awq", "awg", "ui"])
 
 
 if __name__ == "__main__":

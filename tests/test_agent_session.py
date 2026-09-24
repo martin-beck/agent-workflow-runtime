@@ -24,6 +24,13 @@ class AgentSessionTests(unittest.TestCase):
             with self.assertRaisesRegex(CliError, "digest"):
                 AgentSession(Path(root), "SES-FAKE-A", "fake-alpha").run(["true"], worktree, input_digest="bad")
 
+    def test_sandbox_required_path_is_executable(self):
+        with tempfile.TemporaryDirectory() as root:
+            worktree = Path(root) / "project"; worktree.mkdir()
+            result = AgentSession(Path(root), "SES-FAKE-S", "fake-sandbox", sandboxed=True).run(["/usr/bin/python3", "-c", "print('sandboxed')"], worktree, input_digest=fake_digest("input"))
+            self.assertEqual(result["status"], "completed")
+            self.assertEqual(result["sandbox"], "enforced")
+
 
 if __name__ == "__main__":
     unittest.main()
