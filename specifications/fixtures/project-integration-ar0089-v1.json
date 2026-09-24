@@ -1,0 +1,67 @@
+{
+  "projects": [
+    {
+      "project_key": "alpha-project",
+      "tenant": "tenant-a",
+      "project_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "capabilities": ["read", "edit"],
+      "contract_version": "1.0.0"
+    }
+  ],
+  "contexts": {
+    "alpha": {
+      "task_id": "AR-0089",
+      "task_revision": 3,
+      "tenant": "tenant-a",
+      "project_key": "alpha-project",
+      "project_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "worktree_key": "WT-ALPHA-PROJECT-0089-1",
+      "worker_id": "agent-alpha",
+      "lease_id": "LSE-0089-1",
+      "fence": 1,
+      "session_id": "SES-0089-1",
+      "coordinator_revision": 3
+    }
+  },
+  "intakes": {
+    "alpha": {
+      "task_id": "AR-0089",
+      "task_revision": 3,
+      "input_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "required_capabilities": ["read"],
+      "policy_reference": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  },
+  "sessions": {
+    "alpha": {
+      "session_id": "SES-0089-1",
+      "session_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "adapter_capabilities": ["read", "edit"]
+    }
+  },
+  "actions": [
+    {"kind": "register", "project": "alpha-project"},
+    {"kind": "intake", "project": "alpha-project", "intake": "alpha", "context": "alpha", "session": "alpha"},
+    {"kind": "begin", "run": "alpha-project", "operation_id": "OP-BEGIN-0089"},
+    {"kind": "publish", "run": "alpha-project", "artifact_id": "ART-RESULT", "payload": {"ok": true, "value": 7}},
+    {"kind": "handoff", "run": "alpha-project", "artifact_id": "ART-RESULT", "evidence_id": "EVD-RESULT", "evidence_payload": {"tests": 3}, "operation_id": "OP-AWQ-0089", "request_id": "REQ-AWQ-0089"},
+    {"kind": "terminal", "run": "alpha-project", "status": "succeeded", "evidence_from_run": true, "terminal_payload": {"result": "ok"}, "operation_id": "TERM-0089"},
+    {"kind": "terminal_replay", "run": "alpha-project", "operation_id": "TERM-0089"},
+    {"kind": "record_replay", "operation": "local-response", "request": {"case": "alpha"}, "response": {"answer": "deterministic"}}
+  ],
+  "expected": {
+    "projects": 1,
+    "runs": 1,
+    "terminal_state": "terminal",
+    "artifacts": 1,
+    "events": 6,
+    "recorded": 1
+  },
+  "offline": {
+    "network": "disabled",
+    "provider": "not_performed",
+    "llm": "not_performed",
+    "coordinator_write": "not_performed",
+    "checkout": "not_performed"
+  }
+}

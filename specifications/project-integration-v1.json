@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-project-integration",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {
+    "id": "AR-0089",
+    "revision": 3
+  },
+  "contract": {
+    "registration": "A project supplies identity, revision, and generic capability declarations.",
+    "intake": "A task is admitted only with an exact project, task, lease, worktree, and session binding.",
+    "capabilities": "Required capabilities must be declared by both the project and the selected session.",
+    "artifacts": "Artifacts are exchanged through the AR-0087 namespaced, digest-verified registry.",
+    "evidence": "AWQ receives an opaque content-addressed evidence handoff; AWQ owns its meaning and acceptance.",
+    "record_replay": "Local deterministic requests may be recorded and replayed only on an exact request digest.",
+    "terminal": "Only one revision-bound terminal observation may be reconciled; success requires accepted evidence."
+  },
+  "authority_boundaries": {
+    "awc": "owns identity, task revisions, claims, leases, and terminal authority",
+    "awr": "consumes bindings, schedules boundary calls, routes artifacts, and projects evidence",
+    "awq": "owns evidence policy and quality acceptance",
+    "awg": "owns guidance and user-decision escalation when required",
+    "project": "declares capabilities and supplies task inputs/results without changing runtime policy"
+  },
+  "invariants": [
+    "Registration is idempotent only for an identical project identity and declaration.",
+    "Task intake rejects crossed project, tenant, project revision, task revision, lease, worktree, or session bindings.",
+    "The runtime consumes an existing scheduler lease and never creates a competing lease.",
+    "Required capabilities must be declared by the project and selected session.",
+    "Policy references are opaque digests and are never interpreted by the runtime.",
+    "Artifacts use the AR-0087 project/worktree namespace and immutable content/provenance digests.",
+    "AWQ evidence handoff requires an existing artifact and exact runtime binding.",
+    "Authority outcomes other than the versioned finite result set fail closed.",
+    "A replay with changed request, binding, revision, or evidence is rejected.",
+    "A successful terminal requires the exact evidence digest previously handed to AWQ.",
+    "Missing, stale, or contradictory terminal observations never become approval.",
+    "A terminal observation is immutable and idempotent only for an identical observation.",
+    "The runtime does not embed application-specific policy or provider credentials.",
+    "No network, provider, or LLM execution is required by this contract."
+  ],
+  "hostile_qualification": [
+    "cross-project binding",
+    "stale project or task revision",
+    "missing project capability",
+    "missing session capability",
+    "artifact missing from evidence",
+    "crossed or ambiguous AWQ result",
+    "changed record/replay request",
+    "missing success evidence",
+    "contradictory terminal",
+    "policy leakage marker"
+  ],
+  "offline_boundary": {
+    "network": "disabled",
+    "provider": "not_performed",
+    "llm": "not_performed",
+    "coordinator_write": "not_performed",
+    "checkout": "not_performed"
+  },
+  "required_fixture_fields": [
+    "projects",
+    "contexts",
+    "intakes",
+    "sessions",
+    "actions",
+    "expected",
+    "offline"
+  ]
+}

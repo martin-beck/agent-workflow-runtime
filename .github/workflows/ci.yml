@@ -42,6 +42,8 @@ jobs:
         run: python scripts/check_authority_bridges.py --spec specifications/authority-bridges-v1.json --record specifications/fixtures/authority-bridges-ar0088-v1.json --evidence specifications/fixtures/authority-bridges-ar0088-evidence-v1.json --expected-revision 3
       - name: Run AR-0087 project isolation contract checker
         run: python scripts/check_project_isolation.py --spec specifications/multi-project-isolation-v1.json --fixture specifications/fixtures/multi-project-isolation-ar0087-v1.json --expected-revision 3
+      - name: Run AR-0089 project integration contract checker
+        run: python scripts/check_project_integration.py --spec specifications/project-integration-v1.json --fixture specifications/fixtures/project-integration-ar0089-v1.json --expected-revision 3
       - name: Run AR-0099 TLA+/TLC authority model
         run: python scripts/check_tlc_authority.py
 
