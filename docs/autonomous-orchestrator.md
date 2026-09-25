@@ -33,6 +33,47 @@ Coordinator terminal state plus the complete gate journal. Terminal journal
 entries cannot be replayed into another outcome. The operator API accepts no
 executable or arbitrary worker command.
 
+## Run operations and board evidence
+
+`awr run-ops` records and projects one already-admitted run/task binding. It is
+the operator journal around the workflow runtime; `awr workflow start` remains
+the command that starts the approved local orchestrator. The binding file is a
+privacy-safe projection of the exact graph, Coordinator task revision, worker,
+session, and current lease. It contains only identifiers, revisions, lease
+expiry, limits, and digests. Mutations repeat `--run-id`, expected board
+revision, lease ID, and fence; the journal rejects mismatches and expired
+leases. Recovery additionally needs a digest-bound checkpoint and a new worker
+and lease fence.
+
+```text
+awr run-ops start --state-file .awr/run/board.json --binding run-binding.json \
+  --operation-id OP-START-1
+awr run-ops status --state-file .awr/run/board.json --run-id RUN-EXAMPLE-1
+awr run-ops follow --state-file .awr/run/board.json --run-id RUN-EXAMPLE-1 \
+  --after-sequence 3
+awr run-ops interrupt --state-file .awr/run/board.json --run-id RUN-EXAMPLE-1 \
+  --operation-id OP-INT-1 --expected-revision 4 --lease-id LSE-EXAMPLE-1 \
+  --lease-fence 1
+awr run-ops resume --state-file .awr/run/board.json --run-id RUN-EXAMPLE-1 \
+  --operation-id OP-RESUME-1 --expected-revision 6 --lease-id LSE-EXAMPLE-1 \
+  --lease-fence 1 --observation resume-checkpoint.json
+awr run-ops cancel --state-file .awr/run/board.json --run-id RUN-EXAMPLE-1 \
+  --operation-id OP-CANCEL-1 --expected-revision 7 --lease-id LSE-EXAMPLE-1 \
+  --lease-fence 1
+awr run-ops diagnose --state-file .awr/run/board.json --run-id RUN-EXAMPLE-1
+awr run-ops export-evidence --state-file .awr/run/board.json --run-id RUN-EXAMPLE-1
+```
+
+`interrupt`, `resume`, and `cancel` append requests, not claims that the action
+occurred. A subsequent bounded observation must confirm the result. The board
+shows the current worker/session/lease mapping, Coordinator and gate outcomes,
+failure code, checkpoint digest, accounting, artifact digests, and journal
+head. Export validation rechecks the event chain, accounting conservation,
+artifact references, redaction policy, and evidence digest. Unknown outcomes
+stay unknown; accepted requires Coordinator `done` and explicit AWQ, AWG, and
+UI outcomes. Provider execution is not performed, credentials are not
+inspected, and remote verification remains unverified.
+
 Example operator commands from a source checkout:
 
 ```text

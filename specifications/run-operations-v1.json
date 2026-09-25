@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-run-operations",
+  "version": "1.0.0",
+  "normative": true,
+  "commands": ["start", "status", "follow", "interrupt", "resume", "cancel", "diagnose", "export-evidence", "observe", "recover"],
+  "states": ["starting", "running", "interrupt_requested", "interrupted", "resume_requested", "cancel_requested", "cancelled", "blocked", "awaiting_decision", "failed", "accepted", "unknown"],
+  "binding": ["run_id", "task_id", "task_revision", "project", "worktree_key", "worktree_digest", "graph_digest", "owner", "session_id", "lease_id", "lease_fence", "lease_expires_at", "event_budget", "accounting_budget"],
+  "invariants": [
+    "Every mutation names and matches one run, exact task revision, worker, session, lease identifier, and lease fence.",
+    "Events are atomic, bounded, privacy-safe, ordered, and SHA-256 hash linked; restart validates the complete chain.",
+    "Interrupt, resume, and cancel are requests until a runtime observation confirms their outcome.",
+    "Resume requires the exact observed checkpoint; recovery requires that checkpoint, an expired prior lease, a new worker, and a newer lease fence.",
+    "Accounting consumption plus remaining budget equals the original budget; artifact IDs and digests are unique.",
+    "Board events retain bounded Coordinator/AWQ/AWG/UI outcomes, failure codes, checkpoint digests, and historical worker/session/lease mappings.",
+    "Accepted requires Coordinator done plus AWQ accepted, AWG approved, and UI completed observations.",
+    "Unknown remote outcomes remain unknown; this interface performs no provider, credential, or network operation."
+  ],
+  "authority": {"coordinator": ["task revision", "lease", "lease fence", "durable task state"], "awq": ["evidence acceptance"], "awg": ["decision and guidance"], "ui": ["human gate"], "runtime": ["bounded local execution and observation", "safe status projection"]},
+  "offline_boundary": {"provider": "not_performed", "credentials": "not_inspected", "network": "disabled", "remote_verification": "unverified"},
+  "failure_semantics": {"mode": "fail_closed", "stale_or_cross_run": "reject_without_mutation", "unconfirmed_effect": "retain_requested_or_unknown", "tamper": "reject"}
+}

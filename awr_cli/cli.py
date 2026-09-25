@@ -300,6 +300,19 @@ def parser() -> argparse.ArgumentParser:
         item.add_argument("--max-parallel", type=int, default=1)
         item.add_argument("--worktree", action="append", default=[], metavar="KEY=PATH")
         item.add_argument("--owner", default="WRK-AR0136-LOCAL")
+    run_ops = commands.add_parser("run-ops", help="operate and inspect a revision/lease-fenced run journal")
+    run_ops_commands = run_ops.add_subparsers(dest="run_ops_action", required=True)
+    ops_start = run_ops_commands.add_parser("start", help="create the durable operator record for a run")
+    ops_start.add_argument("--state-file", type=Path, required=True); ops_start.add_argument("--binding", type=Path, required=True); ops_start.add_argument("--operation-id", required=True)
+    for action in ("status", "follow", "diagnose", "export-evidence"):
+        item = run_ops_commands.add_parser(action)
+        item.add_argument("--state-file", type=Path, required=True); item.add_argument("--run-id", required=True)
+        if action == "follow": item.add_argument("--after-sequence", type=int, default=0)
+    for action in ("interrupt", "resume", "cancel", "observe", "recover"):
+        item = run_ops_commands.add_parser(action)
+        item.add_argument("--state-file", type=Path, required=True); item.add_argument("--run-id", required=True); item.add_argument("--operation-id", required=True)
+        item.add_argument("--expected-revision", type=int, required=True); item.add_argument("--lease-id", required=True); item.add_argument("--lease-fence", type=int, required=True)
+        item.add_argument("--observation", type=Path); item.add_argument("--artifacts", type=Path); item.add_argument("--accounting-delta", type=int, default=0)
     host = commands.add_parser("host-run", help="run one bounded local worker process")
     host.add_argument("--root", type=Path, required=True); host.add_argument("--cwd", type=Path, required=True)
     host.add_argument("--timeout", type=float, default=5.0); host.add_argument("--output-limit", type=int, default=16384)
@@ -428,6 +441,24 @@ def main(argv: list[str] | None = None) -> int:
                     owner=args.owner, max_parallel=args.max_parallel,
                 )
                 output = runner.run()
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "run-ops":
+            from scripts.run_operations import RunOperations
+            board = RunOperations(args.state_file)
+            if args.run_ops_action == "start":
+                output = board.start(json.loads(args.binding.read_text(encoding="utf-8")), args.operation_id)
+            elif args.run_ops_action in {"status", "follow", "diagnose", "export-evidence"}:
+                if args.run_ops_action == "status": output = board.status(args.run_id)
+                elif args.run_ops_action == "follow": output = board.follow(args.run_id, args.after_sequence)
+                elif args.run_ops_action == "diagnose": output = board.diagnose(args.run_id)
+                else: output = board.export_evidence(args.run_id)
+            else:
+                observation = json.loads(args.observation.read_text(encoding="utf-8")) if args.observation else None
+                artifacts = json.loads(args.artifacts.read_text(encoding="utf-8")) if args.artifacts else None
+                output = board.apply(args.run_ops_action, run_id=args.run_id, operation_id=args.operation_id, expected_revision=args.expected_revision,
+                                     lease_id=args.lease_id, lease_fence=args.lease_fence, observation=observation,
+                                     accounting_delta=args.accounting_delta, artifacts=artifacts)
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
