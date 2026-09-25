@@ -137,8 +137,15 @@ class AdapterSession:
         self.helper = helper.resolve(strict=True)
         self.executable = (executable or Path(sys.executable)).resolve(strict=True)
         self.task = dict(task or TASK)
-        if self.task != TASK:
-            raise AdapterError("stale_task", "session task revision is stale")
+        if (
+            not isinstance(self.task, dict)
+            or set(self.task) != {"id", "revision"}
+            or not isinstance(self.task.get("id"), str)
+            or not re.fullmatch(r"AR-[0-9]{4}", self.task["id"])
+            or type(self.task.get("revision")) is not int
+            or self.task["revision"] < 1
+        ):
+            raise AdapterError("stale_task", "session task revision is invalid")
         self.clock = clock
         self.state = "new"
         self.sequence = 0
@@ -182,7 +189,7 @@ class AdapterSession:
         return value
 
     def _run_id(self, operation: str) -> str:
-        candidate = f"RUN-0085-{self.binding.session_id.removeprefix('SES-')}-{self.sequence + 1}-{operation.upper()}"
+        candidate = f"RUN-{self.binding.session_id.removeprefix('SES-')}-{self.sequence + 1}-{operation.upper()}"
         candidate = re.sub(r"[^A-Z0-9-]", "-", candidate)
         if not RUN_ID.fullmatch(candidate):
             raise AdapterError("run_identity", "bounded run identity could not be created", state=self.state)

@@ -50,7 +50,7 @@ class DurableFakeCoordinator:
         with self._locked():
             if self.path.exists():
                 raise AuthorityError("state_already_initialized")
-            self._save({"schema": 1, "task": {"id": task_id, "revision": revision, "status": "open", "project_revision": project_revision, "worktree_digest": worktree_digest, "owner": None, "lease": None, "fence": 0}, "events": [], "operations": {}})
+            self._save({"schema": 1, "task": {"id": task_id, "revision": revision, "task_revision": revision, "status": "open", "project_revision": project_revision, "worktree_digest": worktree_digest, "owner": None, "lease": None, "fence": 0}, "events": [], "operations": {}})
 
     def _locked(self):
         coordinator = self

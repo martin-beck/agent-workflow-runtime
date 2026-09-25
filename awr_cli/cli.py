@@ -291,6 +291,15 @@ def parser() -> argparse.ArgumentParser:
     gate.add_argument("--task", required=True); gate.add_argument("--revision", type=int, required=True)
     qualification = commands.add_parser("qualify-concurrent", help="run bounded concurrent provider-free qualification")
     qualification.add_argument("--root", type=Path, required=True); qualification.add_argument("--count", type=int, default=2)
+    workflow = commands.add_parser("workflow", help="start, resume, or inspect an approved local fake-agent workflow")
+    workflow_commands = workflow.add_subparsers(dest="workflow_action", required=True)
+    for action in ("start", "resume", "status"):
+        item = workflow_commands.add_parser(action)
+        item.add_argument("--graph", type=Path, required=True)
+        item.add_argument("--state-dir", type=Path, required=True)
+        item.add_argument("--max-parallel", type=int, default=1)
+        item.add_argument("--worktree", action="append", default=[], metavar="KEY=PATH")
+        item.add_argument("--owner", default="WRK-AR0136-LOCAL")
     host = commands.add_parser("host-run", help="run one bounded local worker process")
     host.add_argument("--root", type=Path, required=True); host.add_argument("--cwd", type=Path, required=True)
     host.add_argument("--timeout", type=float, default=5.0); host.add_argument("--output-limit", type=int, default=16384)
@@ -389,6 +398,38 @@ def main(argv: list[str] | None = None) -> int:
             output = run_concurrent(args.root, args.count)
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
+        if args.command == "workflow":
+            from scripts.autonomous_orchestrator import (
+                AutonomousOrchestrator, DurableRunJournal, OrchestratorError, load_graph,
+            )
+            graph = load_graph(args.graph)
+            journal_path = args.state_dir / "run.json"
+            exists = journal_path.exists()
+            if args.workflow_action == "start" and exists:
+                raise OrchestratorError("run_already_exists_use_resume")
+            if args.workflow_action in {"resume", "status"} and not exists:
+                raise OrchestratorError("run_state_missing_start_first")
+            if args.workflow_action == "status":
+                output = DurableRunJournal(journal_path, graph, args.max_parallel).status()
+            else:
+                worktrees = {}
+                for binding in args.worktree:
+                    if "=" not in binding:
+                        raise OrchestratorError("worktree_binding_invalid")
+                    key, value = binding.split("=", 1)
+                    if key in worktrees or not value:
+                        raise OrchestratorError("worktree_binding_duplicate_or_empty")
+                    worktrees[key] = Path(value)
+                root = Path(__file__).resolve().parents[1]
+                runner = AutonomousOrchestrator(
+                    graph, state_dir=args.state_dir, worktrees=worktrees,
+                    registry_spec=root / "specifications" / "agent-registry-v1.json",
+                    helper=root / "tests" / "helpers" / "agent_session_helper.py",
+                    owner=args.owner, max_parallel=args.max_parallel,
+                )
+                output = runner.run()
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
         if args.command in {"version", "doctor", "install", "repair", "upgrade", "rollback", "uninstall"}:
             from . import __version__
             from .install import doctor, install, rollback, uninstall
@@ -416,7 +457,7 @@ def main(argv: list[str] | None = None) -> int:
             output = make_plan(manifest, revision, args.workspace, args.expected_revision)
         print(json.dumps(output, sort_keys=True, separators=(",", ":")))
         return 0
-    except CliError as exc:
+    except (CliError, ValueError) as exc:
         print(f"awr: {exc}", file=sys.stderr)
         return 2
 

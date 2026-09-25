@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-autonomous-orchestrator",
+  "version": "1.0.0",
+  "normative": true,
+  "task": {"id": "AR-0136", "revision": 5},
+  "authority": {
+    "coordinator": ["graph_identity", "task_revision", "dependency_state", "claim", "lease", "fence", "recovery", "terminal_state"],
+    "runtime": ["ready_selection", "bounded_dispatch", "supervised_session", "event_projection", "retry_request", "reconciliation_request"],
+    "awq": ["evidence_acceptance"],
+    "awg": ["material_alternative_decision", "guidance"],
+    "ui": ["human_gate_outcome"]
+  },
+  "graph": {
+    "requires_exact_digest_approval": true,
+    "dependencies_must_be_acyclic": true,
+    "ready_when": "all_dependencies_completed",
+    "parallelism": "bounded_by_operator_and_graph_limits",
+    "worktree_binding": ["worktree_key", "worktree_digest"]
+  },
+  "lifecycle": ["planned", "ready", "leased", "executing", "streaming", "evidence_pending", "quality_pending", "guidance_pending", "ui_pending", "repair_pending", "recovering", "completed", "blocked", "failed"],
+  "mandatory_gates": ["coordinator_lease", "awq", "awg", "ui"],
+  "session": {
+    "adapter": "repository_owned_deterministic_fake_only",
+    "requires_real_supervised_process": true,
+    "interaction": "bounded_request_and_stream",
+    "heartbeat": "before_dispatch_and_between_tasks",
+    "event_payload": "digest_only"
+  },
+  "durability": {
+    "journal": "atomic_hash_linked_event_log",
+    "resume": "reconstruct_status_from_verified_journal_and_recover_only_after_lease_expiry",
+    "replay": "same_operation_and_payload_only",
+    "terminal": "reconcile_through_coordinator_after_all_gates"
+  },
+  "hostile_cases": ["unapproved_graph", "changed_graph_digest", "dependency_bypass", "cycle", "parallelism_over_limit", "direct_session_without_lease", "missing_awq", "missing_awg", "missing_ui", "stale_binding", "expired_lease", "tampered_journal", "manual_worker_launch_bypass"],
+  "offline_boundary": {"provider": "not_performed", "credentials": "not_inspected", "network": "disabled", "authority": "deterministic_local_fakes", "hosted_ci": "not_claimed", "remote_verification": "unverified"},
+  "limitations": ["The graph approval and all AWQ, AWG, and UI results in local mode are supplied or deterministic fake observations, not live authority decisions.", "A successful local run proves supervised local fake-agent orchestration only; it does not prove configured-provider behavior, hosted checks, remote success, or production isolation."]
+}
