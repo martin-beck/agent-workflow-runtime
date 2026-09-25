@@ -20,10 +20,10 @@ from scripts.worker_monitor import RecoveryStore
 ROOT = Path(__file__).resolve().parents[1]
 CANONICAL_UMBRELLA_ORIGIN = "https://github.com/martin-beck/agent-workflow.git"
 RUNTIME_ORIGIN = "https://github.com/martin-beck/agent-workflow-runtime.git"
-UMBRELLA_COMMIT = "78cff9000086e4fc73ec6a86b259b4f85e29f46b"
-UMBRELLA_MANIFEST_SHA256 = "74aa023d504bd2b4d3dc6a00b88c8061263b5366031e14813a873a1edfd551c6"
-RUNTIME_RELEASE = "v0.1.8"
-RUNTIME_COMMIT = "79b0c25af69c9bd9d8551c8065fb1488fb36ccd5"
+UMBRELLA_COMMIT = "fef73d8248e31f85399070b163d7ee49d7029a25"
+UMBRELLA_MANIFEST_SHA256 = "845ec2a8419a370df9337565bb98aa08276409fbd61873e2d3c1437c70743a4d"
+RUNTIME_RELEASE = "v0.1.9"
+RUNTIME_COMMIT = "023093ee429242121baf159dfccdad371ee4c867"
 PHASES = (
     ("planning", (), "tree-a", "fake-alpha"),
     ("architecture", (), "tree-b", "fake-beta"),
