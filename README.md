@@ -44,6 +44,15 @@ writes, and restart recovery. It is offline qualification only; hosted
 Coordinator transport and provider execution remain unqualified. See
 `specifications/durable-coordinator-session-v1.json`.
 
+AR-0135 adds the executable worker action loop in
+`scripts/worker_control_loop.py`. Each material proposal is bound to exact
+specification, test, evidence, and task revision digests and must pass AWQ,
+AWG, and UI decisions. Blocked or uncertain actions require AWG escalation and
+a UI outcome. Deterministic local authority fakes exercise approval, rejection,
+cancellation, and hostile bindings; see `docs/worker-control-loop.md` and
+`specifications/worker-control-loop-v1.json`. This local reference does not
+claim live authority, provider, or hosted success.
+
 ## Initial architecture
 
 The initial repository defines the contracts first. Runtime implementations,

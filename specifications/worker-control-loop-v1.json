@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "protocol": {"id": "awr-worker-control-loop", "version": "1.0.0"},
+  "task": {"id": "AR-0135", "revision": 2},
+  "authorities": {
+    "awq": "evidence_admission_and_gate_decision",
+    "awg": "guidance_and_uncertainty_decision",
+    "ui": "human_decision_for_every_material_action",
+    "coordinator": "task_identity_revision_and_terminal_state"
+  },
+  "required_order": ["awq", "awg", "ui"],
+  "worker_denied_changes": ["specification", "tests", "user_decision", "acceptance_evidence"],
+  "outcomes": ["approved", "rejected", "cancelled", "escalated"],
+  "binding": ["task_id", "task_revision", "proposal_digest", "specification_digest", "test_digest", "evidence_digest"],
+  "durability": "each_decision_must_be_append_only_and_revision_bound",
+  "limits": {
+    "authority_adapters": "deterministic_local_fakes_only",
+    "provider": "not_performed",
+    "credentials": "not_inspected",
+    "network": "disabled",
+    "hosted_or_live_authority": "unverified"
+  }
+}
