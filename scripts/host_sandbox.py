@@ -125,7 +125,13 @@ class HostSandbox:
             resource.setrlimit(resource.RLIMIT_NPROC, (budget.process_count, budget.process_count))
         return apply
 
-    def launch(self, argv: Iterable[str], *, budget: SandboxBudget | None = None) -> subprocess.Popen[bytes]:
+    def launch(
+        self,
+        argv: Iterable[str],
+        *,
+        budget: SandboxBudget | None = None,
+        environment: dict[str, str] | None = None,
+    ) -> subprocess.Popen[bytes]:
         budget = budget or DEFAULT_BUDGET
         budget.validate()
         args = tuple(argv)
@@ -134,17 +140,34 @@ class HostSandbox:
         limited = ["/usr/bin/prlimit", f"--cpu={budget.cpu_seconds}",
                    f"--as={budget.memory_bytes}", f"--fsize={budget.disk_bytes}",
                    f"--nproc={budget.process_count}", "--", *args]
+        env = {"PATH": "/usr/bin:/bin", "LANG": "C"}
+        if environment is not None:
+            if set(environment) - {"PATH", "LANG", "PYTHONUNBUFFERED", "AWR_SESSION_ID", "AWR_TASK_REVISION"}:
+                raise SandboxError("sandbox environment contains an unapproved name")
+            if any(not isinstance(key, str) or not isinstance(value, str) or not value or "\x00" in value for key, value in environment.items()):
+                raise SandboxError("sandbox environment is malformed")
+            env.update(environment)
         process = subprocess.Popen(
             self._prefix(self.worktree) + limited, cwd=self.worktree,
-            env={"PATH": "/usr/bin:/bin", "LANG": "C"},
-            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            env=env,
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
             start_new_session=True, close_fds=True,
         )
         return process
 
+    def wait(self, process: subprocess.Popen[bytes], *, budget: SandboxBudget | None = None) -> tuple[bytes, bytes, bool, bool]:
+        """Collect a launched process while retaining its explicit bindings."""
+
+        selected_budget = budget or DEFAULT_BUDGET
+        selected_budget.validate()
+        result = self._collect(process, selected_budget)
+        return result
+
     def run(self, argv: Iterable[str], *, budget: SandboxBudget | None = None) -> dict[str, object]:
         budget = budget or DEFAULT_BUDGET
         process = self.launch(argv, budget=budget)
+        if process.stdin is not None:
+            process.stdin.close()
         stdout, stderr, timed_out, overflow = self._collect(process, budget)
         return {"status": "timeout" if timed_out else ("output_overflow" if overflow else ("ok" if process.returncode == 0 else "failed")),
                 "returncode": process.returncode, "stdout": stdout[:budget.output_bytes].decode("utf-8", "replace"),
