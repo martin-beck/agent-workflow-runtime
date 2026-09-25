@@ -22,6 +22,7 @@ class Coordinator(Protocol):
     def read_task(self, task_id: str) -> dict[str, Any]: ...
     def claim(self, task_id: str, revision: int, owner: str, operation_id: str) -> dict[str, Any]: ...
     def acquire_lease(self, task_id: str, revision: int, owner: str, session: str, operation_id: str) -> dict[str, Any]: ...
+    def recover_expired(self, task_id: str, revision: int, owner: str, session: str, operation_id: str) -> dict[str, Any]: ...
     def heartbeat(self, task_id: str, revision: int, lease: dict[str, Any], operation_id: str) -> dict[str, Any]: ...
     def append_session_event(self, task_id: str, revision: int, lease: dict[str, Any], session: str, event: str, event_digest: str, operation_id: str) -> dict[str, Any]: ...
     def reconcile(self, task_id: str, revision: int, lease: dict[str, Any], status: str, operation_id: str) -> dict[str, Any]: ...
@@ -120,6 +121,23 @@ class DurableFakeCoordinator:
                 task["lease"] = {"id": f"LSE-{task['fence']:08d}", "owner": owner, "fence": task["fence"], "expires_at": self.clock() + self.lease_seconds, "session": session}
                 return self._record(value, "lease_acquired", task_id=task_id, task_revision=revision, session=session, lease=dict(task["lease"]))
             return self._operation(value, operation_id, _digest(["lease", task_id, revision, owner, session]), action)
+
+    def recover_expired(self, task_id, revision, owner, session, operation_id):
+        """Replace only an expired running lease; Coordinator owns the new fence."""
+        with self._locked():
+            value = self._load(); task = value["task"]
+            def action():
+                self._cas(task, task_id, revision)
+                lease = task.get("lease")
+                if task["status"] != "running" or not isinstance(lease, dict) or lease["expires_at"] > self.clock():
+                    raise AuthorityError("lease_not_expired")
+                task["fence"] += 1; task["revision"] += 1
+                task["owner"] = owner
+                task["lease"] = {"id": f"LSE-{task['fence']:08d}", "owner": owner,
+                    "fence": task["fence"], "expires_at": self.clock()+self.lease_seconds, "session": session}
+                return self._record(value, "lease_recovered", task_id=task_id, task_revision=revision,
+                    session=session, prior_fence=lease["fence"], lease=dict(task["lease"]))
+            return self._operation(value, operation_id, _digest(["recover", task_id, revision, owner, session]), action)
 
     def heartbeat(self, task_id, revision, lease, operation_id):
         with self._locked():

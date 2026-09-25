@@ -12,6 +12,7 @@ from scripts.execution_controller import (
     ExecutionError,
 )
 from scripts.host_sandbox import SandboxBudget
+from scripts.worker_monitor import RecoveryStore
 
 
 class ExecutionControllerTests(unittest.TestCase):
@@ -73,6 +74,20 @@ class ExecutionControllerTests(unittest.TestCase):
         self.run_controller()
         with self.assertRaises(ExecutionError):
             self.run_controller()
+
+    def test_expired_lease_recovery_uses_checkpoint_and_new_coordinator_fence(self):
+        claim = self.coordinator.claim("AR-0131", 2, "WRK-OLD", "OP-RECOVERY-CLAIM")
+        receipt = self.coordinator.acquire_lease("AR-0131", claim["revision"], "WRK-OLD", self.binding.session_id, "OP-RECOVERY-LEASE")
+        old = receipt["lease"]
+        store = RecoveryStore(self.evidence / "restart.json")
+        binding = {"task_id":"AR-0131", "task_revision":2, "session_id":self.binding.session_id, "worktree_digest":self.binding.worktree_digest, "worker_id":"WRK-OLD", "lease_id":old["id"], "lease_fence":old["fence"]}
+        store.checkpoint(binding, {"progress":4})
+        self.now[0] += 31
+        snapshot = self.coordinator.read_task("AR-0131")
+        renewed = self.coordinator.recover_expired("AR-0131", snapshot["revision"], "WRK-NEW", self.binding.session_id, "OP-RECOVERY-NEW-FENCE")["lease"]
+        recovered = store.recover(binding={**binding, "worker_id":"WRK-NEW", "lease_id":renewed["id"], "lease_fence":renewed["fence"]}, attempts=0, old_fence=old["fence"])
+        self.assertTrue(recovered["resume"])
+        self.assertGreater(renewed["fence"], old["fence"])
 
 
 if __name__ == "__main__":

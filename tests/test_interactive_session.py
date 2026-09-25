@@ -92,6 +92,20 @@ class InteractiveSessionTests(unittest.TestCase):
         with self.assertRaisesRegex(InteractionError, "session_terminal"):
             self.begin(s)
 
+    def test_cancel_fences_late_output_and_requires_cleanup_ack(self):
+        s = self.session()
+        self.begin(s)
+        operation = "OP-SES-AR0132-CANCEL"
+        self.assertEqual(s.request_cancel(operation)["status"], "cancelling")
+        with self.assertRaisesRegex(InteractionError, "session_cancelling"):
+            s.feed("stdout", '{"type":"message","data":{"text":"late"}}')
+        with self.assertRaisesRegex(InteractionError, "cancel_cleanup_unconfirmed"):
+            s.acknowledge_cancel(operation, process_group_clean=False)
+        terminal = s.acknowledge_cancel(operation, process_group_clean=True)
+        self.assertEqual(terminal["status"], "cancelled")
+        with self.assertRaisesRegex(InteractionError, "session_terminal"):
+            s.acknowledge_cancel(operation, process_group_clean=True)
+
 
 if __name__ == "__main__":
     unittest.main()

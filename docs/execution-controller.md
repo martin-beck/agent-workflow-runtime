@@ -57,3 +57,26 @@ Run the focused check with:
 ```text
 python3 -m unittest tests.test_execution_controller tests.test_host_sandbox -v
 ```
+# AR-0134 worker monitoring and recovery
+
+`scripts/worker_monitor.py` monitors the spawned session while draining both
+output streams. It renews the current Coordinator lease on a bounded interval,
+records digest-only progress checkpoints, samples Linux CPU and resident-memory
+counters, and detects process exit, deadline expiry, output stalls, overflow,
+and cancellation. A cancel request fences further interactive input and output;
+the terminal cancellation acknowledgement is emitted only after the process
+group is confirmed clean. A late or duplicate event remains rejected by the
+lease and operation bindings.
+
+`RecoveryStore` atomically records a canonical checkpoint bound to task,
+revision, session, worktree digest, worker, lease, and fence. Recovery verifies
+the stored digest and requires a strictly newer fence and an available attempt
+under the bounded retry limit. The controller's Coordinator client remains the
+authority for acquiring that new lease; the store cannot mint leases or mark a
+task terminal. See `specifications/worker-monitor-recovery-v1.json`.
+
+The hostile local tests use deterministic worker processes to cover a hanging
+worker, a stalled output stream, a worker with a descendant, cancellation,
+checkpoint restart, retry exhaustion, and stale fencing. These tests do not
+inspect provider configuration, run a provider, or establish hosted CI or
+production host containment.

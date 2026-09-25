@@ -65,6 +65,8 @@ class InteractiveSession:
         self.pending_correlation: str | None = None
         self.pending_deadline: float | None = None
         self.terminal = False
+        self.cancelling = False
+        self.cancel_operation: str | None = None
         self.events: list[dict[str, Any]] = []
         self._outstanding = 0
 
@@ -147,6 +149,35 @@ class InteractiveSession:
         self.terminal = True
         return self._append({"kind": "terminal", "status": status})
 
+    def request_cancel(self, operation_id: str) -> dict[str, Any]:
+        """Fence new input/output immediately while awaiting process cleanup."""
+        self._fence(allow_cancelling=True)
+        if not isinstance(operation_id, str) or not re.fullmatch(r"OP-[A-Z0-9-]{1,63}", operation_id):
+            raise InteractionError("cancel_operation_invalid")
+        if self.terminal:
+            raise InteractionError("session_terminal")
+        if self.cancelling:
+            if operation_id != self.cancel_operation:
+                raise InteractionError("cancel_operation_conflict")
+            return {"status": "cancelling", "operation_id": operation_id}
+        self.cancelling, self.cancel_operation = True, operation_id
+        self.pending = None
+        self.pending_correlation = None
+        self.pending_deadline = None
+        return {"status": "cancelling", "operation_id": operation_id}
+
+    def acknowledge_cancel(self, operation_id: str, *, process_group_clean: bool) -> dict[str, Any]:
+        self._fence(allow_cancelling=True)
+        if self.terminal:
+            raise InteractionError("session_terminal")
+        if not self.cancelling or operation_id != self.cancel_operation:
+            raise InteractionError("cancel_ack_unmatched")
+        if process_group_clean is not True:
+            raise InteractionError("cancel_cleanup_unconfirmed")
+        self.terminal = True
+        return self._append({"kind": "terminal", "status": "cancelled", "cancel_operation": operation_id,
+                             "process_group_clean": True})
+
     def _normalize(self, kind: str, body: dict[str, Any], stream: str) -> dict[str, Any]:
         mapping = ({"message": "assistant", "call": "tool", "state": "status"} if self.protocol == "fake-alpha" else {"assistant_delta": "assistant", "tool_invocation": "tool", "lifecycle": "status"})
         if kind not in mapping or set(body) - {"text", "name", "state"}:
@@ -169,9 +200,11 @@ class InteractiveSession:
         self.events.append(value)
         return value
 
-    def _fence(self) -> None:
+    def _fence(self, *, allow_cancelling: bool = False) -> None:
         if self.clock() >= self.lease_expires_at:
             raise InteractionError("lease_stale")
+        if self.cancelling and not allow_cancelling:
+            raise InteractionError("session_cancelling")
 
 
 def replay(events: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:

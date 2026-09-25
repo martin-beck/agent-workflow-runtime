@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-worker-monitor-recovery",
+  "version": "1.0.0",
+  "task": "AR-0134",
+  "authority": {
+    "coordinator": ["task identity", "revision", "claim", "lease", "fence", "terminal state"],
+    "runtime": ["process monitoring", "bounded output", "process-group cleanup", "checkpoint verification", "retry enforcement"]
+  },
+  "monitor": {
+    "observations": ["heartbeat", "process liveness", "output progress", "cpu ticks", "resident memory", "lease expiry", "cancellation acknowledgement"],
+    "heartbeat_deadline": "strictly_before_lease_expiry",
+    "output_after_cancel_or_expiry": "reject",
+    "terminal_events": "idempotent_same_operation_only",
+    "cleanup": "signal_process_group_and_confirm_empty"
+  },
+  "recovery": {
+    "checkpoint": "atomic_digest_bound_task_session_worktree_worker_lease_fence",
+    "resume": "verified_checkpoint_and_newer_coordinator_fence_required",
+    "retry": {"max_attempts": 3, "policy": "bounded", "retryable": ["worker_lost", "transient_unavailable"]},
+    "ambiguity": "fail_closed"
+  },
+  "privacy": {"record": ["opaque_bindings", "bounded_counters", "digests"], "forbidden": ["credentials", "keys", "models", "prompts", "transcripts", "raw_unbounded_output"]},
+  "qualification": {"provider_configuration": "not_inspected", "provider_execution": "not_performed", "hosted_ci": "not_claimed"}
+}

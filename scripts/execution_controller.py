@@ -18,6 +18,7 @@ from typing import Any
 
 from awr_cli.agent_registry import AdapterRegistry, RegistryError
 from scripts.durable_coordinator import AuthorityError, Coordinator
+from scripts.worker_monitor import MonitorPolicy, RecoveryStore, WorkerMonitor
 
 from .host_sandbox import HostSandbox, SandboxBudget, SandboxError
 
@@ -105,6 +106,8 @@ class ExecutionController:
         registry_revision: int,
         capabilities: list[str] | None = None,
         budget: SandboxBudget | None = None,
+        cancel_requested=None,
+        monitor_policy: MonitorPolicy | None = None,
     ) -> dict[str, Any]:
         binding.validate()
         self._validate_authority(authority_admission, binding)
@@ -162,12 +165,37 @@ class ExecutionController:
             process.stdin.close()
             spawn.update({"pid": process.pid, "pgid": os.getpgid(process.pid)})
             _atomic_json(evidence, {"spawn": spawn})
-            stdout, stderr, timed_out, overflow = sandbox.wait(process, budget=selected_budget)
+            recovery = RecoveryStore(self.evidence_dir / f"{binding.session_id}.checkpoint.json")
+            heartbeat_number = 0
+
+            def renew_lease():
+                nonlocal authoritative_revision, lease_value, heartbeat_number
+                current = self.coordinator.read_task(binding.task_id)
+                if current.get("lease") != lease_value:
+                    raise ExecutionError("coordinator_lease_expired_or_fenced")
+                heartbeat_number += 1
+                receipt = self._authority_write(lambda: self.coordinator.heartbeat(
+                    binding.task_id, current["revision"], lease_value,
+                    f"OP-{binding.session_id}-MONITOR-{heartbeat_number:06d}"))
+                lease_value = receipt["lease"]
+                authoritative_revision = receipt["revision"]
+
+            checkpoint_binding = {"task_id": binding.task_id, "task_revision": binding.task_revision,
+                "session_id": binding.session_id, "worktree_digest": binding.worktree_digest,
+                "worker_id": self.owner_id, "lease_id": lease_value["id"], "lease_fence": lease_value["fence"]}
+            observed = WorkerMonitor(clock=time.monotonic, policy=monitor_policy or MonitorPolicy(),
+                heartbeat=renew_lease, cancel_requested=cancel_requested,
+                checkpoint=lambda state: recovery.checkpoint(checkpoint_binding, state)).wait(
+                    process, timeout=selected_budget.timeout_seconds, output_limit=selected_budget.output_bytes)
+            stdout, stderr = observed["stdout"], observed["stderr"]
+            timed_out = observed["timed_out"] or observed["stalled"]
+            overflow = observed["output_overflow"]
             terminal = {
-                "schema_version": 1, "event": "terminal", "status": "timeout" if timed_out else ("output_overflow" if overflow else ("completed" if process.returncode == 0 else "failed")),
+                "schema_version": 1, "event": "terminal", "status": "cleanup_unconfirmed" if not observed["process_group_clean"] else ("cancelled" if observed["cancelled"] else ("stalled" if observed["stalled"] else ("timeout" if timed_out else ("output_overflow" if overflow else ("completed" if process.returncode == 0 else "failed"))))),
                 "returncode": process.returncode, "stdout_digest": _digest(stdout.decode("utf-8", "replace")), "stderr_digest": _digest(stderr.decode("utf-8", "replace")),
-                "stdout_bytes": len(stdout), "stderr_bytes": len(stderr), "process_tree_clean": process.poll() is not None,
-                "cleanup": process.poll() is not None, "lease_id": lease_value["id"],
+                "stdout_bytes": len(stdout), "stderr_bytes": len(stderr), "process_tree_clean": observed["process_group_clean"],
+                "cleanup": observed["process_group_clean"], "lease_id": lease_value["id"],
+                "monitor": {key: observed[key] for key in ("heartbeat_count", "progress_observed", "resource_observation", "process_group_clean")},
             }
             authoritative_revision = self._coordinator_event(binding, authoritative_revision, lease_value, "session_terminal", _digest({"status": terminal["status"], "stdout": terminal["stdout_digest"], "stderr": terminal["stderr_digest"]}))
             snapshot = self.coordinator.read_task(binding.task_id)
@@ -193,6 +221,38 @@ class ExecutionController:
             except (AuthorityError, KeyError, TypeError):
                 pass
             raise
+
+    def recover(self, *, task_id: str, session_id: str, owner_id: str, checkpoint_path: Path,
+                attempts: int = 0) -> dict[str, Any]:
+        """Acquire a fresh Coordinator fence and verify the latest checkpoint."""
+        recovery = RecoveryStore(checkpoint_path)
+        stored = recovery.inspect()
+        prior = stored.get("binding", {})
+        if prior.get("task_id") != task_id or prior.get("session_id") != session_id:
+            raise ExecutionError("checkpoint_binding_mismatch")
+        try:
+            task = self.coordinator.read_task(task_id)
+            old_lease = task.get("lease")
+            if not isinstance(old_lease, dict) or old_lease.get("fence") != prior.get("lease_fence"):
+                raise ExecutionError("coordinator_recovery_fence_mismatch")
+            receipt = self._authority_write(lambda: self.coordinator.recover_expired(
+                task_id, task["revision"], owner_id, session_id,
+                f"OP-{session_id}-RECOVER-{old_lease['fence']}"))
+        except AuthorityError as exc:
+            raise ExecutionError(f"coordinator_{exc}") from exc
+        lease = receipt.get("lease")
+        if not isinstance(lease, dict):
+            lease = self.coordinator.read_task(task_id).get("lease")
+        if not isinstance(lease, dict):
+            raise ExecutionError("coordinator_recovery_lease_missing")
+        binding = {**prior, "worker_id": owner_id, "lease_id": lease["id"], "lease_fence": lease["fence"]}
+        try:
+            recovered = recovery.recover(binding=binding, attempts=attempts, old_fence=prior["lease_fence"])
+        except ValueError as exc:
+            raise ExecutionError(f"recovery_{exc}") from exc
+        return {"status": "recovered", "task_revision": receipt["revision"], "lease": lease,
+                "checkpoint_digest": stored["checkpoint_digest"], "attempt": recovered["attempt"],
+                "resume_state_digest": stored["state_digest"], "provider": "not_performed"}
 
     def _coordinator_event(self, binding, revision, lease, event, event_digest):
         try:
