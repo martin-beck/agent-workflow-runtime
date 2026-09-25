@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any
 
 from awr_cli.agent_registry import AdapterRegistry, RegistryError
+from scripts.durable_coordinator import AuthorityError, Coordinator
 
 from .host_sandbox import HostSandbox, SandboxBudget, SandboxError
 
@@ -31,7 +32,6 @@ _PROJECT = re.compile(r"^[a-z][a-z0-9-]{1,62}$")
 _WORKTREE = re.compile(r"^[a-z0-9][a-z0-9-]{1,62}$")
 _SESSION = re.compile(r"^SES-[A-Z0-9-]{3,64}$")
 _WORKER = re.compile(r"^WRK-[A-Z0-9-]{1,63}$")
-_LEASE = re.compile(r"^LSE-[A-Z0-9-]{1,63}$")
 
 
 def _canonical(value: object) -> bytes:
@@ -63,35 +63,16 @@ class ExecutionBinding:
             raise ExecutionError("session_binding_invalid")
 
 
-@dataclass(frozen=True)
-class JobLease:
-    lease_id: str
-    worker_id: str
-    fence: int
-    expires_at: float
-
-    def validate(self, now: float) -> None:
-        if not _LEASE.fullmatch(self.lease_id) or not _WORKER.fullmatch(self.worker_id):
-            raise ExecutionError("lease_binding_invalid")
-        if isinstance(self.fence, bool) or not isinstance(self.fence, int) or self.fence < 1:
-            raise ExecutionError("lease_fence_invalid")
-        if not isinstance(self.expires_at, (int, float)) or isinstance(self.expires_at, bool) or self.expires_at <= now:
-            raise ExecutionError("lease_stale")
-
-
-def _load_lease(value: dict[str, Any]) -> JobLease:
-    required = {"id", "worker", "fence", "expires_at"}
-    if not isinstance(value, dict) or set(value) != required:
-        raise ExecutionError("lease_shape_invalid")
-    return JobLease(str(value["id"]), str(value["worker"]), value["fence"], value["expires_at"])
-
-
 class ExecutionController:
     """Admit and run exactly one deterministic local fake agent session."""
 
-    def __init__(self, *, registry: AdapterRegistry, evidence_dir: Path, clock=time.time):
+    def __init__(self, *, registry: AdapterRegistry, evidence_dir: Path, coordinator: Coordinator, owner_id: str, clock=time.time):
         self.registry = registry
         self.evidence_dir = Path(evidence_dir).resolve()
+        self.coordinator = coordinator
+        if not isinstance(owner_id, str) or not _WORKER.fullmatch(owner_id):
+            raise ExecutionError("owner_binding_invalid")
+        self.owner_id = owner_id
         self.clock = clock
 
     @staticmethod
@@ -118,7 +99,6 @@ class ExecutionController:
         self,
         *,
         binding: ExecutionBinding,
-        lease: dict[str, Any],
         authority_admission: dict[str, Any],
         worktree: Path,
         adapter_id: str,
@@ -127,9 +107,6 @@ class ExecutionController:
         budget: SandboxBudget | None = None,
     ) -> dict[str, Any]:
         binding.validate()
-        now = self.clock()
-        job_lease = _load_lease(lease)
-        job_lease.validate(now)
         self._validate_authority(authority_admission, binding)
         root = Path(worktree).resolve(strict=True)
         if not root.is_dir():
@@ -146,19 +123,39 @@ class ExecutionController:
         evidence = self.evidence_dir / f"{binding.session_id}.json"
         if evidence.exists():
             raise ExecutionError("session_evidence_replayed")
+        # Caller-provided lease blobs are observations only. Coordinator owns
+        # task revision, claim, fencing token, and expiry for this session.
+        try:
+            task = self.coordinator.read_task(binding.task_id)
+            if task["revision"] != binding.task_revision or task["project_revision"] != binding.project_revision or task["worktree_digest"] != binding.worktree_digest:
+                raise ExecutionError("coordinator_task_binding_mismatch")
+            claim = self._authority_write(lambda: self.coordinator.claim(binding.task_id, task["revision"], self.owner_id, f"OP-{binding.session_id}-CLAIM"))
+            coordinator_lease = self._authority_write(lambda: self.coordinator.acquire_lease(binding.task_id, claim["revision"], self.owner_id, binding.session_id, f"OP-{binding.session_id}-LEASE"))
+            lease_value = coordinator_lease.get("lease")
+            if not isinstance(lease_value, dict):
+                lease_value = self.coordinator.read_task(binding.task_id).get("lease")
+            if not isinstance(lease_value, dict):
+                raise ExecutionError("coordinator_lease_missing")
+            authoritative_revision = coordinator_lease["revision"]
+        except AuthorityError as exc:
+            raise ExecutionError(f"coordinator_{exc}") from exc
         argv = ["/usr/bin/python3", "-c", "import os; print('AWR-FAKE-AGENT-OK'); print('AWR-FAKE-AGENT-ERR', file=__import__('sys').stderr)"]
         environment = {"PATH": "/usr/bin:/bin", "LANG": "C", "PYTHONUNBUFFERED": "1", "AWR_SESSION_ID": binding.session_id, "AWR_TASK_REVISION": str(binding.task_revision)}
         spawn = {
             "schema_version": 1, "event": "spawned", "task": binding.task_id, "task_revision": binding.task_revision,
             "project_key": binding.project_key, "project_revision": binding.project_revision, "worktree_key": binding.worktree_key,
-            "worktree_digest": binding.worktree_digest, "session_id": binding.session_id, "lease_id": job_lease.lease_id,
-            "worker_id": job_lease.worker_id, "lease_fence": job_lease.fence, "profile_digest": negotiated["profile_digest"],
+            "worktree_digest": binding.worktree_digest, "session_id": binding.session_id, "lease_id": lease_value["id"],
+            "worker_id": self.owner_id, "lease_fence": lease_value["fence"], "profile_digest": negotiated["profile_digest"],
             "registry_revision": negotiated["registry_revision"], "argv_digest": _digest(argv), "environment_names": sorted(environment),
             "stdio": {"stdin": "pipe", "stdout": "pipe", "stderr": "pipe"}, "process_group": "session-leader",
             "controls": sandbox.capabilities.as_dict(), "provider": "not_performed", "configuration": "not_inspected",
         }
         process = None
         try:
+            authoritative_revision = self._coordinator_event(binding, authoritative_revision, lease_value, "session_started", _digest({"session": binding.session_id, "profile": negotiated["profile_digest"]}))
+            heartbeat = self._authority_write(lambda: self.coordinator.heartbeat(binding.task_id, authoritative_revision, lease_value, f"OP-{binding.session_id}-HEARTBEAT"))
+            lease_value = heartbeat["lease"]
+            authoritative_revision = heartbeat["revision"]
             process = sandbox.launch(argv, budget=selected_budget, environment=environment)
             if process.stdin is None or process.stdout is None or process.stderr is None:
                 raise ExecutionError("stdio_binding_invalid")
@@ -170,14 +167,50 @@ class ExecutionController:
                 "schema_version": 1, "event": "terminal", "status": "timeout" if timed_out else ("output_overflow" if overflow else ("completed" if process.returncode == 0 else "failed")),
                 "returncode": process.returncode, "stdout_digest": _digest(stdout.decode("utf-8", "replace")), "stderr_digest": _digest(stderr.decode("utf-8", "replace")),
                 "stdout_bytes": len(stdout), "stderr_bytes": len(stderr), "process_tree_clean": process.poll() is not None,
-                "cleanup": process.poll() is not None, "lease_id": job_lease.lease_id,
+                "cleanup": process.poll() is not None, "lease_id": lease_value["id"],
             }
+            authoritative_revision = self._coordinator_event(binding, authoritative_revision, lease_value, "session_terminal", _digest({"status": terminal["status"], "stdout": terminal["stdout_digest"], "stderr": terminal["stderr_digest"]}))
+            snapshot = self.coordinator.read_task(binding.task_id)
+            authoritative_revision = snapshot["revision"]
+            status = "done" if terminal["status"] == "completed" else "failed"
+            self._authority_write(lambda: self.coordinator.reconcile(binding.task_id, authoritative_revision, lease_value, status, f"OP-{binding.session_id}-RECONCILE"))
             _atomic_json(evidence, {"spawn": spawn, "terminal": terminal})
             return {"status": terminal["status"], "session_id": binding.session_id, "evidence": str(evidence), "spawn": spawn, "terminal": terminal, "stdout": stdout.decode("utf-8", "replace"), "stderr": stderr.decode("utf-8", "replace")}
-        except (OSError, SandboxError, ExecutionError):
+        except (OSError, SandboxError, ExecutionError, AuthorityError):
             if process is not None and process.poll() is None:
                 sandbox.cancel(process)
+            # A started session must leave an authoritative failure request
+            # when the lease is still current. If authority is unavailable,
+            # retain the original failure and never infer terminal success.
+            try:
+                latest = self.coordinator.read_task(binding.task_id)
+                current_lease = latest.get("lease")
+                if isinstance(current_lease, dict) and current_lease == lease_value:
+                    rev = latest["revision"]
+                    failed = _digest({"status": "failed", "session": binding.session_id})
+                    receipt = self.coordinator.append_session_event(binding.task_id, rev, current_lease, binding.session_id, "session_terminal", failed, f"OP-{binding.session_id}-FAILURE-TERMINAL")
+                    self.coordinator.reconcile(binding.task_id, receipt["revision"], current_lease, "failed", f"OP-{binding.session_id}-FAILURE-RECONCILE")
+            except (AuthorityError, KeyError, TypeError):
+                pass
             raise
+
+    def _coordinator_event(self, binding, revision, lease, event, event_digest):
+        try:
+            receipt = self._authority_write(lambda: self.coordinator.append_session_event(binding.task_id, revision, lease, binding.session_id, event, event_digest, f"OP-{binding.session_id}-{event.upper().replace('_', '-')}"))
+            return receipt["revision"]
+        except AuthorityError as exc:
+            raise ExecutionError(f"coordinator_{exc}") from exc
+
+    @staticmethod
+    def _authority_write(operation):
+        try:
+            return operation()
+        except AuthorityError as exc:
+            if str(exc) != "unknown_outcome":
+                raise
+            # Resolve only by retrying the exact same operation ID and payload;
+            # the authority fake returns its durable idempotency receipt.
+            return operation()
 
 
 def _atomic_json(path: Path, value: dict[str, Any]) -> None:
@@ -193,4 +226,4 @@ def _atomic_json(path: Path, value: dict[str, Any]) -> None:
             os.unlink(temporary)
 
 
-__all__ = ["ExecutionBinding", "ExecutionController", "ExecutionError", "JobLease"]
+__all__ = ["ExecutionBinding", "ExecutionController", "ExecutionError"]

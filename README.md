@@ -36,6 +36,14 @@ stale, unsupported, or unsafe profiles fail closed. The built-in
 `fake-alpha` and `fake-beta` adapters are deterministic local test doubles;
 they never contact a provider or network.
 
+AR-0133 binds executable sessions to `scripts/durable_coordinator.py`. The
+controller reads the exact task revision, requests the claim and fenced lease,
+records session events, heartbeats, and requests terminal reconciliation. The
+atomic file-backed Coordinator fake covers CAS, idempotency, expiry, ambiguous
+writes, and restart recovery. It is offline qualification only; hosted
+Coordinator transport and provider execution remain unqualified. See
+`specifications/durable-coordinator-session-v1.json`.
+
 ## Initial architecture
 
 The initial repository defines the contracts first. Runtime implementations,

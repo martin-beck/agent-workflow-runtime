@@ -25,10 +25,11 @@ wire bounds and rejection contract. Run the focused offline checks with
 
 `scripts.execution_controller.ExecutionController` is the first executable
 runtime path. It accepts one exact Coordinator task revision, project and
-worktree binding, registry revision/profile, authority admission observation,
-and live scheduler lease. Every binding is checked before `HostSandbox` is
-constructed; missing, stale, crossed, unsupported, or replayed inputs fail
-closed without starting a process.
+worktree binding, registry revision/profile, and authority admission
+observation. It reads the task and requests its claim and fenced lease through
+the required Coordinator client before process start. The controller accepts
+no caller-provided lease. Missing, stale, crossed,
+unsupported, or replayed bindings fail closed without starting a process.
 
 The only executable profile in this boundary is a registry profile whose
 command profile is `deterministic-agent` and whose sandbox requirement is true.
@@ -42,9 +43,14 @@ Each session writes one atomically replaced JSON evidence file. The `spawn`
 record contains exact identity/revision/lease/profile bindings, argv and
 environment-name digests, stdio/process-group/resource controls, and the
 provider/configuration non-claims. The `terminal` record contains bounded
-output digests and sizes, exit disposition, and cleanup evidence. Evidence is
-not a Coordinator state mutation; Coordinator remains authoritative for task
-and lease state.
+output digests and sizes, exit disposition, and cleanup evidence. Each evidence
+record is paired with Coordinator session events, a heartbeat, and terminal
+reconciliation. `scripts/durable_coordinator.py` provides the restartable,
+atomic file-backed fake used in CI. It enforces revision CAS, fenced lease
+expiry, exact-operation idempotency, and ambiguous-write recovery by retrying
+the same operation ID and payload. This fake is not a hosted Coordinator
+implementation or live-state verification. Provider configuration remains
+assumed and uninspected; provider execution is not performed.
 
 Run the focused check with:
 

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "awr-durable-coordinator-session",
+  "version": "1.0.0",
+  "task": "AR-0133",
+  "authority": {
+    "coordinator_owns": ["task_identity", "task_revision", "claim", "lease", "fence", "heartbeat", "session_events", "terminal_state"],
+    "runtime_may": ["read", "request_claim", "request_lease", "heartbeat", "append_bound_event", "request_reconciliation"],
+    "runtime_may_not": ["manufacture_claim", "manufacture_lease", "accept_task", "declare_terminal_success"]
+  },
+  "admission": {
+    "required_order": ["read_exact_task_revision", "claim_compare_and_swap", "acquire_fenced_lease", "append_session_started", "heartbeat", "execute", "append_terminal_event", "reconcile_terminal"],
+    "binding_fields": ["task_id", "task_revision", "project_revision", "worktree_digest", "session_id", "owner_id", "lease_id", "fence", "expiry"],
+    "failure_mode": "fail_closed"
+  },
+  "durability": {
+    "fake": "atomic_file_replace_and_fsync",
+    "cas": "exact_expected_revision",
+    "idempotency": "same_operation_id_and_payload_returns_original_receipt",
+    "ambiguous_write": "unknown_until_same_operation_is_retried_or_authority_is_read",
+    "expired_or_stale_lease": "reject_and_fence"
+  },
+  "qualification": {
+    "coordinator_transport": "deterministic_durable_fake",
+    "hosted_transport": "optional_not_qualified",
+    "provider": "not_performed",
+    "provider_configuration": "not_inspected",
+    "hosted_ci": "not_claimed"
+  }
+}
