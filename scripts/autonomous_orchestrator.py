@@ -90,8 +90,8 @@ def validate_graph(graph: Any, max_parallel: int) -> dict[str, dict[str, Any]]:
         for field in ("worktree_digest", "action_digest"):
             if not isinstance(task[field], str) or not DIGEST.fullmatch(task[field]):
                 raise OrchestratorError(field + "_invalid")
-        if task["profile_id"] != "generic-mock-agent":
-            raise OrchestratorError("only_deterministic_fake_profile_is_supported")
+        if task["profile_id"] not in {"fake-alpha", "fake-beta"}:
+            raise OrchestratorError("only_deterministic_fake_profiles_are_supported")
         tasks[task["id"]] = dict(task)
     for task in tasks.values():
         if any(dep not in tasks or dep == task["id"] for dep in task["dependencies"]):
@@ -241,11 +241,12 @@ class AutonomousOrchestrator:
         # deterministic profile. No external registry/provider is consulted.
         self.registry = AdapterRegistry(self.state_dir / "agent-registry.json")
         if self.registry.revision == 0:
-            self.registry.register(AdapterProfile(
-                "autonomous-mock", "1.0.0", ("deterministic-agent",),
-                frozenset({"request", "close"}), ("start", "request", "close"),
-                {"max_request_bytes": 4096, "max_output_events": 4}, True,
-            ))
+            for profile_id in ("fake-alpha", "fake-beta"):
+                self.registry.register(AdapterProfile(
+                    profile_id, "1.0.0", ("deterministic-agent",),
+                    frozenset({"request", "stream", "close"}), ("start", "request", "stream", "close"),
+                    {"max_request_bytes": 4096, "max_output_events": 4}, True,
+                ))
         self.owner = owner
         if not re.fullmatch(r"WRK-[A-Z0-9-]{1,63}", owner):
             raise OrchestratorError("worker_identity_invalid")
@@ -386,7 +387,8 @@ class AutonomousOrchestrator:
             self.journal.transition(task_id, "leased", {"lease_id": lease["id"], "fence": lease["fence"]})
             self.journal.transition(task_id, "executing", {"session_id": session_id})
         execution = controller.run(binding=binding, authority_admission=admission, worktree=root,
-                                  adapter_id="autonomous-mock", registry_revision=self.registry.revision,
+                                  adapter_id=task["profile_id"], registry_revision=self.registry.revision,
+                                  request_digest=task["action_digest"],
                                   budget=SandboxBudget(timeout_seconds=min(10, self.lease_seconds - 2)),
                                   reconcile_terminal=False, lease_observer=observe_lease,
                                   recovered_lease=recovered_lease)
@@ -400,7 +402,7 @@ class AutonomousOrchestrator:
         lease_value = execution["coordinator_lease"]
         interactive = InteractiveSession(
             InteractionBinding(session_id, task["revision"], lease_value["id"], lease_value["fence"]),
-            protocol="fake-alpha", lease_expires_at=execution["lease_expires_at"], clock=self.clock,
+            protocol=task["profile_id"], lease_expires_at=execution["lease_expires_at"], clock=self.clock,
         )
         correlation = f"COR-{task_id[3:]}-1"
         interactive.input({"session_id": session_id, "task_revision": task["revision"],

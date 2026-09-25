@@ -53,6 +53,21 @@ cancellation, and hostile bindings; see `docs/worker-control-loop.md` and
 `specifications/worker-control-loop-v1.json`. This local reference does not
 claim live authority, provider, or hosted success.
 
+AR-0137 adds a CI-only complex project run in
+`tests/test_ci_complex_project_workflow.py`. Its planning, architecture,
+implementation, testing, review, repair, and documentation jobs are scheduled
+by the autonomous orchestrator, which claims Coordinator-shaped leases,
+recovers an expired lease with a new fence, starts concurrent sandboxed local
+agent sessions, sends correlated requests through stdin, and normalizes the
+two deterministic native event protocols from stdout. The run consumes the
+mandatory local AWQ/AWG/UI decision sequence, records digest-bound evidence,
+replays terminal state, and reconciles every job. Hostile cases for graph
+approval, gate rejection, duplicate operations, stale leases, replay, and
+orphan process cleanup are covered by the autonomous orchestrator, Coordinator,
+interactive session, and WorkerMonitor test suites. This is offline CI
+qualification only; it proves no external provider, credential, network
+access, live authority, or hosted result.
+
 ## Initial architecture
 
 The initial repository defines the contracts first. Runtime implementations,

@@ -105,6 +105,7 @@ class ExecutionController:
         adapter_id: str,
         registry_revision: int,
         capabilities: list[str] | None = None,
+        request_digest: str | None = None,
         budget: SandboxBudget | None = None,
         cancel_requested=None,
         monitor_policy: MonitorPolicy | None = None,
@@ -115,6 +116,9 @@ class ExecutionController:
         if not isinstance(reconcile_terminal, bool):
             raise ExecutionError("terminal_reconciliation_option_invalid")
         binding.validate()
+        prompt_digest = request_digest or binding.worktree_digest
+        if not _DIGEST.fullmatch(prompt_digest):
+            raise ExecutionError("request_digest_invalid")
         self._validate_authority(authority_admission, binding)
         root = Path(worktree).resolve(strict=True)
         if not root.is_dir():
@@ -158,13 +162,21 @@ class ExecutionController:
         checkpoint_path = self.evidence_dir / f"{binding.session_id}.checkpoint.json"
         if evidence.exists():
             raise ExecutionError("session_evidence_replayed")
-        argv = ["/usr/bin/python3", "-c", "import sys; print('{\"type\":\"message\",\"data\":{\"text\":\"AWR-FAKE-AGENT-OK\"}}'); print('{\"type\":\"state\",\"data\":{\"state\":\"AWR-FAKE-AGENT-ERR\"}}', file=sys.stderr)"]
+        agent_program = (
+            "import json,sys; request=json.loads(sys.stdin.readline()); "
+            "text='response:'+request['correlation_id']+':'+request['prompt_digest']; "
+            "event=({'type':'message','data':{'text':text}} if sys.argv[1]=='fake-alpha' "
+            "else {'event':'assistant_delta','payload':{'text':text}}); "
+            "print(json.dumps(event,separators=(',',':')),flush=True)"
+        )
+        argv = ["/usr/bin/python3", "-c", agent_program, adapter_id]
         environment = {"PATH": "/usr/bin:/bin", "LANG": "C", "PYTHONUNBUFFERED": "1", "AWR_SESSION_ID": binding.session_id, "AWR_TASK_REVISION": str(binding.task_revision)}
         spawn = {
             "schema_version": 1, "event": "spawned", "task": binding.task_id, "task_revision": binding.task_revision,
             "project_key": binding.project_key, "project_revision": binding.project_revision, "worktree_key": binding.worktree_key,
             "worktree_digest": binding.worktree_digest, "session_id": binding.session_id, "lease_id": lease_value["id"],
-            "worker_id": self.owner_id, "lease_fence": lease_value["fence"], "profile_digest": negotiated["profile_digest"],
+            "worker_id": self.owner_id, "lease_fence": lease_value["fence"], "adapter_id": adapter_id,
+            "profile_digest": negotiated["profile_digest"],
             "registry_revision": negotiated["registry_revision"], "argv_digest": _digest(argv), "environment_names": sorted(environment),
             "stdio": {"stdin": "pipe", "stdout": "pipe", "stderr": "pipe"}, "process_group": "session-leader",
             "controls": sandbox.capabilities.as_dict(), "provider": "not_performed", "configuration": "not_inspected",
@@ -178,6 +190,9 @@ class ExecutionController:
             process = sandbox.launch(argv, budget=selected_budget, environment=environment)
             if process.stdin is None or process.stdout is None or process.stderr is None:
                 raise ExecutionError("stdio_binding_invalid")
+            process.stdin.write((_canonical({"correlation_id": f"COR-{binding.task_id[3:]}-1",
+                                             "prompt_digest": prompt_digest}) + b"\n"))
+            process.stdin.flush()
             process.stdin.close()
             spawn.update({"pid": process.pid, "pgid": os.getpgid(process.pid)})
             _atomic_json(evidence, {"spawn": spawn})

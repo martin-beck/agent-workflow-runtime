@@ -42,8 +42,9 @@ class ExecutionControllerTests(unittest.TestCase):
     def test_real_fake_process_has_bindings_and_durable_spawn_terminal_evidence(self):
         result = self.run_controller()
         self.assertEqual(result["status"], "completed")
-        self.assertEqual(result["stdout"], '{"type":"message","data":{"text":"AWR-FAKE-AGENT-OK"}}\n')
-        self.assertIn('"state":"AWR-FAKE-AGENT-ERR"', result["stderr"])
+        self.assertIn('"event":"assistant_delta"', result["stdout"])
+        self.assertIn("COR-0131-1", result["stdout"])
+        self.assertEqual(result["stderr"], "")
         record = __import__("json").loads(Path(result["evidence"]).read_text())
         self.assertEqual(record["spawn"]["task_revision"], 2)
         self.assertEqual(record["spawn"]["lease_id"], "LSE-00000001")

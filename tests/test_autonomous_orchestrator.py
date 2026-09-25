@@ -27,11 +27,11 @@ def make_graph(tasks=None):
         "max_parallelism": 2,
         "tasks": tasks or [
             {"id": "AR-7001", "revision": 1, "dependencies": [], "worktree_key": "tree-a",
-             "worktree_digest": digest("tree-a"), "profile_id": "generic-mock-agent", "action_digest": digest("action-a"), "max_attempts": 2},
+             "worktree_digest": digest("tree-a"), "profile_id": "fake-alpha", "action_digest": digest("action-a"), "max_attempts": 2},
             {"id": "AR-7002", "revision": 1, "dependencies": [], "worktree_key": "tree-a",
-             "worktree_digest": digest("tree-a"), "profile_id": "generic-mock-agent", "action_digest": digest("action-b"), "max_attempts": 2},
+             "worktree_digest": digest("tree-a"), "profile_id": "fake-beta", "action_digest": digest("action-b"), "max_attempts": 2},
             {"id": "AR-7003", "revision": 1, "dependencies": ["AR-7001", "AR-7002"], "worktree_key": "tree-a",
-             "worktree_digest": digest("tree-a"), "profile_id": "generic-mock-agent", "action_digest": digest("action-c"), "max_attempts": 2},
+             "worktree_digest": digest("tree-a"), "profile_id": "fake-alpha", "action_digest": digest("action-c"), "max_attempts": 2},
         ],
         "approval": {"authority": "coordinator", "status": "approved", "decision_id": "DEC-FIXTURE-1", "graph_digest": ""},
     }
@@ -167,10 +167,10 @@ class AutonomousOrchestratorTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             tasks = [
-                {"id": "AR-7101", "revision": 1, "dependencies": [], "worktree_key": "tree-a", "worktree_digest": digest("a"), "profile_id": "generic-mock-agent", "action_digest": digest("a1"), "max_attempts": 2},
-                {"id": "AR-7102", "revision": 1, "dependencies": [], "worktree_key": "tree-b", "worktree_digest": digest("b"), "profile_id": "generic-mock-agent", "action_digest": digest("b1"), "max_attempts": 2},
-                {"id": "AR-7103", "revision": 1, "dependencies": ["AR-7101"], "worktree_key": "tree-a", "worktree_digest": digest("a"), "profile_id": "generic-mock-agent", "action_digest": digest("a2"), "max_attempts": 2},
-                {"id": "AR-7104", "revision": 1, "dependencies": ["AR-7102"], "worktree_key": "tree-b", "worktree_digest": digest("b"), "profile_id": "generic-mock-agent", "action_digest": digest("b2"), "max_attempts": 2},
+                {"id": "AR-7101", "revision": 1, "dependencies": [], "worktree_key": "tree-a", "worktree_digest": digest("a"), "profile_id": "fake-alpha", "action_digest": digest("a1"), "max_attempts": 2},
+                {"id": "AR-7102", "revision": 1, "dependencies": [], "worktree_key": "tree-b", "worktree_digest": digest("b"), "profile_id": "fake-beta", "action_digest": digest("b1"), "max_attempts": 2},
+                {"id": "AR-7103", "revision": 1, "dependencies": ["AR-7101"], "worktree_key": "tree-a", "worktree_digest": digest("a"), "profile_id": "fake-alpha", "action_digest": digest("a2"), "max_attempts": 2},
+                {"id": "AR-7104", "revision": 1, "dependencies": ["AR-7102"], "worktree_key": "tree-b", "worktree_digest": digest("b"), "profile_id": "fake-beta", "action_digest": digest("b2"), "max_attempts": 2},
             ]
             graph = make_graph(tasks)
             (root / "a").mkdir(); (root / "b").mkdir()
