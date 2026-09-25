@@ -2,6 +2,9 @@
 
 # Agent Workflow Runtime
 
+For the one-command, provider-free project board acceptance workflow, see
+[`docs/autonomous-board-acceptance.md`](docs/autonomous-board-acceptance.md).
+
 Agent Workflow Runtime (AWR) is the provider-neutral execution and integration
 layer for the Agent Workflow family. It connects coding-agent CLIs and session
 providers to the authoritative Coordinator, Quality, Guidance, and UI

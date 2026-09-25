@@ -245,6 +245,12 @@ def parser() -> argparse.ArgumentParser:
     project.add_argument("--project", type=Path, required=True)
     project.add_argument("--state", type=Path, required=True)
     project.add_argument("--preview", action="store_true")
+    board = commands.add_parser("board-acceptance", help="create and autonomously execute a complex provider-free local project")
+    board.add_argument("--name", required=True)
+    board.add_argument("--organization", required=True)
+    board.add_argument("--workspace", type=Path, required=True)
+    board.add_argument("--umbrella-root", type=Path, required=True)
+    board.add_argument("--runtime-source", type=Path, default=Path(__file__).resolve().parents[1])
     workflow = commands.add_parser("local-run", help="run the deterministic offline mock workflow")
     workflow.add_argument("--manifest", type=Path, required=True)
     workflow.add_argument("--expected-revision")
@@ -327,6 +333,13 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "project-init":
             from .project_bootstrap import bootstrap
             output = bootstrap(args.name, args.organization, args.project, args.state, preview=args.preview)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "board-acceptance":
+            from scripts.board_acceptance import run_acceptance
+            output = run_acceptance(name=args.name, organization=args.organization,
+                                    workspace=args.workspace, umbrella_root=args.umbrella_root,
+                                    runtime_root=args.runtime_source)
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command == "local-run":

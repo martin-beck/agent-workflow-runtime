@@ -23,6 +23,7 @@ from scripts.worker_control_loop import (
     SPECIFICATION_DIGEST, TEST_CONTRACT_DIGEST, DecisionJournal, Proposal,
     check as check_worker_result, fake_loop,
 )
+from awr_cli.authority_gates import AuthorityGates
 
 SPEC_PATH = Path(__file__).resolve().parents[1] / "specifications" / "autonomous-orchestrator-v1.json"
 WORKFLOW_SPEC_DIGEST = "sha256:" + hashlib.sha256(SPEC_PATH.read_bytes()).hexdigest()
@@ -232,7 +233,8 @@ class AutonomousOrchestrator:
     def __init__(self, graph: dict[str, Any], *, state_dir: Path, worktrees: dict[str, Path],
                  registry_spec: Path, helper: Path, owner: str, max_parallel: int,
                  lease_seconds: int = 45, clock=time.time,
-                 gate_outcomes: tuple[str, str, str] = ("approved", "approved", "approved")):
+                 gate_outcomes: tuple[str, str, str] = ("approved", "approved", "approved"),
+                 authority_gates: AuthorityGates | None = None):
         self.tasks = validate_graph(graph, max_parallel)
         self.graph = graph
         self.state_dir = Path(state_dir).absolute(); self.state_dir.mkdir(parents=True, exist_ok=True)
@@ -257,6 +259,7 @@ class AutonomousOrchestrator:
                 or any(item not in {"approved", "rejected", "escalated", "cancelled"} for item in gate_outcomes)):
             raise OrchestratorError("gate_outcomes_invalid")
         self.gate_outcomes = gate_outcomes
+        self.authority_gates = authority_gates
         self.journal = DurableRunJournal(self.state_dir / "run.json", graph, max_parallel)
         if set(self.worktrees) != {task["worktree_key"] for task in self.tasks.values()}:
             raise OrchestratorError("worktree_map_mismatch")
@@ -388,10 +391,15 @@ class AutonomousOrchestrator:
         binding = ExecutionBinding(task_id, task["revision"], self.graph["project_key"],
                                    self.graph["project_revision"], task["worktree_key"],
                                    task["worktree_digest"], session_id)
-        admission = {"status": "admitted", "task": task_id, "task_revision": task["revision"],
-                     "authority_state": "observed_only", "mandatory_order": ["coordinator", "awq", "awg", "ui"],
-                     "decision": "approved", "trace": [{"authority": name, "mode": "deterministic_local_fake"}
-                                                              for name in ("coordinator", "awq", "awg", "ui")]}
+        admission = (self.authority_gates.admit(task=task_id, revision=task["revision"])
+                     if self.authority_gates else
+                     {"status": "admitted", "task": task_id, "task_revision": task["revision"],
+                      "authority_state": "observed_only", "mandatory_order": ["coordinator", "awq", "awg", "ui"],
+                      "decision": "approved", "trace": [{"authority": name, "mode": "deterministic_local_fake"}
+                                                               for name in ("coordinator", "awq", "awg", "ui")]})
+        if self.authority_gates:
+            self._save_authority_record(task_id, {"task_id": task_id, "task_revision": task["revision"],
+                                                  "admission": admission, "acceptance": None})
         def observe_lease(lease, _revision):
             self.journal.transition(task_id, "leased", {"lease_id": lease["id"], "fence": lease["fence"]})
             self.journal.transition(task_id, "executing", {"session_id": session_id})
@@ -433,24 +441,34 @@ class AutonomousOrchestrator:
                                                     f"OP-{session_id}-F{lease_value['fence']}-INTERACTION")
         self.journal.transition(task_id, "evidence_pending", {"evidence_digest": evidence_digest, "event_count": len(normalized)})
         self.journal.transition(task_id, "quality_pending", {"evidence_digest": evidence_digest})
-        decision_journal = DecisionJournal(self.state_dir / (task_id + ".decisions.jsonl"))
-        proposal = Proposal(task_id, task["revision"], "execute approved graph action", SPECIFICATION_DIGEST,
-                            TEST_CONTRACT_DIGEST, evidence_digest)
-        result = fake_loop(outcomes=self.gate_outcomes, journal=decision_journal).run(proposal)
-        check_worker_result(result, proposal, decision_journal)
-        outcomes = [item["outcome"] for item in result["decisions"]]
-        if result["outcome"] != "approved" or [item["authority"] for item in result["decisions"]] != ["awq", "awg", "ui"]:
+        if self.authority_gates:
+            result = self.authority_gates.accept_artifact(task=task_id, revision=task["revision"],
+                                                          artifact_digest=evidence_digest)
+            self._save_authority_record(task_id, {"task_id": task_id, "task_revision": task["revision"],
+                                                  "admission": admission, "acceptance": result})
+            outcomes = [item["outcome"] for item in result["trace"]]
+            accepted = result["status"] == "accepted"
+        else:
+            decision_journal = DecisionJournal(self.state_dir / (task_id + ".decisions.jsonl"))
+            proposal = Proposal(task_id, task["revision"], "execute approved graph action", SPECIFICATION_DIGEST,
+                                TEST_CONTRACT_DIGEST, evidence_digest)
+            result = fake_loop(outcomes=self.gate_outcomes, journal=decision_journal).run(proposal)
+            check_worker_result(result, proposal, decision_journal)
+            outcomes = [item["outcome"] for item in result["decisions"]]
+            accepted = result["outcome"] == "approved" and [item["authority"] for item in result["decisions"]] == ["awq", "awg", "ui"]
+        if not accepted:
             latest = coord.read_task(task_id)
-            outcome = "blocked" if result["outcome"] == "cancelled" else "failed"
+            outcome = "blocked" if result.get("decision") == "cancelled" or result.get("outcome") == "cancelled" else "failed"
             coord.reconcile(task_id, latest["revision"], lease_value, outcome,
                             f"OP-{session_id}-F{lease_value['fence']}-GATE-REJECTED")
-            self.journal.transition(task_id, outcome, {"gate_outcome": result["outcome"]})
+            self.journal.transition(task_id, outcome, {"gate_outcome": result.get("decision", result.get("outcome", "unknown"))})
             return
-        self.journal.transition(task_id, "guidance_pending", {"gate_digest": digest(result["decisions"][:2])})
-        self.journal.transition(task_id, "ui_pending", {"gate_digest": digest(result["decisions"])})
+        gate_trace = result["trace"] if self.authority_gates else result["decisions"]
+        self.journal.transition(task_id, "guidance_pending", {"gate_digest": digest(gate_trace[:2])})
+        self.journal.transition(task_id, "ui_pending", {"gate_digest": digest(gate_trace)})
         latest = coord.read_task(task_id)
         coord.append_session_event(task_id, latest["revision"], lease_value, session_id,
-                                   "workflow_gates_approved", digest(result["decisions"]),
+                                   "workflow_gates_approved", digest(gate_trace),
                                    f"OP-{session_id}-F{lease_value['fence']}-GATES-APPROVED")
         latest = coord.read_task(task_id)
         receipt = coord.reconcile(task_id, latest["revision"], lease_value, "done",
@@ -458,7 +476,34 @@ class AutonomousOrchestrator:
         self.journal.transition(task_id, "completed", {"coordinator_receipt": receipt["receipt_digest"], "evidence_digest": evidence_digest,
                                                           "awq": outcomes[0], "awg": outcomes[1], "ui": outcomes[2]})
 
+    def _save_authority_record(self, task_id: str, record: dict[str, Any]) -> None:
+        path = self.state_dir / (task_id + ".authority.json")
+        encoded = canonical(record) + b"\n"
+        fd, temporary = tempfile.mkstemp(prefix=".awr-authority-", dir=self.state_dir)
+        try:
+            with os.fdopen(fd, "wb") as stream:
+                stream.write(encoded); stream.flush(); os.fsync(stream.fileno())
+            os.replace(temporary, path)
+        finally:
+            if os.path.exists(temporary):
+                os.unlink(temporary)
+
     def _has_complete_gate_record(self, task_id: str, revision: int) -> bool:
+        authority_path = self.state_dir / (task_id + ".authority.json")
+        if authority_path.exists():
+            try:
+                record = json.loads(authority_path.read_text(encoding="utf-8"))
+                admission = record["admission"]["trace"]
+                acceptance = record["acceptance"]["trace"]
+                return (record["task_id"] == task_id and record["task_revision"] == revision
+                        and [item["authority"] for item in admission] == ["coordinator", "awq", "awg", "ui"]
+                        and [item["authority"] for item in acceptance] == ["awq", "awg", "ui"]
+                        and all(item.get("task_id") == task_id and item.get("task_revision") == revision
+                                for item in admission + acceptance)
+                        and [item["outcome"] for item in admission] == ["observed", "accepted", "requires_ui", "approved"]
+                        and [item["outcome"] for item in acceptance] == ["accepted", "requires_ui", "approved"])
+            except (OSError, ValueError, KeyError, TypeError):
+                return False
         path = self.state_dir / (task_id + ".decisions.jsonl")
         if not path.exists():
             return False

@@ -15,6 +15,8 @@ awr project-register --name inventory-system --project ./inventory-system \
   --state ./inventory-system-state
 awr project-list
 awr local-run --manifest project-manifest.yaml
+awr board-acceptance --name board-project --organization example-org \
+  --workspace ./board-project-run --umbrella-root /path/to/agent-workflow
 awr audit-status
 awr security-check
 ```

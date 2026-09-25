@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-autonomous-board-acceptance",
+  "version": "1.0.0",
+  "normative": true,
+  "workflow": ["verify_canonical_release", "bootstrap_project", "compile_graph", "obtain_coordinator_approval", "claim_and_execute", "supervise_and_recover", "route_awq_awg_ui", "reconcile_and_export_evidence"],
+  "execution": {"agents": ["fake-alpha", "fake-beta"], "provider": "not_performed", "credentials": "not_inspected", "network": "disabled", "llm": "not_performed"},
+  "limits": {"tasks": 8, "parallel_workers": 2, "attempts_per_task": 2, "lease_seconds": 45, "session_timeout_seconds": 10},
+  "authorities": {"coordinator": ["graph approval", "claims", "leases", "terminal reconciliation"], "awq": ["pre-execution evidence", "artifact acceptance"], "awg": ["guidance resolution"], "ui": ["revision-bound human decision"], "runtime": ["graph compilation", "bounded sessions", "supervision", "evidence projection"]},
+  "acceptance": ["at_least_two_fake_profiles", "dependency_graph_generated_by_runtime", "all_sessions_process_supervised_and_reaped", "expired_lease_recovered_with_new_fence", "all_authority_observations_revision_bound", "all_tasks_authoritatively_reconciled", "evidence_bundle_digest_verified", "restart_replay_idempotent"],
+  "hostile_rejections": ["wrong_umbrella_origin", "dirty_or_wrong_umbrella_revision", "runtime_pin_or_tag_mismatch", "authority_rejection_or_ambiguity", "provider_profile", "invalid_project_name", "nonempty_or_symlink_workspace", "missing_gate_evidence"],
+  "privacy": {"allowed": ["opaque_ids", "versions", "digests", "bounded_counts", "enums"], "forbidden": ["credentials", "prompts", "transcripts", "raw_output", "private_paths", "host_identifiers", "network_addresses"]},
+  "qualification_boundary": {"result": "deterministic_local_acceptance", "hosted_authorities": "not_performed", "hosted_ci": "separate_required_check", "tlc": "existing_model_must_pass", "production_readiness": "not_established"}
+}

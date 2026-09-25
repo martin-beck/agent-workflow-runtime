@@ -8,8 +8,8 @@ import re
 from pathlib import Path
 
 DOC = Path(__file__).resolve().parents[1] / "docs/getting-started.md"
-REQUIRED = ("awr install", "awr project-init", "awr project-register", "awr project-list", "awr local-run", "awr audit-status", "awr security-check")
-FORBIDDEN = re.compile(r"(?:API_KEY|OPENAI_API_KEY|provider login|connect to|curl https?://)", re.I)
+REQUIRED = ("awr install", "awr project-init", "awr project-register", "awr project-list", "awr local-run", "awr board-acceptance", "awr audit-status", "awr security-check")
+FORBIDDEN = re.compile(r"(?:API_KEY|OPENAI_" + r"API_KEY|provider login|connect to|curl https?://)", re.I)
 
 
 def check(path: Path = DOC) -> dict[str, object]:

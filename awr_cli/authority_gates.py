@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import hashlib
 from typing import Any
 
 from scripts.local_authority_transport import LocalAuthorityClient, make_request
-from scripts.local_authority_bridge import AuthorityBridgeError
+from scripts.local_authority_bridge import AuthorityBridgeError, request_envelope
 
 
 class AuthorityGates:
@@ -18,12 +19,18 @@ class AuthorityGates:
     def __init__(self, client: LocalAuthorityClient):
         self.client = client
 
+    @staticmethod
+    def _request(authority: str, operation: str, revision: int, task: str, payload: str):
+        operation_id = "OP-" + hashlib.sha256(f"{task}:{operation}".encode()).hexdigest()[:20].upper()
+        return request_envelope(authority, operation_id, revision, payload, task_id=task)
+
     def admit(self, *, task: str, revision: int) -> dict[str, Any]:
         trace: list[dict[str, Any]] = []
 
         def ask(authority: str, operation: str, expected: set[str]) -> dict[str, Any]:
             observed = self.client.exchange(
-                make_request(authority, operation, revision, task=task),
+                self._request(authority, operation, revision, task,
+                              make_request(authority, operation, revision, task=task)["payload_digest"]),
                 expected_revision=revision,
                 required_authority=authority,
             )
@@ -54,7 +61,9 @@ class AuthorityGates:
         trace: list[dict[str, Any]] = []
 
         def ask(authority: str, operation: str, expected: set[str]) -> dict[str, Any]:
-            observed = self.client.exchange(make_request(authority, operation, revision, task=task), expected_revision=revision, required_authority=authority)
+            original = make_request(authority, operation, revision, task=task)
+            observed = self.client.exchange(self._request(authority, operation, revision, task,
+                                                          original["payload_digest"]), expected_revision=revision, required_authority=authority)
             trace.append(observed)
             if observed["outcome"] not in expected:
                 raise AuthorityBridgeError(f"mandatory_{authority}_acceptance_not_satisfied")

@@ -131,7 +131,7 @@ def validate_exchange(
     if not isinstance(response["outcome"], str) or not response["outcome"] or response["outcome"] in AMBIGUOUS:
         raise AuthorityBridgeError("ambiguous authority outcome")
     allowed = {
-        "coordinator": {"observed", "stale", "not_found"},
+        "coordinator": {"observed", "approved", "stale", "not_found"},
         "awq": {"accepted", "rejected", "not_applicable"},
         "awg": {"approved", "rejected", "requires_ui", "not_applicable"},
         "ui": {"approved", "rejected", "cancelled", "expired"},
@@ -145,5 +145,4 @@ def validate_exchange(
         "outcome": response["outcome"], "authority_state": "observed_only",
         "network": "disabled", "durable_state": "not_performed",
     }
-
 
