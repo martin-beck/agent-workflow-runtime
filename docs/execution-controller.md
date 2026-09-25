@@ -2,6 +2,27 @@
 
 # AR-0131 execution controller
 
+## AR-0132 interactive session protocol
+
+`scripts/interactive_session.py` layers a bounded turn and event protocol over
+an already admitted session binding and its live lease fence. Inputs carry the
+session, task revision, lease ID and fence, correlation ID, prompt, and absolute
+deadline. Frames are limited to 4096 bytes; prompts are limited to 2048 bytes;
+each turn has bounded queued events and each session has at most 64 recorded
+events. Deadlines cannot extend beyond the lease. Output is accepted only
+while a turn is pending, from stdout or stderr, and is normalized to assistant,
+tool, or status events followed by an explicit end-turn and terminal event.
+Sequence numbers and canonical SHA-256 digests make record/replay deterministic.
+Credential-like labels and bearer values are redacted before events are kept.
+
+The deterministic `fake-alpha` protocol uses `{ "type": ..., "data": ... }`;
+`fake-beta` uses `{ "event": ..., "payload": ... }`. Their native field names
+are erased by normalization. The implementation receives native frames from
+the admitted session transport; it does not configure or inspect a provider,
+key, or model. `specifications/interactive-agent-session-v1.json` records the
+wire bounds and rejection contract. Run the focused offline checks with
+`python3 -m unittest tests.test_interactive_session -v`.
+
 `scripts.execution_controller.ExecutionController` is the first executable
 runtime path. It accepts one exact Coordinator task revision, project and
 worktree binding, registry revision/profile, authority admission observation,

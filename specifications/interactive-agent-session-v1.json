@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "contract": "awr-interactive-agent-session@1.0.0",
+  "limits": {
+    "max_frame_bytes": 4096,
+    "max_prompt_bytes": 2048,
+    "max_events_per_turn": 64,
+    "deadline_must_not_exceed_lease": true
+  },
+  "input_binding": ["session_id", "task_revision", "lease_id", "lease_fence", "correlation_id"],
+  "normalized_events": ["assistant", "tool", "status", "end_turn", "terminal"],
+  "streams": ["stdout", "stderr"],
+  "fake_protocols": {
+    "fake-alpha": {"kind_field": "type", "payload_field": "data"},
+    "fake-beta": {"kind_field": "event", "payload_field": "payload"}
+  },
+  "security": {
+    "reject_stale_binding": true,
+    "reject_unsolicited_output": true,
+    "reject_unknown_event_fields": true,
+    "redact_secret_labels": true,
+    "record_replay_digest": "sha256-canonical-json"
+  },
+  "authority": {
+    "provider_configuration": "not_inspected",
+    "coordinator_state": "not_mutated",
+    "provider_execution": "not_required_for_fake-protocol-tests"
+  }
+}
