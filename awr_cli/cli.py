@@ -245,6 +245,13 @@ def parser() -> argparse.ArgumentParser:
     project.add_argument("--project", type=Path, required=True)
     project.add_argument("--state", type=Path, required=True)
     project.add_argument("--preview", action="store_true")
+    setup = commands.add_parser("setup", help="adopt an existing Git project into Agent Workflow")
+    setup.add_argument("--project", type=Path, default=Path.cwd())
+    setup.add_argument("--name")
+    setup.add_argument("--organization", default="local")
+    setup.add_argument("--home", type=Path)
+    setup.add_argument("--allow-dirty", action="store_true")
+    setup.add_argument("--start", action="store_true", help="start the initial provider-free controlled workflow")
     board = commands.add_parser("board-acceptance", help="create and autonomously execute a complex provider-free local project")
     board.add_argument("--name", required=True)
     board.add_argument("--organization", required=True)
@@ -333,6 +340,12 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "project-init":
             from .project_bootstrap import bootstrap
             output = bootstrap(args.name, args.organization, args.project, args.state, preview=args.preview)
+            print(json.dumps(output, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.command == "setup":
+            from .existing_project_setup import setup_existing
+            output = setup_existing(args.project, name=args.name, organization=args.organization,
+                                    home=args.home, allow_dirty=args.allow_dirty, start=args.start)
             print(json.dumps(output, sort_keys=True, separators=(",", ":")))
             return 0
         if args.command == "board-acceptance":

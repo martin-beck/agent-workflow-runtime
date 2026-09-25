@@ -12,6 +12,19 @@ awr plan --manifest project-manifest.yaml --workspace demo/mock
 awr init --manifest project-manifest.yaml --workspace /tmp/demo-aw-workspace
 ```
 
+To adopt an existing Git project, run this from its root:
+
+```text
+awr setup --project . --start
+```
+
+This creates the local `.awr` binding, durable state, and starter workflow,
+initializes the runtime home, registers the project, and executes one
+provider-free deterministic fake-agent intake task. It does not contact a
+provider or require credentials. The command refuses user changes or managed
+file conflicts unless `--allow-dirty` is supplied; rerunning it is safe when
+the generated files are unchanged.
+
 The exact manifest bytes determine `project_revision` (`sha256:...`). `plan`
 does not inspect or write the workspace; `--expected-revision` can require an
 exact revision. `init` only accepts a missing or empty destination and writes
@@ -29,4 +42,3 @@ This is an operator bootstrap aid, not a Coordinator client. It does not create
 leases, contact a provider, use credentials, mutate Coordinator/AWQ/AWG/UI,
 start agents, or establish filesystem isolation or remote success. The mock
 state is disposable local scaffolding and is not authoritative project state.
-
