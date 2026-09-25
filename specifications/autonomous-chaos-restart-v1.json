@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "specification_id": "awr-autonomous-chaos-restart",
+  "version": "1.0.0",
+  "title": "Deterministic autonomous workflow chaos and restart qualification",
+  "normative": true,
+  "task": {"id": "AR-0139", "revision": 3},
+  "execution": {
+    "mode": "local_deterministic_fakes_only",
+    "provider": "not_performed",
+    "credentials": "not_inspected",
+    "network": "disabled",
+    "live_authority": "not_performed"
+  },
+  "scenarios": [
+    "worker_process_crash_and_cleanup",
+    "host_or_supervisor_restart",
+    "lease_expiry_and_new_fence",
+    "lost_reordered_duplicate_frames",
+    "coordinator_cas_timeout_and_ambiguous_write",
+    "ui_interruption_and_unresolved_decision",
+    "sandbox_denial_and_resource_exhaustion",
+    "same_worktree_and_cross_project_contention",
+    "checkpoint_accounting_and_replay"
+  ],
+  "invariants": [
+    "one_authoritative_terminal_acceptance_per_task_revision",
+    "old_worker_and_lease_cannot_commit_after_recovery",
+    "success_requires_authoritative_done_and_complete_awq_awg_ui_evidence",
+    "unknown_or_ambiguous_outcome_never_implies_success",
+    "all_spawned_process_groups_are_clean_before_terminal_cleanup_evidence",
+    "resume_uses_matching_checkpoint_and_new_fence_or_escalates",
+    "replay_is_idempotent_and_does_not_repeat_decisions_or_acceptance",
+    "resource_or_sandbox_failure_is_bounded_and_never_reported_as_success"
+  ],
+  "limits": {
+    "max_tasks": 8,
+    "max_attempts_per_task": 2,
+    "max_parallel_workers": 2,
+    "max_frame_bytes": 4096,
+    "max_output_bytes": 65536,
+    "max_recovery_attempts": 2
+  },
+  "evidence": {
+    "permitted": ["scenario_id", "disposition", "fence_advanced", "checkpoint_bound", "process_tree_clean", "terminal_count", "decision_count", "replay_digest"],
+    "forbidden": ["provider_configuration", "credential_values", "prompts", "transcripts", "raw_output", "private_paths", "host_identifiers", "network_addresses"]
+  },
+  "pass_conditions": [
+    "all_scenarios_executed_or_explicitly_blocked_without_success_claim",
+    "no_duplicate_authoritative_terminal_acceptance",
+    "no_unreaped_worker_process_group",
+    "no_stale_revision_or_lease_acceptance",
+    "no_success_without_complete_authority_and_gate_evidence",
+    "repeat_runs_produce_identical_terminal_projection"
+  ],
+  "qualification_boundary": {
+    "result": "offline_qualified_only",
+    "release": "blocked_pending_independent_awq_and_live_evidence",
+    "remote_verification": "unverified",
+    "production_readiness": "not_established"
+  },
+  "limitations": [
+    "Local fakes qualify modeled runtime logic and deterministic process supervision only; they do not prove host power-loss behavior, hosted Coordinator availability, provider behavior, or production resource isolation.",
+    "The test suite does not inspect or use configured provider, key, or model values.",
+    "Hosted authority, independent AWQ acceptance, UI operation, and live service evidence remain unverified."
+  ]
+}

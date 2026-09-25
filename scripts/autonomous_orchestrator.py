@@ -317,6 +317,15 @@ class AutonomousOrchestrator:
             try:
                 raw = json.loads(coordinator_path.read_text(encoding="utf-8"))
                 task_state = raw["task"]
+                # Coordinator may have committed the terminal CAS while its
+                # response was lost. Recover success only when the durable
+                # authority and all three revision-bound gate decisions agree.
+                if (task_state.get("status") == "done"
+                        and self._has_complete_gate_record(task_id, self.tasks[task_id]["revision"])):
+                    self.journal.transition(task_id, "completed", {
+                        "coordinator_status": "done", "recovered_terminal": True,
+                    })
+                    return False
                 lease = task_state.get("lease")
                 if task_state.get("status") == "running" and isinstance(lease, dict):
                     coord = DurableFakeCoordinator(coordinator_path, clock=self.clock, lease_seconds=self.lease_seconds)
