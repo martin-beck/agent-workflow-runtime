@@ -31,7 +31,9 @@ jobs:
       - name: Install required Linux sandbox runtime
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y bubblewrap
+          sudo apt-get install -y apparmor-profiles bubblewrap
+          sudo install -m 0644 /usr/share/apparmor/extra-profiles/bwrap-userns-restrict /etc/apparmor.d/bwrap-userns-restrict
+          sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
       - name: Compile source and tests
         run: python -m compileall -q scripts tests
       - name: Run offline test suite
@@ -80,7 +82,9 @@ jobs:
       - name: Install required Linux sandbox runtime
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y bubblewrap
+          sudo apt-get install -y apparmor-profiles bubblewrap
+          sudo install -m 0644 /usr/share/apparmor/extra-profiles/bwrap-userns-restrict /etc/apparmor.d/bwrap-userns-restrict
+          sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
       - name: Parse every JSON contract and fixture
         run: |
           python - <<'PY'
